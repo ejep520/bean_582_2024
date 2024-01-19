@@ -5,7 +5,7 @@
 </h1>
 
 <table align=center>
-<tr><td>Team Name</td><td colspan=4>BEAN_582_2024</td></tr>
+<tr><td>Team Name</td><td colspan=4>Bean_582_2024_aptFinder</td></tr>
 <tr><td>Repository</td><td colspan=4>https://github.com/ejep520/bean_582_2024</td></tr>
 <tr><td>Project topic</td><td colspan=4>A Java spring based apartment finder web portal</td></tr>
 <tr><td>Team members</td><td>Name</td><td>EMail</td><td>WSU ID</td><td>Contact</td></tr>

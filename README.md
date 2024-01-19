@@ -5,7 +5,7 @@
 </h1>
 
 <table align=center>
-<tr><td>Team Name</td><td colspan=4>BEAN_582_2024</td></tr>
+<tr><td>Team Name</td><td colspan=4>Bean_582_2024_aptFinder</td></tr>
 <tr><td>Repository</td><td colspan=4><a href="https://github.com/ejep520/bean_582_2024" target=_blank>https://github.com/ejep520/bean_582_2024</a></td></tr>
 <tr><td>Project topic</td><td colspan=4> A java spring web application to enable users to locate an apartment available for rent.</td></tr>
 <tr><td>Team members</td><td>Name</td><td>EMail</td><td>WSU ID</td><td>Contact</td></tr>
@@ -24,7 +24,7 @@
 ## Running this project
 * Step by step instructions for running this project starting at git clone
 * 
-## Narrative
+## Introduction
 This is a demostration project of an apartment finder web portal.
 
 ## Requirements
@@ -32,6 +32,8 @@ This is a demostration project of an apartment finder web portal.
 * Authentication
 
 ## Test
+[Junit 5](https://junit.org/junit5/) will be used for automated test cases
+
 Approach to testing. WECT, SECT, partioning etc.
 
 ### ~Additional links~

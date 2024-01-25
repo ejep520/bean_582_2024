@@ -8,7 +8,7 @@ group = 'edu.wsu.bean_582_2024'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+	sourceCompatibility = '21'
 }
 
 repositories {
@@ -20,15 +20,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.mockito:mockito-core:5.9.0'
-	testImplementation 'org.mockito:mockito-junit-jupiter:5.9.0'
-	testImplementation(platform('org.junit:junit-bom:5.10.1'))
-	testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
-test{
+tasks.named('test') {
 	useJUnitPlatform()
-	testLogging {
-		events "passed", "skipped", "failed"
-	}
 }

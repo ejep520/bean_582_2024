@@ -1,0 +1,9 @@
+DROP TABLE users IF EXISTS;
+CREATE TABLE users (
+  uName VARCHAR(50) PRIMARY KEY NO NULL,
+  fName VARCHAR(50),
+  lName VARCHAR(50),
+  zip CHAR(5),
+  prefName VARCHAR(50),
+  passHash VARCHAR(50)
+);

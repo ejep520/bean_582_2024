@@ -1,21 +1,34 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
 /**
  * Basic class for users of the website. This does not 
  */
+@Table
 public class User {
 
   /** First (or given) name of the user */
+  @Column
   private String f_name;
   /** Last name of the user */
+  @Column
   private String l_name;
   /** Preferred name of the user */
+  @Column
   private String pref_name;
   /** Zip code of the user. Five digits only! */
+  @Column
   private String zip;
   /** Chosen username of the user */
+  @Id
+  @Column
   private String u_name;
   /** A hash of the user's password. */
+  @Column
   private String pass_hash;
 
   /**
@@ -86,10 +99,12 @@ public class User {
    * @param pass_hash The user's hashed password
    * @throws InvalidZipCode Thrown if the provided zip code does not meet the requirements.
    */
+  @PersistenceCreator
   public User(String f_name, String l_name, String pref_name, String zip, String u_name, String pass_hash) throws InvalidZipCode{
     this.f_name = f_name;
     this.l_name = l_name;
-    this.pref_name = pref_name;
+    if (pref_name == null || pref_name.isEmpty()) this.pref_name = this.f_name;
+    else this.pref_name = pref_name;
     this.zip = zip;
     this.u_name = u_name;
     this.pass_hash = pass_hash;

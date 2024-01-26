@@ -24,8 +24,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation(platform('org.junit:junit-bom:5.10.1'))
 	testImplementation 'org.junit.jupiter:junit-jupiter'
+/* -- Commenting these out until we are ready to start implementing tests. -- ELJ Jan 26, 2024
 	testImplementation 'org.mockito:mockito-core:5.10.0'
 	testImplementation 'org.mockito:mockito-junit-jupiter:5.10.0'
+*/
 }
 
 test {

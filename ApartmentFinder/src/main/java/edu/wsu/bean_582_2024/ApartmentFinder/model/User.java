@@ -6,7 +6,12 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 /**
- * Basic class for users of the website. This does not 
+ * Basic class for users of the website.
+ * @author Erik Jepsen &lt;erik.jepsen@wsu.edu&gt;
+ */
+/*
+ * I am going to suppose this class is not going to survive in its current form
+ * until the end of the project. Alter this class as need be. ELJ -- Jan 26, 2024
  */
 @Table
 public class User {

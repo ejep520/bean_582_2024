@@ -28,8 +28,15 @@
 This is a demostration project of an apartment finder web portal.
 
 ## Requirements
-### Security
-* Authentication
+### Narrative
+This project is a web portal for finding availiable apartments for rent.
+
+### Functional
+* As a shopper I want to search for an apartment with given search criteria 
+  * For example: postal code, number of bedrooms, size, bathrooms, ammenities
+* As a shopper I want to view an apartment floorplan
+* As a shopper I want to see interior views of an apartment
+* As a shopper I want to send an apartment complex an inquiry message 
 
 ## Test
 [Junit 5](https://junit.org/junit5/) will be used for automated test cases

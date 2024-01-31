@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Persistent;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 import static edu.wsu.bean_582_2024.ApartmentFinder.helpers.Helpers.IsZipValid;
@@ -31,6 +32,7 @@ public class Unit {
   private String kitchen;
   @Column
   private Integer hashValue;
+  @MappedCollection(idColumn = "id", keyColumn = "u_name")
   Set<User> wishlisted = new HashSet<>();
 
   public Set<User> getWishlisted() {

@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Persistent;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 import static edu.wsu.bean_582_2024.ApartmentFinder.helpers.Helpers.IsZipValid;
@@ -41,6 +42,7 @@ public class User {
   /** A hash of the user's password. */
   @Column
   private String pass_hash;
+  @MappedCollection(idColumn = "u_name", keyColumn="id")
   private final Set<Unit> wishlisted = new HashSet<>();
   
 

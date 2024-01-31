@@ -1,9 +1,14 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
+import org.springframework.data.annotation.Persistent;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+
+import static edu.wsu.bean_582_2024.ApartmentFinder.helpers.Helpers.IsZipValid;
 
 /**
  * Basic class for users of the website.
@@ -14,6 +19,7 @@ import org.springframework.data.relational.core.mapping.Table;
  * until the end of the project. Alter this class as need be. ELJ -- Jan 26, 2024
  */
 @Table
+@Persistent
 public class User {
 
   /** First (or given) name of the user */
@@ -35,6 +41,8 @@ public class User {
   /** A hash of the user's password. */
   @Column
   private String pass_hash;
+  private final Set<Unit> wishlisted = new HashSet<>();
+  
 
   /**
    * Gets the user's first name
@@ -69,8 +77,11 @@ public class User {
     return zip;
   }
 
-  public void setZip(String zip) {
-    this.zip = zip;
+  public void setZip(String zip) throws InvalidZipCode {
+    if (IsZipValid(zip))
+      this.zip = zip;
+    else 
+      throw new InvalidZipCode();
   }
 
   public String getU_name() {
@@ -113,20 +124,6 @@ public class User {
     this.zip = zip;
     this.u_name = u_name;
     this.pass_hash = pass_hash;
-    if (!VerifyZip()) throw new InvalidZipCode();
-  }
-
-  /**
-   * Determines whether the ZIP code provided may be valid
-   * @return boolean decision on ZIP code's possible validity. 
-   */
-  private boolean VerifyZip() {
-    int zip_int;
-    try {
-      zip_int = Integer.parseInt(zip);
-    } catch (NumberFormatException e) {
-      return false;
-    }
-    return zip_int > 0 && zip_int <= 99999;
+    if (!IsZipValid(this.zip)) throw new InvalidZipCode();
   }
 }

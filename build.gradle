@@ -7,21 +7,17 @@ plugins {
 group = 'edu.wsu.bean_582_2024'
 version = '0.0.1-SNAPSHOT'
 
-compileJava {
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+java {
+	sourceCompatibility = '17'
 }
 
 repositories {
 	mavenCentral()
 }
 
-wrapper {
-	gradleVersion = '8.5'
-}
-
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-gradle-plugin:3.2.m2'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
@@ -30,7 +26,6 @@ dependencies {
 	testImplementation(platform('org.junit:junit-bom:5.10.1'))
 	testImplementation 'org.junit.jupiter:junit-jupiter'
 /* -- Commenting these out until we are ready to start implementing tests. -- ELJ Jan 26, 2024
-	testImplementation 'org.seleniumhq.selenium:selenium-java:4.17.0'
 	testImplementation 'org.mockito:mockito-core:5.10.0'
 	testImplementation 'org.mockito:mockito-junit-jupiter:5.10.0'
 */

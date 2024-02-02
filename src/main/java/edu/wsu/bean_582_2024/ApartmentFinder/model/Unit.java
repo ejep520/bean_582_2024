@@ -29,12 +29,16 @@ public class Unit {
   private String kitchen;
   @Column
   private Integer hashValue;
-
+  @Column boolean featured;
+  private static final String urlPrefix = "https://zealous-stone-07d3e461e.4.azurestaticapps.net/";
+  @Column
+  private String url;
+  
   public Unit() { }
   
   @PersistenceCreator
   public Unit(String unitNumber, String address, String zip, int bedrooms, float bathrooms,
-      String livingRoom, String diningRoom, String kitchen) throws InvalidZipCode{
+      String livingRoom, String diningRoom, String kitchen, boolean featured, String url) throws InvalidZipCode{
     this.unitNumber = unitNumber;
     this.address = address;
     this.zip = zip;
@@ -43,6 +47,8 @@ public class Unit {
     this.livingRoom = Objects.requireNonNullElse(livingRoom, "");
     this.diningRoom = Objects.requireNonNullElse(diningRoom, "");
     this.kitchen = Objects.requireNonNullElse(kitchen, "");
+    this.url = Objects.requireNonNullElse(url, "");
+    this.featured = featured;
     if (!IsZipValid(this.zip)) throw new InvalidZipCode();
     calculateHash();
   }
@@ -125,4 +131,23 @@ public class Unit {
     hashValue = (zip.hashCode() * address.hashCode() * unitNumber.hashCode())%Integer.MAX_VALUE;
   }
 
+  public boolean isFeatured() {
+    return featured;
+  }
+
+  public void setFeatured(boolean featured) {
+    this.featured = featured;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = Objects.requireNonNullElse(url, "");
+  }
+  
+  public String getPhoto() {
+    return urlPrefix + url;
+  }
 }

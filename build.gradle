@@ -7,8 +7,9 @@ plugins {
 group = 'edu.wsu.bean_582_2024'
 version = '0.0.1-SNAPSHOT'
 
-java {
-	sourceCompatibility = '17'
+compileJava {
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
@@ -20,6 +21,7 @@ wrapper {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-gradle-plugin:3.2.m2'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'

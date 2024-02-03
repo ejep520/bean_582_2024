@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Show All Users</title>
+</head>
+<body>
+<table>
+  <tr>
+    <th>email</th>
+    <th>preferred name</th>
+    <th>zip</th>
+  </tr>
+  <tr th:each="${__${userController:getAll()}__}">
+    
+  </tr>
+</table>
+</body>
+</html>

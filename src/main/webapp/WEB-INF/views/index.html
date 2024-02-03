@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Apartment Finder - Available Unit</title>
+</head>
+<body>
+<table>
+  <tr>
+    <th>Unit</th>
+    <th>Address</th>
+    <th>ZIP Code</th>
+    <th>Photo</th>
+  </tr>
+  <tr th:each="unit: ${units}">
+    <td th:text="${unit.unitNumber" />
+    <td th:text="${unit.address"/>
+    <td th:text="${unit.zip"/>
+    <td><a th:href="@{__#{unit.getPhoto()}__}"/></td>
+  </tr>
+</table>
+</body>
+</html>

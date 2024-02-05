@@ -35,17 +35,23 @@ This project is a web portal for finding availiable apartments for rent.
 * As an owner I want to be able to have my listings "featured" before others
   * Featured meaning the featured apartments are shown first on the main landing page and on search pages.
   *  These could be done in a priority (who pays the most) or character set order (alphabetical).
+* As a property owner I want to update and maintain my building's apartment unit data
+* As a property owner I want to list my property
 * As a shopper I want to search for an apartment with given search criteria 
-  * For example: postal code, number of bedrooms, size, bathrooms, ammenities
+  * For example: postal code, number of bedrooms, size, bathrooms
 * As a shopper I want to view an apartment floorplan
 * As a shopper I want to see interior views of an apartment
 * As a shopper I want to send an apartment complex an inquiry message
-* Stretch: As a shopper I want to maintain a list of favorited units. This data could be stored in a cookie.
+* As an authenticated shopper I want to receive property notifications
+  * When a favorited unit availiability state changes
+  * When a message is read or received
+* As an authenticated shopper I want to preserve my favorites between sessions
+* As an authenticated shopper 
+* As an unauthenticated shopper I want to maintain a list of favorited units. (Cookie)
 * Stretch: Either link to Google Maps or embed Google Maps into the UI
+
 * As a developer/tester I want a testable code base
-  * Key UI components should have a x-name or name attribute for test to locate programmatically
-* As a user I want to preserve my favorites between sessions
-* As an owner I want to update and maintain my building's apartment unit data
+  * Key UI components should have a way for test to locate the UI element programmatically
 
 ## Test
 [Junit 5](https://junit.org/junit5/) and [Selenium](https://selenium.dev) will be used for automated test cases.

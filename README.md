@@ -41,11 +41,11 @@ This project is a web portal for finding availiable apartments for rent.
 * As a shopper I want to see interior views of an apartment
 * As a shopper I want to send an apartment complex an inquiry message
 * Stretch: As a shopper I want to maintain a list of favorited units. This data could be stored in a cookie.
+* Stretch: Either link to Google Maps or embed Google Maps into the UI
 * As a developer/tester I want a testable code base
   * Key UI components should have a x-name or name attribute for test to locate programmatically
-
-### Exclusions
-* User accounts and user maintenance are excluded in order to simplify the project for the tight deliverable. Project data is static content used for the demonstration purposes. If time permits, this feature may be pulled in.
+* As a user I want to preserve my favorites between sessions
+* As an owner I want to update and maintain my building's apartment unit data
 
 ## Test
 [Junit 5](https://junit.org/junit5/) and [Selenium](https://selenium.dev) will be used for automated test cases.

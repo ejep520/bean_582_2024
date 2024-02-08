@@ -1,4 +1,4 @@
-package edu.wsu.bean_582_2024.application.data;
+package edu.wsu.bean_582_2024.ApartmentFinder.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;

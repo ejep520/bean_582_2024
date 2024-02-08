@@ -11,15 +11,15 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import edu.wsu.bean_582_2024.application.data.Contact;
-import edu.wsu.bean_582_2024.application.data.CrmService;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.Contact;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.CrmService;
 import jakarta.annotation.security.PermitAll;
 
 @PageTitle("Contacts | Vaadin CRM")
 @Route(value = "", layout = MainLayout.class)
 @PermitAll
 public class ListView extends VerticalLayout {
-	Grid<Contact> grid = new Grid<>(Contact.class);
+	  Grid<Contact> grid = new Grid<>(Contact.class);
     TextField filterText = new TextField();
     ContactForm form;
     CrmService service;

@@ -1,27 +1,57 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		maven { setUrl("https://maven.vaadin.com/vaadin-prereleases") }
+		maven { setUrl("https://repo.spring.io/milestone") }
+	}
+}
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id 'com.vaadin' version '24.3.3'
 }
 
 group = 'edu.wsu.bean_582_2024'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '21'
+	sourceCompatibility = JavaVersion.VERSION_17
+}
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
 }
 
 repositories {
 	mavenCentral()
+	maven { setUrl("https://maven.vaadin.com/vaadin-addons") }
+	maven { setUrl("https://repo.spring.io/milestone") }
+	maven { setUrl("https://maven.vaadin.com/vaadin-prereleases") }
 }
 
 dependencies {
+	implementation 'com.vaadin:vaadin-spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'com.vaadin:vaadin-core:24.3.3'
+	implementation 'com.vaadin:vaadin-charts-flow'
+	runtimeOnly 'com.h2database:h2'
+	//runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+dependencyManagement {
+	imports {
+		mavenBom "com.vaadin:vaadin-bom:24.3.3"
+	}
 }

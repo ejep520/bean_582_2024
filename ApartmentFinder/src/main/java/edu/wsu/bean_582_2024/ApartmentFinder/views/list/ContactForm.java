@@ -15,9 +15,9 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 
-import edu.wsu.bean_582_2024.application.data.Status;
-import edu.wsu.bean_582_2024.application.data.Company;
-import edu.wsu.bean_582_2024.application.data.Contact;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.Status;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.Company;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.Contact;
 
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 

@@ -11,7 +11,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
-import edu.wsu.bean_582_2024.application.data.CrmService;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.CrmService;
 import jakarta.annotation.security.PermitAll;
 
 @Route(value = "dashboard", layout = MainLayout.class)

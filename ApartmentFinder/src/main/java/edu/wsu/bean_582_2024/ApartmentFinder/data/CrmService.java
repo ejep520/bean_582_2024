@@ -1,13 +1,12 @@
-package edu.wsu.bean_582_2024.application.data;
+package edu.wsu.bean_582_2024.ApartmentFinder.data;
 
-import edu.wsu.bean_582_2024.application.data.Company;
-import edu.wsu.bean_582_2024.application.data.Contact;
-import edu.wsu.bean_582_2024.application.data.Status;
-import edu.wsu.bean_582_2024.application.data.CompanyRepository;
-import edu.wsu.bean_582_2024.application.data.ContactRepository;
-import edu.wsu.bean_582_2024.application.data.StatusRepository;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.Company;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.Contact;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.Status;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.CompanyRepository;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.ContactRepository;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.StatusRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service 
@@ -26,7 +25,7 @@ public class CrmService {
     }
 
     public List<Contact> findAllContacts(String stringFilter) {
-        if (stringFilter == null || stringFilter.isEmpty()) { 
+        if (stringFilter == null || stringFilter.isEmpty() || stringFilter.isBlank()) { 
             return contactRepository.findAll();
         } else {
             return contactRepository.search(stringFilter);

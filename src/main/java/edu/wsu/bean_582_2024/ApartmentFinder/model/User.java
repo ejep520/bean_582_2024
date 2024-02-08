@@ -18,7 +18,7 @@ public class User {
   /** The email address of the user; the primary key of the table. */
   @Column
   @Id
-  private String email;
+  private String username;
   /** The preferred name(s) of the user. */
   @Column
   private String prefName;
@@ -31,33 +31,41 @@ public class User {
   private Integer role;
   /** A hash of the user's password. */
   @Column
-  private String passHash;
+  private String password;
   /** The saved home ZIP code of the user */
   @Column
   private String zip;
   private final static String EMAIL_NULL_ERROR = "The email address may not be null.";
   private static final Integer DEFAULT_USER_LEVEL = 0;
 
-  public User(String email, String prefName, Integer role, String passHash, String zip)
+  public User() {
+    username = "";
+    prefName = "";
+    role = DEFAULT_USER_LEVEL;
+    zip = "";
+    password = "";
+  }
+  
+  public User(String username, String prefName, Integer role, String password, String zip)
       throws InvalidZipCode {
-    if (email == null || email.isEmpty() || email.isBlank())
+    if (username == null || username.isEmpty() || username.isBlank())
       throw new NullPointerException(EMAIL_NULL_ERROR);
     if (!IsZipValid(zip)) throw new InvalidZipCode();
-    this.email = email;
+    this.username = username;
     this.prefName = Objects.requireNonNullElse(prefName, "");
     this.role = Objects.requireNonNullElse(role, DEFAULT_USER_LEVEL);
-    this.passHash = passHash;
+    this.password = password;
     this.zip = zip;
   }
 
-  public String getEmail() {
-    return email;
+  public String getUsername() {
+    return username;
   }
 
-  public void setEmail(String email) {
+  public void setUsername(String email) {
     if (email == null || email.isEmpty() || email.isBlank())
       throw new NullPointerException(EMAIL_NULL_ERROR);
-    this.email = email;
+    this.username = email;
   }
 
   public String getPrefName() {
@@ -76,12 +84,12 @@ public class User {
     this.role = Objects.requireNonNullElse(role, DEFAULT_USER_LEVEL);
   }
 
-  public String getPassHash() {
-    return passHash;
+  public String getPassword() {
+    return password;
   }
 
-  public void setPassHash(String passHash) {
-    this.passHash = passHash;
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public String getZip() {

@@ -1,11 +1,12 @@
 DROP TABLE users IF EXISTS;
 DROP TABLE units IF EXISTS;
+DROP TABLE authorities IF EXISTS;
 CREATE TABLE users (
-  email VARCHAR(50) PRIMARY KEY,
+  username VARCHAR(50) PRIMARY KEY,
   zip CHAR(5),
   prefName VARCHAR(50),
   role INTEGER,
-  passHash CHAR(60) -- 60 is to accommodate the BCrypt password hashing.
+  password CHAR(60) -- 60 is to accommodate the BCrypt password hashing.
 );
 CREATE TABLE units (
   unitNumber VARCHAR(10),
@@ -20,3 +21,9 @@ CREATE TABLE units (
   url VARCHAR(50),
   hashValue INTEGER PRIMARY KEY
 );
+CREATE TABLE authorities (
+  username VARCHAR(50) NOT NULL,
+  authority VARCHAR(50) NOT NULL,
+  CONSTRAINT fk_auth_email FOREIGN KEY (email) REFERENCES users(email)
+  );
+CREATE UNIQUE INDEX ix_auth_username on authorities(username, authority);

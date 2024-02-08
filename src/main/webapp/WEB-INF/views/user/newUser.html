@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Bean 582-2024 New User Registration</title>
+</head>
+<body>
+<h1 th:text="#{label.form.title}"/>
+<form action="/" th:object="${user}" method="post" enctype="application/x-www-form-urlencoded">
+  <div>
+    <label th:text="email">email</label>
+    <input type="email" th:field="*{email}" />
+  </div>
+  <div>
+    <label th:text="zip">ZIP code</label>
+    <input type="number" th:field="*{zip}"/>
+  </div>
+  <div>
+    <label th:text="password">password</label>
+    <input type="password" th:field="*{passhash}">
+  </div>
+  
+</form>
+</body>
+</html>

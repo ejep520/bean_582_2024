@@ -1,5 +1,7 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.views.list;
 
+import edu.wsu.bean_582_2024.ApartmentFinder.data.Company;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.Status;
 import java.util.Collections;
 
 import com.vaadin.flow.component.Component;
@@ -14,6 +16,7 @@ import com.vaadin.flow.router.Route;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.Contact;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.CrmService;
 import jakarta.annotation.security.PermitAll;
+import java.util.List;
 
 @PageTitle("Contacts | Vaadin CRM")
 @Route(value = "", layout = MainLayout.class)
@@ -25,7 +28,7 @@ public class ListView extends VerticalLayout {
     CrmService service;
     
 
-    public ListView() {//(CrmService service) will populate the form
+    public ListView(CrmService service) {//(CrmService service) will populate the form
     	this.service = service;
     	addClassName("List-view");
     	setSizeFull();
@@ -34,7 +37,7 @@ public class ListView extends VerticalLayout {
     	configureForm();
     	
     	add(getToolbar(),getContent());    	
-    	//updateList(); //populates form
+    	updateList(); //populates form
     	closeEditor();
     	
     	
@@ -63,13 +66,11 @@ public class ListView extends VerticalLayout {
 	}
 
 	private void configureForm() {
-		form = new ContactForm(Collections.emptyList(), Collections.emptyList()) ;
-		//(service.findAllCompanies(), service.findAllStatuses()); (Collections.emptyList(), Collections.emptyList()) 
+		form = new ContactForm(service.findAllCompanies(), service.findAllStatuses()) ;
 		form.setWidth("25em");
 		form.addSaveListener(this::saveContact); // <1>
-	    form.addDeleteListener(this::deleteContact); // <2>
-	    form.addCloseListener(e -> closeEditor()); // <3>
-		
+		form.addDeleteListener(this::deleteContact); // <2>
+		form.addCloseListener(e -> closeEditor()); // <3>
 	}
 	
 	 private void saveContact(ContactForm.SaveEvent event) {
@@ -89,7 +90,7 @@ public class ListView extends VerticalLayout {
 	private Component getToolbar() {
 		filterText.setPlaceholder("Filter by name...");
 		filterText.setClearButtonVisible(true);
-		filterText.setValueChangeMode(ValueChangeMode.LAZY); // search wont advance until the user stops typing 
+		filterText.setValueChangeMode(ValueChangeMode.LAZY); // search won't advance until the user stops typing 
 		filterText.addValueChangeListener(e -> updateList());// filters as text is typed
 		Button addContactButton = new Button("Add contact");
 		addContactButton.addClickListener(click -> addContact());

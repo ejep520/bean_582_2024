@@ -14,7 +14,7 @@ import edu.wsu.bean_582_2024.ApartmentFinder.security.SecurityService;
 
 public class MainLayout extends AppLayout {   
 	
-	private SecurityService securityService;
+	private final SecurityService securityService;
 
 	public MainLayout(SecurityService securityService) {
 		this.securityService = securityService;

@@ -1,9 +1,5 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.views.list;
 
-import edu.wsu.bean_582_2024.ApartmentFinder.data.Company;
-import edu.wsu.bean_582_2024.ApartmentFinder.data.Status;
-import java.util.Collections;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -16,7 +12,6 @@ import com.vaadin.flow.router.Route;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.Contact;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.CrmService;
 import jakarta.annotation.security.PermitAll;
-import java.util.List;
 
 @PageTitle("Contacts | Vaadin CRM")
 @Route(value = "", layout = MainLayout.class)

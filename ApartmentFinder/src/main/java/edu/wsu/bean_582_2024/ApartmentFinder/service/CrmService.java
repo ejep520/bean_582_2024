@@ -1,21 +1,26 @@
-package edu.wsu.bean_582_2024.ApartmentFinder.data;
+package edu.wsu.bean_582_2024.ApartmentFinder.service;
 
-import edu.wsu.bean_582_2024.ApartmentFinder.data.Company;
-import edu.wsu.bean_582_2024.ApartmentFinder.data.Contact;
-import edu.wsu.bean_582_2024.ApartmentFinder.data.Status;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.CompanyRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.ContactRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.StatusRepository;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Company;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Contact;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Status;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service 
 public class CrmService {
 
-    private final ContactRepository contactRepository;
-    private final CompanyRepository companyRepository;
-    private final StatusRepository statusRepository;
+    @Autowired
+    private ContactRepository contactRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
+    @Autowired
+    private StatusRepository statusRepository;
     
+    /*
     public CrmService(ContactRepository contactRepository,
                       CompanyRepository companyRepository,
                       StatusRepository statusRepository) { 
@@ -23,6 +28,7 @@ public class CrmService {
         this.companyRepository = companyRepository;
         this.statusRepository = statusRepository;
     }
+    */
 
     public List<Contact> findAllContacts(String stringFilter) {
         if (stringFilter == null || stringFilter.isEmpty() || stringFilter.isBlank()) { 

@@ -20,11 +20,8 @@ java {
 	sourceCompatibility = JavaVersion.VERSION_17
 }
 
-configurations {
-	developmentOnly
-	runtimeClasspath {
-		extendsFrom developmentOnly
-	}
+vaadin {
+	productionMode = true
 }
 
 repositories {
@@ -41,8 +38,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'com.vaadin:vaadin-core:24.3.3'
-	implementation 'com.vaadin:vaadin-charts-flow'
-	runtimeOnly 'com.h2database:h2'
+	implementation 'org.apache.commons:commons-lang3:3.14.0'
+	// implementation 'com.vaadin:vaadin-charts-flow'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	// runtimeOnly 'com.h2database:h2'
 	//runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

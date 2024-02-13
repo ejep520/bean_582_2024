@@ -1,4 +1,4 @@
-package edu.wsu.bean_582_2024.ApartmentFinder.views.list;
+package edu.wsu.bean_582_2024.ApartmentFinder.views;
 
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -9,8 +9,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
-
-import edu.wsu.bean_582_2024.ApartmentFinder.security.SecurityService;
+import edu.wsu.bean_582_2024.ApartmentFinder.service.SecurityService;
 
 public class MainLayout extends AppLayout {   
 	
@@ -39,13 +38,11 @@ public class MainLayout extends AppLayout {
 		addToNavbar(header);
 	}
 	
-	private void createDrawer() {			
-		RouterLink listView = new RouterLink("List", ListView.class);
+	private void createDrawer() {
+		RouterLink listView = new RouterLink("Home", HomeView.class);
 		listView.setHighlightCondition(HighlightConditions.sameLocation());
 		
-		 addToDrawer(new VerticalLayout(
-	                listView, 
-	                new RouterLink("Dashboard", DashboardView.class) 
-	        ));
+		 addToDrawer(new VerticalLayout(listView));
 	}
+	
 }

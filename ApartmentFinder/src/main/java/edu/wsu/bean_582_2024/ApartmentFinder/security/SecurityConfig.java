@@ -2,36 +2,40 @@ package edu.wsu.bean_582_2024.ApartmentFinder.security;
 
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
 
-import edu.wsu.bean_582_2024.ApartmentFinder.views.list.LoginView;
-
+import edu.wsu.bean_582_2024.ApartmentFinder.views.LoginView;
+import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
-@EnableWebSecurity // <1>
+@EnableWebSecurity
 @Configuration
-public class SecurityConfig extends VaadinWebSecurity { // <2>
+public class SecurityConfig extends VaadinWebSecurity {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+/*
         http.authorizeHttpRequests(auth ->
             auth.requestMatchers(
                 AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/images/*.png")).permitAll());
-        http.authorizeHttpRequests(auth ->
-            auth.requestMatchers(
-                AntPathRequestMatcher.antMatcher("/h2-console/**")).hasRole("ADMIN"));
-
+ */
+        http.authorizeHttpRequests(auth -> auth
+            .requestMatchers(antMatchers("/admin")).hasRole("ADMIN")
+            .requestMatchers(antMatchers("/owner")).hasAnyRole("ADMIN", "OWNER")
+            .requestMatchers(antMatchers("/home")).hasRole("USER")
+            .requestMatchers(antMatchers("/")).permitAll());
         super.configure(http);
-        setLoginView(http, LoginView.class); // <4>
+        
+        setLoginView(http, LoginView.class);
     }
-
+    @Bean
+    public UserDetailsService users(DataSource dataSource) {
+      return new JdbcUserDetailsManager(dataSource);
+    }
+    /*
     @Bean
     public UserDetailsService users() {
         UserDetails user = User.builder()
@@ -47,4 +51,5 @@ public class SecurityConfig extends VaadinWebSecurity { // <2>
                 .build();
         return new InMemoryUserDetailsManager(user, admin); // <5>
     }
+     */
 }

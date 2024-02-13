@@ -1,10 +1,10 @@
-package edu.wsu.bean_582_2024.ApartmentFinder.security;
+package edu.wsu.bean_582_2024.ApartmentFinder.service;
 
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class SecurityService {
 
     private final AuthenticationContext authenticationContext;
@@ -14,7 +14,7 @@ public class SecurityService {
     }
 
     public UserDetails getAuthenticatedUser() {
-        return authenticationContext.getAuthenticatedUser(UserDetails.class).get();
+        return authenticationContext.getAuthenticatedUser(UserDetails.class).orElse(null);
     }
 
     public void logout() {

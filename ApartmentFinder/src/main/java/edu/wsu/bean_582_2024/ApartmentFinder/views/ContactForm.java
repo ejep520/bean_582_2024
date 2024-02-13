@@ -1,4 +1,4 @@
-package edu.wsu.bean_582_2024.ApartmentFinder.views.list;
+package edu.wsu.bean_582_2024.ApartmentFinder.views;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 
-import edu.wsu.bean_582_2024.ApartmentFinder.data.Status;
-import edu.wsu.bean_582_2024.ApartmentFinder.data.Company;
-import edu.wsu.bean_582_2024.ApartmentFinder.data.Contact;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Status;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Company;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Contact;
 
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
@@ -123,6 +123,4 @@ public class ContactForm extends FormLayout{
 	  public Registration addCloseListener(ComponentEventListener<CloseEvent> listener) {
 	    return addListener(CloseEvent.class, listener);
 	  }
-
-
-	}
+}

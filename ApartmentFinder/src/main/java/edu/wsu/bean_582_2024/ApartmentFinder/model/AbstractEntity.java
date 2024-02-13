@@ -1,4 +1,4 @@
-package edu.wsu.bean_582_2024.ApartmentFinder.data;
+package edu.wsu.bean_582_2024.ApartmentFinder.model;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +12,7 @@ public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idgenerator")
-    // The initial value is to account for data.sql demo data ids
+    // The initial value is to account for badData.Nosql demo data ids
     @SequenceGenerator(name = "idgenerator", initialValue = 1000)
     private Long id;
 

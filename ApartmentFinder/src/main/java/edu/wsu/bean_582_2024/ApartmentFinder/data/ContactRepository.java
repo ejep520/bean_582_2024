@@ -1,6 +1,7 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.data;
 
 
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Contact;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;

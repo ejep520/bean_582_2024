@@ -1,4 +1,4 @@
-package edu.wsu.bean_582_2024.ApartmentFinder.data;
+package edu.wsu.bean_582_2024.ApartmentFinder.model;
 
 import jakarta.persistence.Entity;
 

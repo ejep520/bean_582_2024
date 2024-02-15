@@ -1,4 +1,4 @@
-name: ejep509apartmentfinderservice
+name: apartmentfinder
 services:
   web:
     build:

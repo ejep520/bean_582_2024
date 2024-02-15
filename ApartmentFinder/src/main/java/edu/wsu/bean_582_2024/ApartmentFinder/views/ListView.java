@@ -13,113 +13,116 @@ import edu.wsu.bean_582_2024.ApartmentFinder.model.Contact;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.CrmService;
 import jakarta.annotation.security.PermitAll;
 
+@SuppressWarnings("serial")
 @PageTitle("Contacts | Vaadin CRM")
 @Route(value = "list_view", layout = MainLayout.class)
 @PermitAll
 public class ListView extends VerticalLayout {
-	  Grid<Contact> grid = new Grid<>(Contact.class);
-    TextField filterText = new TextField();
-    ContactForm form;
-    CrmService service;
-    
+  Grid<Contact> grid = new Grid<>(Contact.class);
+  TextField filterText = new TextField();
+  ContactForm form;
+  CrmService service;
 
-    public ListView(CrmService service) {//(CrmService service) will populate the form
-    	this.service = service;
-    	addClassName("List-view");
-    	setSizeFull();
-    	
-    	configureGrid();
-    	configureForm();
-    	
-    	add(getToolbar(),getContent());    	
-    	updateList(); //populates form
-    	closeEditor();
-    	
-    	
-    	 
-    }
-    private void closeEditor() {
-        form.setContact(null);
-        form.setVisible(false);
-        removeClassName("editing");
-    }
-    
-	// goes to database and fetch all contacts that match filter. 
-    private void updateList() {
-		grid.setItems(service.findAllContacts(filterText.getValue()));
-		
-	}
 
-	private Component getContent() {
-		HorizontalLayout content = new HorizontalLayout(grid, form);
-		content.setFlexGrow(2, grid);
-		content.setFlexGrow(1, form);
-		content.addClassNames("content");
-		content.setSizeFull();
-		
-		return content;
-	}
+  public ListView(CrmService service) {// (CrmService service) will populate the form
+    this.service = service;
+    addClassName("List-view");
+    setSizeFull();
 
-	private void configureForm() {
-		form = new ContactForm(service.findAllCompanies(), service.findAllStatuses()) ;
-		form.setWidth("25em");
-		form.addSaveListener(this::saveContact); // <1>
-		form.addDeleteListener(this::deleteContact); // <2>
-		form.addCloseListener(e -> closeEditor()); // <3>
-	}
-	
-	 private void saveContact(ContactForm.SaveEvent event) {
-	        service.saveContact(event.getContact());
-	        updateList();
-	        closeEditor();
-	        updateList();
-	        closeEditor();
-	    }
-	
-	private void deleteContact(ContactForm.DeleteEvent event) {
-        service.deleteContact(event.getContact());
-        updateList();
-        closeEditor();
-    }
+    configureGrid();
+    configureForm();
 
-	private Component getToolbar() {
-		filterText.setPlaceholder("Filter by name...");
-		filterText.setClearButtonVisible(true);
-		filterText.setValueChangeMode(ValueChangeMode.LAZY); // search won't advance until the user stops typing 
-		filterText.addValueChangeListener(e -> updateList());// filters as text is typed
-		Button addContactButton = new Button("Add contact");
-		addContactButton.addClickListener(click -> addContact());
-		
-		HorizontalLayout toolbar = new HorizontalLayout(filterText, addContactButton);
-		toolbar.addClassName("toolbar");
-		return toolbar;
-	}
+    add(getToolbar(), getContent());
+    updateList(); // populates form
+    closeEditor();
 
-    private void addContact() {
-        grid.asSingleSelect().clear();
-        editContact(new Contact());
+
+
+  }
+
+  private void closeEditor() {
+    form.setContact(null);
+    form.setVisible(false);
+    removeClassName("editing");
+  }
+
+  // goes to database and fetch all contacts that match filter.
+  private void updateList() {
+    grid.setItems(service.findAllContacts(filterText.getValue()));
+
+  }
+
+  private Component getContent() {
+    HorizontalLayout content = new HorizontalLayout(grid, form);
+    content.setFlexGrow(2, grid);
+    content.setFlexGrow(1, form);
+    content.addClassNames("content");
+    content.setSizeFull();
+
+    return content;
+  }
+
+  private void configureForm() {
+    form = new ContactForm(service.findAllCompanies(), service.findAllStatuses());
+    form.setWidth("25em");
+    form.addSaveListener(this::saveContact); // <1>
+    form.addDeleteListener(this::deleteContact); // <2>
+    form.addCloseListener(e -> closeEditor()); // <3>
+  }
+
+  private void saveContact(ContactForm.SaveEvent event) {
+    service.saveContact(event.getContact());
+    updateList();
+    closeEditor();
+    updateList();
+    closeEditor();
+  }
+
+  private void deleteContact(ContactForm.DeleteEvent event) {
+    service.deleteContact(event.getContact());
+    updateList();
+    closeEditor();
+  }
+
+  private Component getToolbar() {
+    filterText.setPlaceholder("Filter by name...");
+    filterText.setClearButtonVisible(true);
+    filterText.setValueChangeMode(ValueChangeMode.LAZY); // search won't advance until the user
+                                                         // stops typing
+    filterText.addValueChangeListener(e -> updateList());// filters as text is typed
+    Button addContactButton = new Button("Add contact");
+    addContactButton.addClickListener(click -> addContact());
+
+    HorizontalLayout toolbar = new HorizontalLayout(filterText, addContactButton);
+    toolbar.addClassName("toolbar");
+    return toolbar;
+  }
+
+  private void addContact() {
+    grid.asSingleSelect().clear();
+    editContact(new Contact());
+  }
+
+  private void configureGrid() {
+    grid.addClassName("contact-grid");
+    grid.setSizeFull();
+    grid.setColumns("firstName", "lastName", "email");
+    grid.addColumn(contact -> contact.getStatus().getName()).setHeader("Status");
+    grid.addColumn(contact -> contact.getCompany().getName()).setHeader("Company");
+    grid.getColumns().forEach(col -> col.setAutoWidth(true));
+
+    grid.asSingleSelect().addValueChangeListener(event -> editContact(event.getValue()));
+
+  }
+
+  public void editContact(Contact contact) {
+    if (contact == null) {
+      closeEditor();
+    } else {
+      form.setContact(contact);
+      form.setVisible(true);
+      addClassName("editing");
     }
-    
-	private void configureGrid() {
-    	grid.addClassName("contact-grid");
-    	grid.setSizeFull();
-    	grid.setColumns("firstName", "lastName", "email");
-    	grid.addColumn(contact -> contact.getStatus().getName()).setHeader("Status");
-    	grid.addColumn(contact -> contact.getCompany().getName()).setHeader("Company");
-    	grid.getColumns().forEach(col -> col.setAutoWidth(true));
-    	
-    	grid.asSingleSelect().addValueChangeListener(event -> editContact(event.getValue()));
-    	
-    }
-	
-    public void editContact(Contact contact) {
-        if (contact == null) {
-            closeEditor();
-        } else {
-            form.setContact(contact);
-            form.setVisible(true);
-            addClassName("editing");
-        }
-    }
+  }
 
 }

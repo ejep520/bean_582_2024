@@ -2,8 +2,10 @@ package edu.wsu.bean_582_2024.ApartmentFinder.service;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.data.UserRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,5 +36,17 @@ public class UserService {
   public void saveUser(User user) {
     if (user == null) return;
     userRepository.save(user);
+  }
+  public Optional<User> findUserByUsername(String username) {
+    return Optional.ofNullable(userRepository.getUserByUsername(username));
+  }
+  public Optional<User> findUserById(Long id) {
+    Optional<User> returnValue;
+    try {
+      returnValue = Optional.of(userRepository.getReferenceById(id));
+    } catch (EntityNotFoundException e) {
+      returnValue = Optional.empty();
+    }
+    return returnValue;
   }
 }

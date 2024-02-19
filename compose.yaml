@@ -1,0 +1,40 @@
+name: apartmentfinder
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    secrets:
+      - mysql_db_name
+      - mysql_db_pass
+      - mysql_db_conn
+    links:
+      - "db:mysql"
+    depends_on:
+      db:
+        condition: service_healthy
+    image: ejep509/apartment_finder
+  db:
+    image: mysql:8.0
+    secrets:
+      - mysql_db_pass
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_db_pass
+      MYSQL_DATABASE: aptFinder
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "--password=$$MYSQL_ROOT_PASSWORD_FILE" ]
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 100
+    ports:
+      - "3308:3306"
+secrets:
+  mysql_db_name:
+    environment: bean_mysql_admin_name
+  mysql_db_pass:
+    environment: bean_mysql_admin_pass
+  mysql_db_conn:
+    environment: bean_mysql_conn

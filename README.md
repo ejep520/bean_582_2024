@@ -32,16 +32,49 @@ This is a demostration project of an apartment finder web portal.
 This project is a web portal for finding availiable apartments for rent.
 
 ### Functional
+* As an owner I want to be able to have my listings "featured" before others
+  * Featured meaning the featured apartments are shown first on the main landing page and on search pages.
+  *  These could be done in a priority (who pays the most) or character set order (alphabetical).
+* As a property owner I want to update and maintain my building's apartment unit data
+* As a property owner I want to list my property
 * As a shopper I want to search for an apartment with given search criteria 
-  * For example: postal code, number of bedrooms, size, bathrooms, ammenities
+  * For example: postal code, number of bedrooms, size, bathrooms
 * As a shopper I want to view an apartment floorplan
 * As a shopper I want to see interior views of an apartment
-* As a shopper I want to send an apartment complex an inquiry message 
+* As a shopper I want to send an apartment complex an inquiry message
+* As an authenticated shopper I want to receive property notifications
+  * When a favorited unit availiability state changes
+  * When a message is read or received
+* As an authenticated shopper I want to preserve my favorites between sessions
+* As an authenticated shopper 
+* As an unauthenticated shopper I want to maintain a list of favorited units. (Cookie)
+* Stretch: Either link to Google Maps or embed Google Maps into the UI
+
+* As a developer/tester I want a testable code base
+  * Key UI components should have a way for test to locate the UI element programmatically
 
 ## Test
-[Junit 5](https://junit.org/junit5/) will be used for automated test cases
+[Junit 5](https://junit.org/junit5/) and [Selenium](https://selenium.dev) will be used for automated test cases.
+* Unit testing. Individual units of testable code must have a corresponding unit test. Mocking may be used appropriate
+* Functional tests
+  * API Testing
+    * APIs may be needed to facilitate testing. These must be such that authorization is required with a fixed token
+  * Integration Testing
+  * UI Integration Testing
+    * UI Testing will be accomplished using [Selenium](https://selenium.dev) to provide programmatic control of the UI to simulate the end user's behaviors.
+    * UI Test scripts should not be one monolithic script. Each script should accomplish one use case
+* Tests
+  * Are "paid to promote" prioritization listed correctly?
+  * Do searches return the proper properties?
+    * I want all apartments with 3+ bedrooms. Do all the appropriate apartments get returned
+  * The correct floorplan image is returned. This may just be a URL that can be made to the src attribute of an <image> element
+  * Are the correct interior images returned?
+  * Are favorited properties maintained?
 
-Approach to testing. WECT, SECT, partioning etc.
+// TODO:
+
+* Show graphs, tables, and UML
+
 
 ### ~Additional links~
 * [Official Gradle documentation](https://docs.gradle.org)

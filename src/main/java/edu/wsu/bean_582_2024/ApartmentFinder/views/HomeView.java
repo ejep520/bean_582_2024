@@ -51,7 +51,7 @@ public class HomeView extends VerticalLayout {
   }
 
   private Component getToolbar() {
-    filterText.setPlaceholder("Filter by username");
+    filterText.setPlaceholder("Filter by address");
     filterText.setClearButtonVisible(true);
     filterText.setValueChangeMode(ValueChangeMode.LAZY);
     filterText.addValueChangeListener(event -> updateList());

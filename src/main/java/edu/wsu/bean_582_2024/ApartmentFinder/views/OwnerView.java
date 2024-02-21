@@ -1,5 +1,7 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.views;
 
+import org.springframework.context.annotation.Scope;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -9,10 +11,14 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.UnitService;
 import jakarta.annotation.security.RolesAllowed;
 
+@SpringComponent
+@Scope("prototype")
 @SuppressWarnings("serial")
 @Route(value = "/owner", layout = MainLayout.class)
 @PageTitle("Unit Administration | Bean 582")
@@ -35,9 +41,9 @@ public class OwnerView extends VerticalLayout {
   }
 
   private Component getContent() {
-    HorizontalLayout content = new HorizontalLayout(grid, ownerForm);
-    content.setFlexGrow(2, grid);
-    content.setFlexGrow(1, ownerForm);
+    HorizontalLayout content = new HorizontalLayout(getGrid(), getOwnerForm());
+    content.setFlexGrow(2, getGrid());
+    content.setFlexGrow(1, getOwnerForm());
     content.addClassNames("content");
     content.setSizeFull();
 
@@ -45,11 +51,11 @@ public class OwnerView extends VerticalLayout {
   }
 
   private void configureGrid() {
-    grid.setClassName("owner-grid");
-    grid.setSizeFull();
-    grid.setColumns("address", "bedrooms", "bathrooms", "kitchen", "livingRoom", "featured");
-    grid.asSingleSelect().addValueChangeListener(event -> editUnit(event.getValue()));
-    grid.setItems(unitService.getAllUnits());
+    getGrid().setClassName("owner-grid");
+    getGrid().setSizeFull();
+    getGrid().setColumns("address", "bedrooms", "bathrooms", "kitchen", "livingRoom", "featured");
+    getGrid().asSingleSelect().addValueChangeListener(event -> editUnit(event.getValue()));
+    getGrid().setItems(unitService.getAllUnits());
   }
 
   private void editUnit(Unit unit) {
@@ -57,17 +63,17 @@ public class OwnerView extends VerticalLayout {
       closeEditor();
       return;
     }
-    ownerForm.setUnit(unit);
-    ownerForm.setVisible(true);
+    getOwnerForm().setUnit(unit);
+    getOwnerForm().setVisible(true);
     addClassName("editing");
   }
 
   private void configureForm() {
     ownerForm = new OwnerForm();
-    ownerForm.setWidth("25em");
-    ownerForm.addSaveListener(this::saveUnit);
-    ownerForm.addDeleteListener(this::deleteUnit);
-    ownerForm.addCloseListener(e -> closeEditor());
+    getOwnerForm().setWidth("25em");
+    getOwnerForm().addSaveListener(this::saveUnit);
+    getOwnerForm().addDeleteListener(this::deleteUnit);
+    getOwnerForm().addCloseListener(e -> closeEditor());
   }
 
   private void saveUnit(OwnerForm.SaveEvent event) {
@@ -87,12 +93,12 @@ public class OwnerView extends VerticalLayout {
   }
 
   private void updateList() {
-    grid.setItems(unitService.findUnits(filterText.getValue()));
+    getGrid().setItems(unitService.findUnits(filterText.getValue()));
   }
 
   private void closeEditor() {
-    ownerForm.setUnit(null);
-    ownerForm.setVisible(false);
+    getOwnerForm().setUnit(null);
+    getOwnerForm().setVisible(false);
     removeClassName("editing");
   }
 
@@ -107,4 +113,18 @@ public class OwnerView extends VerticalLayout {
     toolbar.addClassName("toolbar");
     return toolbar;
   }
+
+/**
+ * @return the ownerForm
+ */
+public OwnerForm getOwnerForm() {
+	return ownerForm;
+}
+
+/**
+ * @return the grid
+ */
+public Grid<Unit> getGrid() {
+	return grid;
+}
 }

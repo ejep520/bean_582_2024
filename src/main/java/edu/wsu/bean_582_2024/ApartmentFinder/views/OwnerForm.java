@@ -24,16 +24,20 @@ public class OwnerForm extends FormLayout {
   private final IntegerField bedrooms = new IntegerField("Bedroom Count");
   private final NumberField bathrooms = new NumberField("Bathroom Count");
   private final Checkbox featured = new Checkbox("featured");
+  
+  private Button save = new Button("Save");
+  private Button delete = new Button("Delete");
+  private Button cancel = new Button("Cancel");
 
   public OwnerForm() {
     addClassName("owner-form");
     binder.bindInstanceFields(this);
     configureForm();
-    add(address, bedrooms, bathrooms, kitchen, livingRoom, featured, createButtonLayout());
+    add(getAddress(), bedrooms, bathrooms, kitchen, livingRoom, featured, createButtonLayout());
   }
 
   private void configureForm() {
-    address.setRequired(true);
+    getAddress().setRequired(true);
     kitchen.setRequired(false);
     livingRoom.setRequired(false);
     bedrooms.setRequired(true);
@@ -46,10 +50,7 @@ public class OwnerForm extends FormLayout {
     bathrooms.setStep(0.5d);
   }
 
-  private Component createButtonLayout() {
-    Button save = new Button("Save");
-    Button delete = new Button("Delete");
-    Button cancel = new Button("Cancel");
+  private Component createButtonLayout() {    
     save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
     delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -58,7 +59,7 @@ public class OwnerForm extends FormLayout {
     cancel.addClickListener(event -> fireEvent(new CloseEvent(this)));
     save.addClickShortcut(Key.ENTER);
     cancel.addClickShortcut(Key.ESCAPE);
-    return new HorizontalLayout(save, delete, cancel);
+    return new HorizontalLayout(getSave(), delete, cancel);
   }
 
   private void validateAndSave() {
@@ -120,5 +121,46 @@ public class OwnerForm extends FormLayout {
   public void addCloseListener(ComponentEventListener<OwnerForm.CloseEvent> listener) {
     addListener(OwnerForm.CloseEvent.class, listener);
   }
+
+/**
+ * @return the address
+ */
+public TextField getAddress() {
+	return address;
+}
+
+public TextField getKitchen() {
+	return kitchen;
+}
+
+public TextField getLivingRoom() {
+	return livingRoom;
+}
+
+public IntegerField getBedrooms() {
+	return bedrooms;
+}
+
+public NumberField getBathrooms() {
+	return bathrooms;
+}
+
+public Checkbox getFeatured() {
+	return featured;
+}
+
+/**
+ * @param save the save to set
+ */
+public void setSave(Button save) {
+	this.save = save;
+}
+
+/**
+ * @return the save
+ */
+public Button getSave() {
+	return save;
+}
 
 }

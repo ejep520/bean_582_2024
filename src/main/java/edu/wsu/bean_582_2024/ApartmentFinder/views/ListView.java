@@ -35,9 +35,6 @@ public class ListView extends VerticalLayout {
     add(getToolbar(), getContent());
     updateList(); // populates form
     closeEditor();
-
-
-
   }
 
   private void closeEditor() {

@@ -1,4 +1,4 @@
-insert into units (id, version, address, bedrooms, bathrooms, featured, kitchen, living_Room) values (352, 39, '9468 Dakota Avenue', 1, 1.0, true, 'Electric Stove', 'Coffee Table and End Tables, Entertainment Stand, Desk');
+insert into units (id, version, address, bedrooms, bathrooms, featured, kitchen, living_Room) values (352, 39, '9468 Dakota Avenue', 1, 1.0, true, 'Electric Stove', 'Coffee Table and End Tables, Entertainment Stand, Desk')
 insert into units (id, version, address, bedrooms, bathrooms, featured, kitchen, living_Room) values (225, 14, '114 Crescent Oaks Plaza', 2, 1.5, true, 'Dishwasher', null);
 insert into units (id, version, address, bedrooms, bathrooms, featured, kitchen, living_Room) values (174, 12, '77 Longview Drive', 3, 2.5, true, 'Refrigerator, Garbage Disposal', '');
 insert into units (id, version, address, bedrooms, bathrooms, featured, kitchen, living_Room) values (443, 99, '3373 Hanson Trail', 5, 3.5, false, 'Microwave, Dishwasher', null);

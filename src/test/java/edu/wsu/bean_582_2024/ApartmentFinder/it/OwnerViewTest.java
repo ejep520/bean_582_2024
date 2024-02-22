@@ -1,14 +1,13 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.it;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.data.provider.ListDataProvider;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.views.OwnerForm;
@@ -16,7 +15,13 @@ import edu.wsu.bean_582_2024.ApartmentFinder.views.OwnerView;
 
 //Integration Testing
 
-@RunWith(SpringRunner.class)
+/*
+ * If you are seeing the message "Sharing is only supported for boot loader classes because
+ * bootstrap classpath has been appended" and are using Intelli-J, go to 
+ * https://stackoverflow.com/questions/54205486/how-to-avoid-sharing-is-only-supported-for-boot-loader-classes-because-bootstra
+ * for info about how to get rid of this warning.
+ */
+
 @SpringBootTest
 public class OwnerViewTest {
 	
@@ -29,23 +34,21 @@ public class OwnerViewTest {
 	private OwnerView ownerView;
 	
 	 @Test
-	    public void formShownWhenUnitSelected() {
-		Grid<Unit> grid = ownerView.getGrid();
+	 @ExtendWith(SpringExtension.class)
+   public void formShownWhenUnitSelected() {
+		 Grid<Unit> grid = ownerView.getGrid();
 		 Unit firstUnit = getFirstItem(grid);
 		 
 		 OwnerForm form = ownerView.getOwnerForm();
-		 System.out.println(firstUnit.getAddress().toString());
-		 Assert.assertFalse(form.isVisible());
+		 System.out.println(firstUnit.getAddress());
+		 Assertions.assertFalse(form.isVisible());
 		 grid.asSingleSelect().setValue(firstUnit);
 		 
-		 Assert.assertTrue(form.isVisible());
-		 Assert.assertEquals(firstUnit.getAddress(), form.getAddress());
+		 Assertions.assertTrue(form.isVisible());
+		 Assertions.assertEquals(firstUnit.getAddress(), form.getAddress().getValue());
 	    }
 
 	private Unit getFirstItem(Grid<Unit> grid) {
-		// TODO Auto-generated method stub
-		return ((ListDataProvider<Unit>)grid.getDataProvider()).getItems().iterator().next();
-		
+		return grid.getListDataView().getItems().iterator().next();
 	}
-
 }

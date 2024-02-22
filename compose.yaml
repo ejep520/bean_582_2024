@@ -15,7 +15,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    image: ejep509/apartment_finder
+    image: localhost/apartment_finder
   db:
     image: mysql:8.0
     secrets:

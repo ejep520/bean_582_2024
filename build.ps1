@@ -16,6 +16,8 @@ start-process -FilePath 'cmd' -ArgumentList @('/c', '.\gradlew.bat', 'clean', 'v
 echo 'Copying the jar...'
 copy-item build/libs/ApartmentFinder-0.0.1-SNAPSHOT.jar ./
 echo 'Building the Docker container...'
+Start-Process -FilePath docker -ArgumentList @('build', '.', '-t', 'apartment_finder')
+echo 'Creating the Docker Compose stack...'
 Start-Process -FilePath docker -ArgumentList @('compose', 'up') -Wait
 echo 'Cleaning up...'
 $Env:bean_mysql_admin_pass=''

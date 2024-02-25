@@ -22,36 +22,17 @@
 * [JUnit 5](https://junit.org/junit5/)
 
 ## Running this project
-* Step by step instructions for running this project starting at git clone
-* 
+* Install docker desktop
+* Start Docker Desktop
+* Install [Java 17 liberica](https://bell-sw.com/pages/downloads/#jdk-17-lts)
+* Set environment variables (Windows)
+  * Name: `bean_mysql_admin_pass` Value: `MyPassword`
+* Run: `dockerbuild.bat <any password>`
+* Run: `docker compose up`
+* Navigate to http://localhost:8080
+  
 ## Introduction
 This is a demostration project of an apartment finder web portal.
-
-## Requirements
-### Narrative
-This project is a web portal for finding availiable apartments for rent.
-
-### Functional
-* As an owner I want to be able to have my listings "featured" before others
-  * Featured meaning the featured apartments are shown first on the main landing page and on search pages.
-  *  These could be done in a priority (who pays the most) or character set order (alphabetical).
-* As a property owner I want to update and maintain my building's apartment unit data
-* As a property owner I want to list my property
-* As a shopper I want to search for an apartment with given search criteria 
-  * For example: postal code, number of bedrooms, size, bathrooms
-* As a shopper I want to view an apartment floorplan
-* As a shopper I want to see interior views of an apartment
-* As a shopper I want to send an apartment complex an inquiry message
-* As an authenticated shopper I want to receive property notifications
-  * When a favorited unit availiability state changes
-  * When a message is read or received
-* As an authenticated shopper I want to preserve my favorites between sessions
-* As an authenticated shopper 
-* As an unauthenticated shopper I want to maintain a list of favorited units. (Cookie)
-* Stretch: Either link to Google Maps or embed Google Maps into the UI
-
-* As a developer/tester I want a testable code base
-  * Key UI components should have a way for test to locate the UI element programmatically
 
 ## Test
 [Junit 5](https://junit.org/junit5/) and [Selenium](https://selenium.dev) will be used for automated test cases.
@@ -76,7 +57,7 @@ This project is a web portal for finding availiable apartments for rent.
 * Show graphs, tables, and UML
 
 
-### ~Additional links~
+### Additional links
 * [Official Gradle documentation](https://docs.gradle.org)
 * [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.2.1/gradle-plugin/reference/html/)
 * [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.2.1/gradle-plugin/reference/html/#build-image)

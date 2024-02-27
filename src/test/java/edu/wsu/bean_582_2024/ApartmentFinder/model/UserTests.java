@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
  * @author Erik Jepsen &lt;erik.jepsen@wsu.edu&gt;
  */
 @Tag("fast")
-// Tests disabled in this class fail reliably and shouldn't.
 public class UserTests {
   private User user;
   private static final String USERNAME = "TestUser";

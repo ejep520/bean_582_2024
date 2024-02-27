@@ -11,6 +11,7 @@ plugins {
 	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.1.4'
 	id 'com.vaadin' version '24.3.3'
+	id 'jacoco' version '3.1.8'
 }
 
 group = 'edu.wsu.bean_582_2024'
@@ -45,6 +46,9 @@ dependencies {
 	testImplementation(platform('org.junit:junit-bom:5.10.2'))
 	testImplementation 'org.junit.jupiter:junit-jupiter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.seleniumhq.selenium:selenium-java:4.18.10'
+	testImplementation 'org.mockito:mockito-core:5.10.0'
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.10.0'
 	testRuntimeOnly('org.junit.vintage:junit-vintage-engine') {
 		because 'Vaadin sneaks in junit 4.'
 	}
@@ -56,7 +60,20 @@ tasks.named('test') {
 	testLogging {
 		events "passed", "skipped", "failed"
 	}
+	finalizedBy jacocoTestReport
 }
+
+jacoco {
+	
+
+jacocoTestReport {
+	dependsOn test
+}
+
+task myJavadocs(type: Javadoc) {
+	source = sourceSets.main.allJava
+}
+
 dependencyManagement {
 	imports {
 		mavenBom "com.vaadin:vaadin-bom:24.3.3"

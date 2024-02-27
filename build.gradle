@@ -41,15 +41,21 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'com.vaadin:vaadin-core:24.3.3'
 	implementation 'org.apache.commons:commons-lang3:3.14.0'
-	// implementation 'com.vaadin:vaadin-charts-flow'
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	// runtimeOnly 'com.h2database:h2'
-	//runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
+	testImplementation(platform('org.junit:junit-bom:5.10.2'))
+	testImplementation 'org.junit.jupiter:junit-jupiter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly('org.junit.vintage:junit-vintage-engine') {
+		because 'Vaadin sneaks in junit 4.'
+	}
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
 }
 dependencyManagement {
 	imports {

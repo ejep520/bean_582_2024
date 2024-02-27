@@ -1,11 +1,11 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.model;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.CredentialsContainer;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.DigestUtils;
 import jakarta.persistence.Entity;
@@ -29,7 +29,7 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   private Boolean enabled;
   private Role role;
   @OneToMany(targetEntity = Authority.class)
-  private List<Authority> authorities;
+  private final List<Authority> authorities = new ArrayList<>();
 
   public User() {
     username = "";
@@ -52,17 +52,17 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
 
   @Override
   public boolean isAccountNonExpired() {
-    return false;
+    return true;
   }
 
   @Override
   public boolean isAccountNonLocked() {
-    return false;
+    return true;
   }
 
   @Override
   public boolean isCredentialsNonExpired() {
-    return false;
+    return true;
   }
 
   @Override
@@ -75,7 +75,7 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   }
 
   @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
+  public Collection<? extends Authority> getAuthorities() {
     return authorities;
   }
 

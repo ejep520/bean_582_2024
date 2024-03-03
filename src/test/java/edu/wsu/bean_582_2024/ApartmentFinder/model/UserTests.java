@@ -18,11 +18,8 @@ import org.junit.jupiter.api.Test;
  * @author Erik Jepsen &lt;erik.jepsen@wsu.edu&gt;
  */
 @Tag("fast")
-public class UserTests {
+public class UserTests extends AuthenticationTestsTemplate{
   private User user;
-  private static final String USERNAME = "TestUser";
-  private static final String PASSWORD = "TestPassword";
-  private static final String WRONG_PASSWORD = "NotThePassword";
   @AfterEach
   public void RecreateUser() {
     user = null;
@@ -96,7 +93,7 @@ public class UserTests {
   @DisplayName("Parameterized User can check its own password (2/2)")
   public void parameterizedUserWrongPasswordFails() {
     user = new User(USERNAME, PASSWORD, Role.USER);
-    assertFalse(user.checkPassword(WRONG_PASSWORD));
+    assertFalse(user.checkPassword(BAD_PASSWORD));
   }
 
   @Test
@@ -152,8 +149,8 @@ public class UserTests {
   @Test
   @DisplayName("Set Username works")
   public void userSetUsernameHolds() {
-    user = new User(WRONG_PASSWORD, PASSWORD, Role.USER);
-    assertEquals(WRONG_PASSWORD, user.getUsername());
+    user = new User(BAD_PASSWORD, PASSWORD, Role.USER);
+    assertEquals(BAD_PASSWORD, user.getUsername());
     user.setUsername(USERNAME);
     assertEquals(USERNAME, user.getUsername());
   }
@@ -170,8 +167,8 @@ public class UserTests {
   @Test
   @DisplayName("Set Password on Parameterized User works")
   public void parameterizedUserSetPasswordTest() {
-    user = new User(USERNAME, WRONG_PASSWORD, Role.USER);
-    assertTrue(user.checkPassword(WRONG_PASSWORD)); // Check the wrong password is present.
+    user = new User(USERNAME, BAD_PASSWORD, Role.USER);
+    assertTrue(user.checkPassword(BAD_PASSWORD)); // Check the wrong password is present.
     user.setPassword(PASSWORD);
     assertTrue(user.checkPassword(PASSWORD)); // Check the correct password is now present.
   }

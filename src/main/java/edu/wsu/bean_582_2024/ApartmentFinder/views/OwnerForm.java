@@ -14,6 +14,7 @@ import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
+import java.io.Serial;
 
 @SuppressWarnings("serial")
 public class OwnerForm extends FormLayout {
@@ -24,10 +25,10 @@ public class OwnerForm extends FormLayout {
   private final IntegerField bedrooms = new IntegerField("Bedroom Count");
   private final NumberField bathrooms = new NumberField("Bathroom Count");
   private final Checkbox featured = new Checkbox("featured");
-  
-  private Button save = new Button("Save");
-  private Button delete = new Button("Delete");
-  private Button cancel = new Button("Cancel");
+
+  final Button save = new Button("Save");
+  final Button delete = new Button("Delete");
+  final Button cancel = new Button("Cancel");
 
   public OwnerForm() {
     addClassName("owner-form");
@@ -45,12 +46,12 @@ public class OwnerForm extends FormLayout {
     bedrooms.setMin(0);
     bedrooms.setMax(20);
     bedrooms.setStep(1);
-    bathrooms.setMin(0f);
+    bathrooms.setMin(0d);
     bathrooms.setMax(10.5d);
     bathrooms.setStep(0.5d);
   }
 
-  private Component createButtonLayout() {    
+  private Component createButtonLayout() {
     save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
     delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -59,7 +60,7 @@ public class OwnerForm extends FormLayout {
     cancel.addClickListener(event -> fireEvent(new CloseEvent(this)));
     save.addClickShortcut(Key.ENTER);
     cancel.addClickShortcut(Key.ESCAPE);
-    return new HorizontalLayout(getSave(), delete, cancel);
+    return new HorizontalLayout(save, delete, cancel);
   }
 
   private void validateAndSave() {
@@ -87,6 +88,7 @@ public class OwnerForm extends FormLayout {
     }
   }
   public static class SaveEvent extends OwnerForm.OwnerFormEvent {
+    @Serial
     private static final long serialVersionUID = 6288447328604003658L;
 
     public SaveEvent(OwnerForm source, Unit unit) {
@@ -122,45 +124,31 @@ public class OwnerForm extends FormLayout {
     addListener(OwnerForm.CloseEvent.class, listener);
   }
 
-/**
- * @return the address
- */
-public TextField getAddress() {
-	return address;
-}
+  /**
+   * @return the address
+   */
+  public TextField getAddress() {
+    return address;
+  }
 
-public TextField getKitchen() {
-	return kitchen;
-}
+  public TextField getKitchen() {
+    return kitchen;
+  }
 
-public TextField getLivingRoom() {
-	return livingRoom;
-}
+  public TextField getLivingRoom() {
+    return livingRoom;
+  }
 
-public IntegerField getBedrooms() {
-	return bedrooms;
-}
+  public IntegerField getBedrooms() {
+    return bedrooms;
+  }
 
-public NumberField getBathrooms() {
-	return bathrooms;
-}
+  public NumberField getBathrooms() {
+    return bathrooms;
+  }
 
-public Checkbox getFeatured() {
-	return featured;
-}
-
-/**
- * @param save the save to set
- */
-public void setSave(Button save) {
-	this.save = save;
-}
-
-/**
- * @return the save
- */
-public Button getSave() {
-	return save;
-}
+  public Checkbox getFeatured() {
+    return featured;
+  }
 
 }

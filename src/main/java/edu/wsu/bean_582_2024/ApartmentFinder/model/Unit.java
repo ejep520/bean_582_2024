@@ -82,4 +82,27 @@ public class Unit extends AbstractEntity {
   public void setFeatured(Boolean featured) {
     this.featured = Objects.requireNonNullElse(featured, false);
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Unit unit = (Unit) o;
+    return Objects.equals(address, unit.getAddress()) && Objects.equals(bedrooms,
+        unit.getBedrooms()) && Objects.equals(bathrooms, unit.getBathrooms())
+        && Objects.equals(livingRoom, unit.getLivingRoom()) && Objects.equals(kitchen,
+        unit.getKitchen()) && Objects.equals(featured, unit.getFeatured())
+        && Objects.equals(this.getId(), unit.getId()) && Objects.equals(this.getVersion(),
+        unit.getVersion());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), address, bedrooms, bathrooms, livingRoom, kitchen,
+        featured);
+  }
 }

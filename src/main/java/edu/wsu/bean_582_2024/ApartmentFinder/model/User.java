@@ -1,6 +1,8 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.model;
 
+import java.io.Serial;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -14,9 +16,10 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-@Table(name = "APT_USERS")
+@Table(name = "apt_users")
 @Entity
 public class User extends AbstractEntity implements UserDetails, CredentialsContainer {
+  @Serial
   private static final long serialVersionUID = -614412803435355964L;
   @NotNull
   @NotEmpty
@@ -29,7 +32,9 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   private Boolean enabled;
   private Role role;
   @OneToMany(targetEntity = Authority.class)
-  private List<Authority> authorities;
+  private final List<Authority> authorities = new ArrayList<>();
+  @OneToMany(targetEntity=Unit.class)
+  private final List<Unit> units = new ArrayList<>();
 
   public User() {
     username = "";
@@ -120,6 +125,15 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
     return passwordSalt == null || passwordSalt.isEmpty() || passwordSalt.isBlank();
   }
 
+  public List<Unit> getUnits() {
+    return units;
+  }
+  
   @Override
   public void eraseCredentials() {}
+  
+  @Override
+  public String toString() {
+    return username;
+  }
 }

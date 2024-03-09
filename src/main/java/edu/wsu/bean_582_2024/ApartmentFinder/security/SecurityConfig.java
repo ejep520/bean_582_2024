@@ -36,6 +36,18 @@ public class SecurityConfig extends VaadinWebSecurity {
         "select username,password_hash,'true' as enabled from apt_users where username = ?");
     service.setAuthoritiesByUsernameQuery(
         "select username, authority from authorities where username = ?");
+    service.setChangePasswordSql(
+        "update apt_users set password = ? where username = ?"
+    );
+    service.setUpdateUserSql(
+        "update apt_users set password = ?, enabled = ? where username = ?"
+    );
+    service.setCreateUserSql(
+        "insert into apt_users (username, password, enabled) values (?, ?, ?)"
+    );
+    service.setDeleteUserSql(
+        "delete from apt_users where username = ?"
+    );
     return service;
   }
   /*

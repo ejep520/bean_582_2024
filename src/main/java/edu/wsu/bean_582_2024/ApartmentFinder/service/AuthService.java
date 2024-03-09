@@ -1,5 +1,6 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.service;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -73,6 +74,7 @@ public class AuthService implements AuthenticationProvider {
   public record AuthorizedRoute(String route, String name, Class<? extends Component> view) {
   }
   public static class AuthException extends Exception {
+    @Serial
     private static final long serialVersionUID = 1L;
   }
 

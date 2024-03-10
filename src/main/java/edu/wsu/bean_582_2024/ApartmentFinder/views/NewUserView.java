@@ -17,7 +17,7 @@ import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService;
 
 @Route(value = "/newuser", layout = MainLayout.class)
-@PageTitle("New User | Bean 582")
+@PageTitle("Register User")
 @AnonymousAllowed
 @SuppressWarnings("serial")
 public class NewUserView extends Composite<Component> {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.data.annotation.Transient;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,20 +36,30 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   private final List<Authority> authorities = new ArrayList<>();
   @OneToMany(targetEntity=Unit.class)
   private final List<Unit> units = new ArrayList<>();
+  @Transient
+  private String newPassword;
+  @Transient
+  private boolean passwordChanged;
+  
 
   public User() {
+    generateSalt();
     username = "";
     passwordHash = "";
     enabled = false;
+    newPassword = "";
+    passwordChanged = false;
   }
 
   public User(String username, String password, Role role) {
     generateSalt();
     this.username = username;
+    newPassword = password;
     this.role = role;
     enabled = true;
     this.passwordHash =
         DigestUtils.md5DigestAsHex((password + passwordSalt).getBytes(StandardCharsets.UTF_8));
+    passwordChanged = true;
   }
 
   public String getUsername() {
@@ -89,11 +100,8 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   }
 
   public void setPassword(String password) {
-    if (passwordSalt == null || passwordSalt.isEmpty() || passwordSalt.isBlank())
-      this.passwordHash = password;
-    else
-      this.passwordHash =
-          DigestUtils.md5DigestAsHex((password + passwordSalt).getBytes(StandardCharsets.UTF_8));
+    this.passwordHash =
+        DigestUtils.md5DigestAsHex((password + passwordSalt).getBytes(StandardCharsets.UTF_8));
   }
 
   public Boolean getEnabled() {
@@ -121,10 +129,6 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
     passwordSalt = RandomStringUtils.random(10, true, true);
   }
 
-  public boolean isPasswordSaltEmpty() {
-    return passwordSalt == null || passwordSalt.isEmpty() || passwordSalt.isBlank();
-  }
-
   public List<Unit> getUnits() {
     return units;
   }
@@ -135,5 +139,28 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   @Override
   public String toString() {
     return username;
+  }
+  
+  private boolean digestNewPassword() {
+    if (!checkPassword(newPassword)) {
+      passwordHash = DigestUtils.md5DigestAsHex(
+          (newPassword + passwordSalt).getBytes(StandardCharsets.UTF_8));
+      newPassword = null;
+      return true;
+    }
+    if (newPassword != null) {
+      newPassword = null;
+    }
+    return false;
+  }
+  
+  public void setNewPassword(String newPassword) {
+    if (newPassword != null && !newPassword.isBlank())
+      this.newPassword = newPassword;
+    passwordChanged = digestNewPassword();
+  }
+  
+  public boolean getPasswordChanged() {
+    return passwordChanged;
   }
 }

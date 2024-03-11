@@ -133,22 +133,22 @@ public class AuthService implements AuthenticationProvider {
   public void register(String username, String password, Role role) {
     User user;
     if (getUserCount() == 0 || role == Role.ADMIN) {
-      userRepository.save(new User(username, password, Role.ADMIN));
+      userRepository.add(new User(username, password, Role.ADMIN));
       user = userRepository.getUserByUsername(username);
       for (GrantedAuthority auth : ADMIN_AUTHORITY) {
-        authRepository.save(new Authority(user, auth.getAuthority()));
+        authRepository.add(new Authority(user, auth.getAuthority()));
       }
     } else if (role == Role.OWNER) {
-      userRepository.save(new User(username, password, Role.OWNER));
+      userRepository.add(new User(username, password, Role.OWNER));
       user = userRepository.getUserByUsername(username);
       for (GrantedAuthority auth : OWNER_AUTHORITY) {
-        authRepository.save(new Authority(user, auth.getAuthority()));
+        authRepository.add(new Authority(user, auth.getAuthority()));
       }
     } else {
-      userRepository.save(new User(username, password, Role.USER));
+      userRepository.add(new User(username, password, Role.USER));
       user = userRepository.getUserByUsername(username);
       for (GrantedAuthority auth : USER_AUTHORITY) {
-        authRepository.save(new Authority(user, auth.getAuthority()));
+        authRepository.add(new Authority(user, auth.getAuthority()));
       }
     }
   }

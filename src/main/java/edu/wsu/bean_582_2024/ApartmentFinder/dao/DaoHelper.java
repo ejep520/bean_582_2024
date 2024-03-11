@@ -2,11 +2,12 @@ package edu.wsu.bean_582_2024.ApartmentFinder.dao;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.model.AbstractEntity;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
+import org.hibernate.Transaction;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.slf4j.Logger;
 
 public abstract class DaoHelper{
@@ -29,13 +30,14 @@ public abstract class DaoHelper{
   }
 
   void executeInsideTransaction(Consumer<EntityManager> action) {
-    EntityTransaction tx = entityManager.getTransaction();
+    SessionImplementor sessionImplementor = (SessionImplementor) entityManager.getDelegate();
+    Transaction transaction = sessionImplementor.getTransaction();
     try {
-      tx.begin();
+      transaction.begin();
       action.accept(entityManager);
-      tx.commit();
+      transaction.commit();
     } catch (RuntimeException err) {
-      tx.rollback();
+      transaction.rollback();
       throw err;
     }
   }

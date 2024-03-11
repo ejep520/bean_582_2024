@@ -6,7 +6,11 @@ import jakarta.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public class AuthorityDao extends DaoHelper implements Dao<Authority> {
 
   public AuthorityDao(EntityManager entityManager) {
@@ -25,6 +29,7 @@ public class AuthorityDao extends DaoHelper implements Dao<Authority> {
   }
 
   @Override
+  @Transactional(propagation = Propagation.NEVER)
   public void save(Authority authority) {
     executeInsideTransaction(entityManager -> entityManager.persist(authority));
   }
@@ -37,6 +42,7 @@ public class AuthorityDao extends DaoHelper implements Dao<Authority> {
   }
 
   @Override
+  @Transactional(propagation = Propagation.NEVER)
   public void delete(Authority authority) {
     executeInsideTransaction(entityManager -> entityManager.remove(authority));
   }

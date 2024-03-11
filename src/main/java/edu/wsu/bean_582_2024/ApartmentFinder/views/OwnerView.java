@@ -75,7 +75,7 @@ public class OwnerView extends VerticalLayout {
     if ((owner_id != null) && !is_admin)
       getGrid().setItems(unitService.getUsersUnits(owner_id));
     else if ((owner_id != null))
-      getGrid().setItems(unitService.getAllUnits());
+      getGrid().setItems(unitService.getAllUnits(true));
   }
 
   private void editUnit(Unit unit) {

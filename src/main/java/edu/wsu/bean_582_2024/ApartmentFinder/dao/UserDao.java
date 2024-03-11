@@ -11,6 +11,8 @@ import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserDao extends DaoHelper implements Dao<User>{
@@ -31,26 +33,27 @@ public class UserDao extends DaoHelper implements Dao<User>{
   }
 
   @Override
+  @Transactional(propagation = Propagation.NEVER)
   public void save(User user) {
     executeInsideTransaction(entityManager -> entityManager.persist(user));
   }
 
   @Override
+  @Transactional(propagation = Propagation.NEVER)
   public void update(User user, Object... params) {
     Objects.requireNonNull(user, "User may not be null.").setUsername(Objects
         .requireNonNull((String)params[0], "Username may not be null."));
-    if (user.isPasswordSaltEmpty()) {
-      user.generateSalt();
-    }
-    user.setPassword(Objects.requireNonNull((String)params[1], "Password may not be null."));
+    user.setPassword(Objects.requireNonNull((String)params[1],
+        "Password may not be null."));
     user.getUnits().clear();
-    List<Unit> castedList = castList(Unit.class, (Collection<?>)params[2]);
-    user.getUnits().addAll(Objects
-        .requireNonNull(castedList, "Units list may not be null."));
+    List<Unit> castedList = castList(Unit.class, (Collection<?>) Objects.requireNonNull(params[2],
+        "Units may not be null."));
+    user.getUnits().addAll(castedList);
     executeInsideTransaction(entityManager -> entityManager.merge(user));
   }
 
   @Override
+  @Transactional(propagation = Propagation.NEVER)
   public void delete(User user) {
     executeInsideTransaction(entityManager -> entityManager.remove(user));
   }
@@ -69,5 +72,18 @@ public class UserDao extends DaoHelper implements Dao<User>{
     } catch (IndexOutOfBoundsException err) {
       return null;
     }
+  }
+  
+  public Long count() {
+    Long returnValue;
+    try {
+      returnValue = (Long) entityManager
+          .createQuery("select count(e.id) from User e")
+          .getSingleResult();
+    } catch (ClassCastException err) {
+      logger.atError().log(String.format("Unable to cast to Long. %s", err));
+      returnValue = 0L;
+    }
+    return returnValue;
   }
 }

@@ -1,6 +1,12 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.data;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Authority;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Component;
 
-public interface AuthorityRepository extends JpaRepository<Authority, Long> { }
+@Component
+public interface AuthorityRepository {
+  Authority get(Long id);
+  void add(Authority authority);
+  void update(Authority authority);
+  void remove(Authority authority);
+}

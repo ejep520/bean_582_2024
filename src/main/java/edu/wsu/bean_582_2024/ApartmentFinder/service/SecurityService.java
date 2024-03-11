@@ -12,10 +12,10 @@ public class SecurityService {
 
   private final AuthenticationContext authenticationContext;
 
-  @Autowired
-  private UserDetailsService userDetailsService;
+  private final UserDetailsService userDetailsService;
 
-  public SecurityService(AuthenticationContext authenticationContext) {
+  public SecurityService(AuthenticationContext authenticationContext, UserDetailsService userDetailsService) {
+    this.userDetailsService = userDetailsService;
     this.authenticationContext = authenticationContext;
   }
 

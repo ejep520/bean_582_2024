@@ -49,7 +49,7 @@ public class LoginView extends VerticalLayout
 
   @Override
   public void onComponentEvent(LoginEvent loginEvent) {
-    boolean authenticated = false;
+    boolean authenticated;
     try {
       authenticated = authService.authenticate(loginEvent.getUsername(), loginEvent.getPassword());
     } catch (AuthException e) {

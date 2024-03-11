@@ -13,7 +13,7 @@ public class UnitService {
     this.unitRepository = unitRepository;
   }
   public List<Unit> getAllUnits() {
-    return unitRepository.findAll(Sort.by("featured"));
+    return unitRepository.findAll(Sort.by(Sort.Direction.DESC,"featured"));
   }
   public List<Unit> findUnits(String filter) {
     return unitRepository.search(filter);

@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 public interface UnitRepository extends JpaRepository<Unit, Long> {
   @Query("select u " 
       + "from unit u " 
-      + "where lower(u.address) like lower(concat('%', :searchTerm, '%'))") 
+      + "where lower(u.address) like lower(concat('%', :searchTerm, '%')) order by u.featured desc")
 //      + "OR lower(u.livingRoom) like lower(concat('%', :searchTerm, '%'));") 
 //      + "OR lower(u.kitchen) like lower(concat('%' :searchTerm, '%'))") 
 //      + "ORDER BY featured DESC;")

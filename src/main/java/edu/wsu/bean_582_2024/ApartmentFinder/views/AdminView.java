@@ -15,7 +15,7 @@ import edu.wsu.bean_582_2024.ApartmentFinder.service.UserService;
 import jakarta.annotation.security.RolesAllowed;
 
 @SuppressWarnings("serial")
-@PageTitle("User Admin | Bean 582")
+@PageTitle("User Administration")
 @Route(value = "admin", layout = MainLayout.class)
 @RolesAllowed("ADMIN")
 public class AdminView extends VerticalLayout {

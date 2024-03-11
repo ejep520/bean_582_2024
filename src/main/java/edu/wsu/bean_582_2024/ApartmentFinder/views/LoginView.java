@@ -21,7 +21,7 @@ import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService.AuthException;
 
 @Route("login")
 @RouteAlias("/")
-@PageTitle("Login | BEAN_582")
+@PageTitle("Login")
 @AnonymousAllowed
 @SuppressWarnings("serial")
 public class LoginView extends VerticalLayout

@@ -29,7 +29,7 @@ public class MainLayout extends AppLayout {
 
   private void createHeader() {
     HorizontalLayout header;
-    H1 logo = new H1("Bean 582");
+    H1 logo = new H1("Apartment Finder");
     logo.addClassNames("text-l", "m-m");
     if (securityService.getAuthenticatedUser().isPresent()) {
       Button logOut = new Button("Log out", e -> securityService.logout());

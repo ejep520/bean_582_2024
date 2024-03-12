@@ -4,8 +4,8 @@ import edu.wsu.bean_582_2024.ApartmentFinder.dao.AuthorityDao;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Authority;
 import org.springframework.stereotype.Component;
 
-@Component
-public class AuthorityRepositoryImpl implements  AuthorityRepository{
+@Component("AuthImpl")
+public class AuthorityRepositoryImpl implements AuthorityRepository{
 
   private final AuthorityDao authorityDao;
   
@@ -26,7 +26,7 @@ public class AuthorityRepositoryImpl implements  AuthorityRepository{
 
   @Override
   public void update(Authority authority) {
-    authorityDao.update(get(authority.getId()), authority);
+    authorityDao.update(authority);
   }
 
   @Override

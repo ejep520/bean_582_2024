@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface UserRepository {
+public interface userService {
   List<User> getAll();
   Optional<User> getUserById(Long id);
   void add(User user);

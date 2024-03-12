@@ -1,21 +1,22 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.data.annotation.Transient;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.DigestUtils;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 @Table(name = "apt_users")
 @Entity
@@ -32,14 +33,14 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   @NotNull
   private Boolean enabled;
   private Role role;
-  @OneToMany(targetEntity = Authority.class)
+  @OneToMany(targetEntity = Authority.class, fetch = FetchType.EAGER)
   private final List<Authority> authorities = new ArrayList<>();
-  @OneToMany(targetEntity=Unit.class)
+  @OneToMany(targetEntity=Unit.class, fetch = FetchType.EAGER)
   private final List<Unit> units = new ArrayList<>();
   @Transient
-  private String newPassword;
+  private transient String newPassword;
   @Transient
-  private boolean passwordChanged;
+  private transient boolean passwordChanged;
   
 
   public User() {
@@ -54,12 +55,11 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   public User(String username, String password, Role role) {
     generateSalt();
     this.username = username;
-    newPassword = password;
     this.role = role;
     enabled = true;
     this.passwordHash =
         DigestUtils.md5DigestAsHex((password + passwordSalt).getBytes(StandardCharsets.UTF_8));
-    passwordChanged = true;
+    passwordChanged = false;
   }
 
   public String getUsername() {
@@ -121,8 +121,8 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   }
 
   public boolean checkPassword(String password) {
-    return DigestUtils.md5DigestAsHex((password + passwordSalt).getBytes(StandardCharsets.UTF_8))
-        .equals(passwordHash);
+    String attemptHash = DigestUtils.md5DigestAsHex((password + passwordSalt).getBytes(StandardCharsets.UTF_8)); 
+    return attemptHash.equals(passwordHash);
   }
 
   public void generateSalt() {

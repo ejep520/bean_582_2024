@@ -7,11 +7,11 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserRepositoryImpl implements UserRepository {
+public class userServiceImpl implements userService {
 
   private final UserDao userDao;
   
-  public UserRepositoryImpl(UserDao userDao) {
+  public userServiceImpl(UserDao userDao) {
     this.userDao = userDao;
   }
 
@@ -32,12 +32,7 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Override
   public void update(User user) {
-    User oldUser = getUserById(user.getId()).orElse(null);
-    if (oldUser == null) return;
-    if (user.getPasswordChanged())
-      userDao.update(oldUser, user.getUsername(), user.getPassword(), user.getUnits());
-    else
-      userDao.update(oldUser, user.getUsername(), oldUser.getPassword(), user.getUnits());
+    userDao.update(user);
   }
 
   @Override

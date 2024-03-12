@@ -32,8 +32,7 @@ public class UnitRepositoryImpl implements UnitRepository {
 
   @Override
   public void update(Unit unit) {
-    unitDao.update(get(unit.getId()), unit.getAddress(), unit.getBedrooms(), unit.getBathrooms(),
-        unit.getLivingRoom(), unit.getKitchen(), unit.getFeatured(), unit.getUser());
+    unitDao.update(unit);
   }
 
   @Override

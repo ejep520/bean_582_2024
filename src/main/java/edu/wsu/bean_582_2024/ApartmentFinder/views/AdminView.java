@@ -14,16 +14,15 @@ import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.UserService;
 import jakarta.annotation.security.RolesAllowed;
 
-@SuppressWarnings("serial")
 @PageTitle("User Administration")
 @Route(value = "admin", layout = MainLayout.class)
 @RolesAllowed("ADMIN")
 public class AdminView extends VerticalLayout {
-  private Grid<User> grid = new Grid<>(User.class, false);
-  private TextField filterText = new TextField("Filter");
+  private final Grid<User> grid = new Grid<>(User.class, false);
+  private final TextField filterText = new TextField("Filter");
   private AdminForm adminForm;
-  private UserService userService;
-  private AuthService authService;
+  private final UserService userService;
+  private final AuthService authService;
   private Boolean isNewUser = null;
   public AdminView(UserService userService, AuthService authService) {
     this.userService = userService;
@@ -79,7 +78,7 @@ public class AdminView extends VerticalLayout {
 
   private void saveUser(AdminForm.SaveEvent event) {
     if (isNewUser != null) {
-      if (isNewUser) authService.register(event.getUser().getUsername(), event.getUser().getPassword(), event.getUser().getRole());
+      if (isNewUser) authService.register(event.getUser());
       else userService.saveUser(event.getUser());
     }
     updateList();

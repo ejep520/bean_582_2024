@@ -5,7 +5,6 @@ import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,19 +39,10 @@ public class UnitDao extends DaoHelper implements Dao<Unit>{
   }
 
   @Override
-  @Transactional(propagation = Propagation.NEVER)
-  public void update(Unit unit, Object... params) {
-      Objects.requireNonNull(unit)
-          .setAddress((String) Objects.requireNonNull(params[0]));
-      unit.setBedrooms((Integer) Objects.requireNonNull(params[1]));
-      unit.setBathrooms((Double) Objects.requireNonNull(params[2]));
-      unit.setLivingRoom((String) Objects.requireNonNull(params[3]));
-      unit.setKitchen((String) Objects.requireNonNull(params[4]));
-      unit.setFeatured((Boolean) Objects.requireNonNull(params[5]));
-      unit.setUser((User) Objects.requireNonNull(params[6]));
+  public void update(Unit unit) {
       executeInsideTransaction(entityManager -> entityManager.merge(unit));
   }
-
+  
   @Override
   @Transactional(propagation = Propagation.NEVER)
   public void delete(Unit unit) {
@@ -60,6 +50,7 @@ public class UnitDao extends DaoHelper implements Dao<Unit>{
   }
   
   public List<Unit> find(String searchKey) {
+    if ((searchKey == null) || searchKey.isEmpty() || searchKey.isBlank()) return getAll();
     List<Unit> returnValue = new ArrayList<>();
     for (Object o : entityManager
         .createQuery("SELECT e from unit e where lower(e.address) LIKE :searchKey OR lower(e.livingRoom) LIKE :searchKey OR lower(e.kitchen) LIKE :searchKey")
@@ -83,7 +74,7 @@ public class UnitDao extends DaoHelper implements Dao<Unit>{
   public List<Unit> findByUser(User user) {
     return castList(Unit.class,
         entityManager
-            .createQuery("select e from unit e where User = :userKey")
+            .createQuery("select e from unit e where user = :userKey")
             .setParameter("userKey", user)
             .getResultList());
   }

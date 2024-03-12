@@ -1,18 +1,13 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.dao;
 
-import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserDao extends DaoHelper implements Dao<User>{
@@ -33,27 +28,16 @@ public class UserDao extends DaoHelper implements Dao<User>{
   }
 
   @Override
-  @Transactional(propagation = Propagation.NEVER)
   public void save(User user) {
     executeInsideTransaction(entityManager -> entityManager.persist(user));
   }
 
   @Override
-  @Transactional(propagation = Propagation.NEVER)
-  public void update(User user, Object... params) {
-    Objects.requireNonNull(user, "User may not be null.").setUsername(Objects
-        .requireNonNull((String)params[0], "Username may not be null."));
-    user.setPassword(Objects.requireNonNull((String)params[1],
-        "Password may not be null."));
-    user.getUnits().clear();
-    List<Unit> castedList = castList(Unit.class, (Collection<?>) Objects.requireNonNull(params[2],
-        "Units may not be null."));
-    user.getUnits().addAll(castedList);
+  public void update(User user) {
     executeInsideTransaction(entityManager -> entityManager.merge(user));
   }
 
   @Override
-  @Transactional(propagation = Propagation.NEVER)
   public void delete(User user) {
     executeInsideTransaction(entityManager -> entityManager.remove(user));
   }
@@ -65,7 +49,9 @@ public class UserDao extends DaoHelper implements Dao<User>{
         .getResultList()) {
       try {
         listUser.add((User) o);
-      } catch (ClassCastException err) {}
+      } catch (ClassCastException err) {
+        logger.atWarn().log(String.format("Error casting to User class. %s", err));
+      }
     }
     try {
       return listUser.get(0);

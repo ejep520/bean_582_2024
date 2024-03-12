@@ -24,7 +24,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @SpringComponent
 @Scope("prototype")
-@SuppressWarnings("serial")
 @Route(value = "/owner", layout = MainLayout.class)
 @PageTitle("Unit Administration | Bean 582")
 @RolesAllowed({"OWNER", "ADMIN"})
@@ -46,7 +45,7 @@ public class OwnerView extends VerticalLayout {
       is_admin = false;
     } else {
       owner_id = userService.findUserByUsername(userDetails.getUsername()).orElse(null);
-      is_admin = (owner_id != null) && (owner_id.getRole() == Role.ADMIN);
+      is_admin = (owner_id != null) && Role.ADMIN.equals(owner_id.getRole());
     }
     addClassName("owner-view");
     setSizeFull();
@@ -63,7 +62,6 @@ public class OwnerView extends VerticalLayout {
     content.setFlexGrow(1, getOwnerForm());
     content.addClassNames("content");
     content.setSizeFull();
-
     return content;
   }
 

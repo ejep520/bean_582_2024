@@ -16,10 +16,9 @@ public class Authority extends AbstractEntity implements GrantedAuthority, Seria
   @Serial
   private static final long serialVersionUID = 612727736166545439L;
   @ManyToOne(targetEntity = User.class, cascade = CascadeType.REMOVE, optional = false,
-      fetch = FetchType.LAZY)
+      fetch = FetchType.EAGER)
   @JoinColumn(name = "userid")
   private User user;
-  private String username;
   private String authority;
 
   public Authority() {}
@@ -27,7 +26,6 @@ public class Authority extends AbstractEntity implements GrantedAuthority, Seria
   public Authority(User user, String authority) {
     this.user = user;
     this.authority = authority;
-    username = user.getUsername();
   }
 
   @Override
@@ -35,7 +33,7 @@ public class Authority extends AbstractEntity implements GrantedAuthority, Seria
     return authority;
   }
 
-  public String getUsername() {
-    return username;
+  public User getUser() {
+    return user;
   }
 }

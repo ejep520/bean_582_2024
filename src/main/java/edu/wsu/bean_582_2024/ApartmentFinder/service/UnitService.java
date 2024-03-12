@@ -36,34 +36,27 @@ public class UnitService {
   }
   public void saveUnit(Unit unit) {
     Unit oldUnit;
+    User oldUser, newUser;
+    newUser = unit.getUser();
     if (unit.getId() != null)
       oldUnit = unitRepository.get(unit.getId());
     else
       oldUnit = null;
-    if (oldUnit == null) {
-      unit.getUser().getUnits().add(unit);
-      userService.saveUser(unit.getUser());
+    if (oldUnit != null) {
+      oldUser = oldUnit.getUser() == null ? null : oldUnit.getUser();
+    } else {
+      newUser.getUnits().add(unit);
+      // userService.saveUser(newUser);
       unitRepository.add(unit);
       return;
     }
-    if (oldUnit.getUser() == null && unit.getUser() != null) {
-      unit.getUser().getUnits().add(unit);
-      userService.saveUser(unit.getUser());
+    if (oldUser == null) {
+      newUser.getUnits().add(unit);
+      // userService.saveUser(newUser);
       unitRepository.update(unit);
       return;
     }
-    if (!oldUnit.getUser().equals(unit.getUser())) {
-      oldUnit.getUser().getUnits().remove(oldUnit);
-      unit.getUser().getUnits().add(unit);
-      userService.saveUser(oldUnit.getUser());
-      userService.saveUser(unit.getUser());
-      unitRepository.update(unit);
-    }
-    if (oldUnit.getUser() != null && unit.getUser() == null) {
-      if (!oldUnit.getUser().getUnits().contains(oldUnit))
-        oldUnit.getUser().getUnits().add(oldUnit);
-      unit.setUser(oldUnit.getUser());
-      userService.saveUser(unit.getUser());
+    if (oldUser.equals(newUser)) {
       unitRepository.update(unit);
     }
   }

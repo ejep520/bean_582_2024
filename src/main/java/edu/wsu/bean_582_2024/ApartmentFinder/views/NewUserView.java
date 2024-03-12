@@ -19,7 +19,6 @@ import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService;
 @Route(value = "/newuser", layout = MainLayout.class)
 @PageTitle("Register User")
 @AnonymousAllowed
-@SuppressWarnings("serial")
 public class NewUserView extends Composite<Component> {
 
   private final AuthService authService;
@@ -50,7 +49,7 @@ public class NewUserView extends Composite<Component> {
     else if (!password1.trim().equals(password2.trim()))
       Notification.show("Passwords don't match");
     else {
-      authService.register(username, password1, Role.USER);
+      authService.register(username, password1.trim(), Role.USER);
       Notification.show("User has been registered.");
       UI.getCurrent().navigate(LoginView.class);
     }

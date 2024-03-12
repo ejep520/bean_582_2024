@@ -35,7 +35,7 @@ public class SecurityConfig extends VaadinWebSecurity {
     service.setUsersByUsernameQuery(
         "select username,password_hash,'true' as enabled from apt_users where username = ?");
     service.setAuthoritiesByUsernameQuery(
-        "select username, authority from authorities where username = ?");
+        "select u.username, a.authority from authorities as a, apt_users as u where u.username = ? and u.id = a.userid");
     service.setChangePasswordSql(
         "update apt_users set password = ? where username = ?"
     );

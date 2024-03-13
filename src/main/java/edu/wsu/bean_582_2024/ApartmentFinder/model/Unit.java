@@ -18,7 +18,7 @@ public class Unit extends AbstractEntity {
   private String livingRoom;
   private String kitchen;
   private Boolean featured;
-  @ManyToOne(cascade = {CascadeType.MERGE,  CascadeType.REMOVE})
+  @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
   private User user;
 
   public Unit() {

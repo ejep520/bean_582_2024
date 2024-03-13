@@ -2,6 +2,7 @@ package edu.wsu.bean_582_2024.ApartmentFinder.views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
@@ -32,9 +33,11 @@ public class NewUserView extends Composite<Component> {
     TextField username = new TextField("Username");
     PasswordField password1 = new PasswordField("Password");
     PasswordField password2 = new PasswordField("Confirm password");
-    VerticalLayout layout =
-        new VerticalLayout(new H2("Register"), username, password1, password2, new Button("Send",
-            event -> register(username.getValue(), password1.getValue(), password2.getValue())));
+    Button sendButton = new Button("Send", event -> register(username.getValue(),
+        password1.getValue(), password2.getValue()));
+    sendButton.addClickShortcut(Key.ENTER);
+    VerticalLayout layout = new VerticalLayout(new H2("Register"), username, password1,
+        password2, sendButton);
     layout.setAlignItems(Alignment.CENTER);
     return layout;
   }

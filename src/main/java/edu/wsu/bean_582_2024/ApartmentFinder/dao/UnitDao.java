@@ -3,6 +3,9 @@ package edu.wsu.bean_582_2024.ApartmentFinder.dao;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UnitDao extends DaoHelper implements Dao<Unit>{
   
-  public UnitDao(EntityManager entityManager) {
-    super(entityManager, LoggerFactory.getLogger(UnitDao.class));
+  public UnitDao(EntityManagerFactory entityManagerFactory) {
+    super(entityManagerFactory, LoggerFactory.getLogger(UnitDao.class));
   }
 
 
@@ -46,7 +49,17 @@ public class UnitDao extends DaoHelper implements Dao<Unit>{
   @Override
   @Transactional(propagation = Propagation.NEVER)
   public void delete(Unit unit) {
-    executeInsideTransaction(entityManager -> entityManager.remove(unit));
+    EntityManager manager = entityManagerFactory.createEntityManager();
+    EntityTransaction transaction = manager.getTransaction();
+    transaction.begin();
+    try {
+      manager.createQuery("delete from unit where id = :id")
+          .setParameter("id", unit.getId())
+          .executeUpdate();
+    } catch (PersistenceException err) {
+      transaction.rollback();
+    }
+    transaction.commit();
   }
   
   public List<Unit> find(String searchKey) {

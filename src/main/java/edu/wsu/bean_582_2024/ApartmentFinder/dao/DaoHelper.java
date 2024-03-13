@@ -2,6 +2,7 @@ package edu.wsu.bean_582_2024.ApartmentFinder.dao;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.model.AbstractEntity;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -12,9 +13,11 @@ import org.slf4j.Logger;
 
 public abstract class DaoHelper{
   EntityManager entityManager;
+  EntityManagerFactory entityManagerFactory;
   Logger logger;
-  public DaoHelper(EntityManager entityManager, Logger logger) {
-    this.entityManager = entityManager;
+  public DaoHelper(EntityManagerFactory entityManagerFactory, Logger logger) {
+    this.entityManagerFactory = entityManagerFactory; 
+    this.entityManager = entityManagerFactory.createEntityManager();
     this.logger = logger;
   }
   <T extends AbstractEntity> List<T> castList(Class<? extends T> clazz, Collection<?> rawCollection) {

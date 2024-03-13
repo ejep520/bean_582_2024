@@ -5,7 +5,7 @@ import edu.wsu.bean_582_2024.ApartmentFinder.model.Authority;
 import org.springframework.stereotype.Component;
 
 @Component("AuthImpl")
-public class AuthorityRepositoryImpl implements AuthorityRepository{
+public class AuthorityRepositoryImpl implements AuthorityRepository {
 
   private final AuthorityDao authorityDao;
   

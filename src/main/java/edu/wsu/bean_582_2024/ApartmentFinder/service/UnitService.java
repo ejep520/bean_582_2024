@@ -1,6 +1,7 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.service;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.data.UnitRepository;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.UserRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
@@ -11,10 +12,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class UnitService {
   private final UnitRepository unitRepository;
-  private final UserService userService;
-  public UnitService(UnitRepository unitRepository, UserService userService) {
+  private final UserRepository userRepository;
+  public UnitService(UnitRepository unitRepository, UserRepository userRepository) {
     this.unitRepository = unitRepository;
-    this.userService = userService;
+    this.userRepository = userRepository;
   }
   public List<Unit> getAllUnits(Boolean sortByFeatured) {
     List<Unit> units = unitRepository.getAll();
@@ -29,34 +30,15 @@ public class UnitService {
     return unitRepository.count();
   }
   public void deleteUnit(Unit unit) {
-    User user = unit.getUser();
-    user.getUnits().remove(unit);
-    userService.saveUser(user);
+    unit.setUser(null);
+    unitRepository.update(unit);
     unitRepository.delete(unit);
   }
   public void saveUnit(Unit unit) {
-    Unit oldUnit;
-    User oldUser, newUser;
-    newUser = unit.getUser();
-    if (unit.getId() != null)
-      oldUnit = unitRepository.get(unit.getId());
-    else
-      oldUnit = null;
-    if (oldUnit != null) {
-      oldUser = oldUnit.getUser() == null ? null : oldUnit.getUser();
-    } else {
-      newUser.getUnits().add(unit);
-      // userService.saveUser(newUser);
+    Long oldUnit = unit.getId();
+    if (oldUnit == null) {
       unitRepository.add(unit);
-      return;
-    }
-    if (oldUser == null) {
-      newUser.getUnits().add(unit);
-      // userService.saveUser(newUser);
-      unitRepository.update(unit);
-      return;
-    }
-    if (oldUser.equals(newUser)) {
+    } else {
       unitRepository.update(unit);
     }
   }

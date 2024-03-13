@@ -7,11 +7,11 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 @Component
-public class userServiceImpl implements userService {
+public class UserRepositoryImpl implements UserRepository {
 
   private final UserDao userDao;
   
-  public userServiceImpl(UserDao userDao) {
+  public UserRepositoryImpl(UserDao userDao) {
     this.userDao = userDao;
   }
 

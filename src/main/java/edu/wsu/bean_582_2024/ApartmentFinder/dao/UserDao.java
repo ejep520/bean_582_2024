@@ -1,7 +1,7 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.dao;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
-import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDao extends DaoHelper implements Dao<User>{
 
-  public UserDao(EntityManager entityManager) {
-    super(entityManager, LoggerFactory.getLogger(UserDao.class));
+  public UserDao(EntityManagerFactory entityManagerFactory) {
+    super(entityManagerFactory, LoggerFactory.getLogger(UserDao.class));
   }
   
   @Override
@@ -39,7 +39,8 @@ public class UserDao extends DaoHelper implements Dao<User>{
 
   @Override
   public void delete(User user) {
-    executeInsideTransaction(entityManager -> entityManager.remove(user));
+    executeInsideTransaction(entityManager ->
+        entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user)));
   }
   
   public User findUser(String searchKey) {

@@ -16,7 +16,7 @@ import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.server.VaadinSession;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.AuthorityRepository;
-import edu.wsu.bean_582_2024.ApartmentFinder.data.userService;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.UserRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Authority;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
@@ -28,7 +28,7 @@ import jakarta.servlet.ServletException;
 
 @Service
 public class AuthService implements AuthenticationProvider {
-  private final userService userService;
+  private final UserRepository UserRepository;
   private final AuthorityRepository authRepository;
   private static final List<SimpleGrantedAuthority> USER_AUTHORITY =
       List.of(new SimpleGrantedAuthority("ROLE_USER"));
@@ -38,15 +38,15 @@ public class AuthService implements AuthenticationProvider {
       List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_OWNER"),
           new SimpleGrantedAuthority("ROLE_USER"));
 
-  public AuthService(userService userService,
+  public AuthService(UserRepository userRepository,
       @Qualifier("AuthImpl") AuthorityRepository authRepository) {
-    this.userService = userService;
+    this.UserRepository = userRepository;
     this.authRepository = authRepository;
   }
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-    User user = userService.getUserByUsername(authentication.getName());
+    User user = UserRepository.getUserByUsername(authentication.getName());
     if (user != null) {
       switch (user.getRole()) {
         case USER -> {
@@ -86,7 +86,7 @@ public class AuthService implements AuthenticationProvider {
   }
 
   public boolean authenticate(String username, String password) throws AuthException {
-    User user = userService.getUserByUsername(username);
+    User user = UserRepository.getUserByUsername(username);
     VaadinServletRequest request = VaadinServletRequest.getCurrent();
     if (request == null)
       return false;
@@ -127,36 +127,43 @@ public class AuthService implements AuthenticationProvider {
   }
 
   public boolean usernameTaken(String username) {
-    User user = userService.getUserByUsername(username);
+    User user = UserRepository.getUserByUsername(username);
     return user != null;
   }
 
   public void register(String username, String password, Role role) {
     User user;
     if (getUserCount() == 0 || role == Role.ADMIN) {
-      userService.add(new User(username, password, Role.ADMIN));
-      user = userService.getUserByUsername(username);
+      UserRepository.add(new User(username, password, Role.ADMIN));
+      user = UserRepository.getUserByUsername(username);
       for (GrantedAuthority auth : ADMIN_AUTHORITY) {
-        authRepository.add(new Authority(user, auth.getAuthority()));
+        Authority authority = new Authority(user, auth.getAuthority());
+        authRepository.add(authority);
+        user.getAuthorities().add(authority);
       }
     } else if (role == Role.OWNER) {
-      userService.add(new User(username, password, Role.OWNER));
-      user = userService.getUserByUsername(username);
+      UserRepository.add(new User(username, password, Role.OWNER));
+      user = UserRepository.getUserByUsername(username);
       for (GrantedAuthority auth : OWNER_AUTHORITY) {
-        authRepository.add(new Authority(user, auth.getAuthority()));
+        Authority authority = new Authority(user, auth.getAuthority()); 
+        authRepository.add(authority);
+        user.getAuthorities().add(authority);
       }
     } else {
-      userService.add(new User(username, password, Role.USER));
-      user = userService.getUserByUsername(username);
+      UserRepository.add(new User(username, password, Role.USER));
+      user = UserRepository.getUserByUsername(username);
       for (GrantedAuthority auth : USER_AUTHORITY) {
-        authRepository.add(new Authority(user, auth.getAuthority()));
+        Authority authority = new Authority(user, auth.getAuthority()); 
+        authRepository.add(authority);
+        user.getAuthorities().add(authority);
       }
     }
+    UserRepository.update(user);
   }
   public void register(User user) {
     user.getAuthorities().clear();
     if (getUserCount() == 0) user.setRole(Role.ADMIN);
-    userService.add(user);
+    UserRepository.add(user);
     if (Role.ADMIN.equals(user.getRole())) {
       for (GrantedAuthority auth : ADMIN_AUTHORITY) {
         authRepository.add(new Authority(user, auth.getAuthority()));
@@ -173,7 +180,11 @@ public class AuthService implements AuthenticationProvider {
   }
 
   public long getUserCount () {
-    return userService.count();
+    return UserRepository.count();
+  }
+  
+  public void delete(Authority authority) {
+    authRepository.remove(authority);
   }
 }
   

@@ -13,8 +13,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.security.core.CredentialsContainer;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.DigestUtils;
 
@@ -33,10 +34,12 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   @NotNull
   private Boolean enabled;
   private Role role;
-  @OneToMany(targetEntity = Authority.class, fetch = FetchType.EAGER)
-  private final List<Authority> authorities = new ArrayList<>();
-  @OneToMany(targetEntity=Unit.class, fetch = FetchType.EAGER)
-  private final List<Unit> units = new ArrayList<>();
+  @OneToMany(targetEntity = Authority.class, fetch = FetchType.EAGER, mappedBy = "user")
+  @Cascade(CascadeType.ALL)
+  private List<Authority> authorities = new ArrayList<>();
+  @OneToMany(targetEntity=Unit.class, fetch = FetchType.EAGER, mappedBy = "user")
+  @Cascade(CascadeType.ALL)
+  private List<Unit> units = new ArrayList<>();
   @Transient
   private transient String newPassword;
   @Transient
@@ -44,7 +47,6 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   
 
   public User() {
-    generateSalt();
     username = "";
     passwordHash = "";
     enabled = false;
@@ -91,7 +93,7 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   }
 
   @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
+  public Collection<Authority> getAuthorities() {
     return authorities;
   }
 
@@ -162,5 +164,18 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   
   public boolean getPasswordChanged() {
     return passwordChanged;
+  }
+
+  public void setPasswordSalt(String passwordSalt) {
+    this.passwordSalt = passwordSalt;
+  }
+
+  public void setAuthorities(
+      List<Authority> authorities) {
+    this.authorities = authorities;
+  }
+
+  public void setUnits(List<Unit> units) {
+    this.units = units;
   }
 }

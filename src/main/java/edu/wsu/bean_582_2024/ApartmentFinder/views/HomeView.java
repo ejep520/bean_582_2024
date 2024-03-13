@@ -44,7 +44,7 @@ public class HomeView extends VerticalLayout {
     grid.setSizeFull();
     grid.setColumns("address", "bedrooms", "bathrooms", "kitchen", "livingRoom", "featured");
     grid.getColumns().forEach(col -> col.setAutoWidth(true));
-    grid.setItems(unitService.getAllUnits());
+    grid.setItems(unitService.getAllUnits(true));
   }
 
   private void updateList() {

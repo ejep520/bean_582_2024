@@ -18,10 +18,9 @@ import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import jakarta.annotation.security.RolesAllowed;
 
-@SuppressWarnings("serial")
 @RolesAllowed("ADMIN")
 public class AdminForm extends FormLayout {
-  private final Binder<User> binder = new BeanValidationBinder<>(User.class);
+  private final Binder<User> binder;
   private final TextField username = new TextField("username");
   private final PasswordField pass1 = new PasswordField("password");
   private final PasswordField pass2 = new PasswordField("confirm password");
@@ -33,6 +32,8 @@ public class AdminForm extends FormLayout {
 
   public AdminForm() {
     addClassName("admin-form");
+    binder = new BeanValidationBinder<>(User.class);
+    binder.bind(enabled, User::getEnabled, User::setEnabled);
     binder.bindInstanceFields(this);
     role.setItems(Role.values());
     enabled.setReadOnly(false);

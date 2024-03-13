@@ -7,48 +7,63 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
+import edu.wsu.bean_582_2024.ApartmentFinder.service.UserService;
 import java.io.Serial;
 
 @SuppressWarnings("serial")
 public class OwnerForm extends FormLayout {
-  private final Binder<Unit> binder = new Binder<>(Unit.class);
-  private final TextField address = new TextField("Address");
-  private final TextField kitchen = new TextField("Kitchen Notes");
-  private final TextField livingRoom = new TextField("Living Room Notes");
-  private final IntegerField bedrooms = new IntegerField("Bedroom Count");
-  private final NumberField bathrooms = new NumberField("Bathroom Count");
-  private final Checkbox featured = new Checkbox("featured");
 
-  final Button save = new Button("Save");
-  final Button delete = new Button("Delete");
-  final Button cancel = new Button("Cancel");
+  final Binder<Unit> binder = new Binder<>(Unit.class);
+  final TextField address = new TextField("Address");
+  final TextField kitchen = new TextField("Kitchen Notes");
+  final TextField livingRoom = new TextField("Living Room Notes");
+  final IntegerField bedrooms = new IntegerField("Bedroom Count");
+  final NumberField bathrooms = new NumberField("Bathroom Count");
+  final Checkbox featured = new Checkbox("featured");
+  final ComboBox<User> user = new ComboBox<>("Owner");
+  private final UserService userService;
+  private final User this_user;
+  private final boolean is_admin;
 
-  public OwnerForm() {
+  Button save = new Button("Save");
+  Button delete = new Button("Delete");
+  Button cancel = new Button("Cancel");
+
+  public OwnerForm(User user, UserService userService) {
     addClassName("owner-form");
+    this.userService = userService;
+    this_user = user;
+    this.is_admin = Role.ADMIN.equals(this_user.getRole());
     binder.bindInstanceFields(this);
     configureForm();
-    add(getAddress(), bedrooms, bathrooms, kitchen, livingRoom, featured, createButtonLayout());
+    add(address, bedrooms, bathrooms, kitchen, livingRoom, featured, this.user, createButtonLayout());
   }
 
   private void configureForm() {
-    getAddress().setRequired(true);
+    address.setRequired(true);
     kitchen.setRequired(false);
     livingRoom.setRequired(false);
     bedrooms.setRequired(true);
     bathrooms.setRequired(true);
+    user.setRequired(true);
     bedrooms.setMin(0);
     bedrooms.setMax(20);
     bedrooms.setStep(1);
     bathrooms.setMin(0d);
     bathrooms.setMax(10.5d);
     bathrooms.setStep(0.5d);
+    user.setItems(userService.getAllUsers());
+    user.setReadOnly(!is_admin);
   }
 
   private Component createButtonLayout() {
@@ -69,6 +84,9 @@ public class OwnerForm extends FormLayout {
   }
 
   public void setUnit(Unit unit) {
+    assert unit == null // There is no unit. 
+        || unit.getUser().equals(this_user) // The user is the unit owner
+        || is_admin; // The user is an admin.
     binder.setBean(unit);
     binder.readBean(unit);
   }
@@ -87,7 +105,9 @@ public class OwnerForm extends FormLayout {
       return unit;
     }
   }
+
   public static class SaveEvent extends OwnerForm.OwnerFormEvent {
+
     @Serial
     private static final long serialVersionUID = 6288447328604003658L;
 
@@ -97,6 +117,8 @@ public class OwnerForm extends FormLayout {
   }
 
   public static class DeleteEvent extends OwnerForm.OwnerFormEvent {
+
+    @Serial
     private static final long serialVersionUID = -3753247172007065836L;
 
     public DeleteEvent(OwnerForm source, Unit unit) {
@@ -105,6 +127,8 @@ public class OwnerForm extends FormLayout {
   }
 
   public static class CloseEvent extends OwnerForm.OwnerFormEvent {
+
+    @Serial
     private static final long serialVersionUID = 4600479831012813485L;
 
     public CloseEvent(OwnerForm source) {
@@ -122,33 +146,6 @@ public class OwnerForm extends FormLayout {
 
   public void addCloseListener(ComponentEventListener<OwnerForm.CloseEvent> listener) {
     addListener(OwnerForm.CloseEvent.class, listener);
-  }
-
-  /**
-   * @return the address
-   */
-  public TextField getAddress() {
-    return address;
-  }
-
-  public TextField getKitchen() {
-    return kitchen;
-  }
-
-  public TextField getLivingRoom() {
-    return livingRoom;
-  }
-
-  public IntegerField getBedrooms() {
-    return bedrooms;
-  }
-
-  public NumberField getBathrooms() {
-    return bathrooms;
-  }
-
-  public Checkbox getFeatured() {
-    return featured;
   }
 
 }

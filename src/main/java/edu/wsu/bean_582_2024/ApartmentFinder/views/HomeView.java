@@ -11,8 +11,9 @@ import com.vaadin.flow.router.Route;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.UnitService;
 import jakarta.annotation.security.PermitAll;
+import org.springframework.data.domain.Sort;
 
-@PageTitle("Unit Viewing | Bean 582")
+@PageTitle("Apartment Finder")
 @Route(value = "/home", layout = MainLayout.class)
 @PermitAll
 @SuppressWarnings("serial")
@@ -43,7 +44,7 @@ public class HomeView extends VerticalLayout {
     grid.setSizeFull();
     grid.setColumns("address", "bedrooms", "bathrooms", "kitchen", "livingRoom", "featured");
     grid.getColumns().forEach(col -> col.setAutoWidth(true));
-    grid.setItems(unitService.getAllUnits());
+    grid.setItems(unitService.getAllUnits(true));
   }
 
   private void updateList() {

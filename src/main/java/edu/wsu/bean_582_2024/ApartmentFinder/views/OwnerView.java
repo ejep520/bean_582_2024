@@ -1,5 +1,9 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.views;
 
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
+import edu.wsu.bean_582_2024.ApartmentFinder.service.SecurityService;
+import edu.wsu.bean_582_2024.ApartmentFinder.service.UserService;
 import org.springframework.context.annotation.Scope;
 
 import com.vaadin.flow.component.Component;
@@ -16,21 +20,33 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.UnitService;
 import jakarta.annotation.security.RolesAllowed;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @SpringComponent
 @Scope("prototype")
-@SuppressWarnings("serial")
 @Route(value = "/owner", layout = MainLayout.class)
 @PageTitle("Unit Administration | Bean 582")
 @RolesAllowed({"OWNER", "ADMIN"})
 public class OwnerView extends VerticalLayout {
   private final UnitService unitService;
+  private final UserService userService;
+  private final User owner_id;
+  private final boolean is_admin;
   private OwnerForm ownerForm;
   private final TextField filterText = new TextField("Filter");
   private final Grid<Unit> grid = new Grid<>(Unit.class, false);
 
-  public OwnerView(UnitService unitService) {
+  public OwnerView(UnitService unitService, SecurityService securityService, UserService userService) {
     this.unitService = unitService;
+    this.userService = userService;
+    UserDetails userDetails = securityService.getAuthenticatedUser().orElse(null);
+    if (userDetails == null) {
+      owner_id = null;
+      is_admin = false;
+    } else {
+      owner_id = userService.findUserByUsername(userDetails.getUsername()).orElse(null);
+      is_admin = (owner_id != null) && Role.ADMIN.equals(owner_id.getRole());
+    }
     addClassName("owner-view");
     setSizeFull();
     configureGrid();
@@ -46,7 +62,6 @@ public class OwnerView extends VerticalLayout {
     content.setFlexGrow(1, getOwnerForm());
     content.addClassNames("content");
     content.setSizeFull();
-
     return content;
   }
 
@@ -55,7 +70,10 @@ public class OwnerView extends VerticalLayout {
     getGrid().setSizeFull();
     getGrid().setColumns("address", "bedrooms", "bathrooms", "kitchen", "livingRoom", "featured");
     getGrid().asSingleSelect().addValueChangeListener(event -> editUnit(event.getValue()));
-    getGrid().setItems(unitService.getAllUnits());
+    if ((owner_id != null) && !is_admin)
+      getGrid().setItems(unitService.getUsersUnits(owner_id));
+    else if ((owner_id != null))
+      getGrid().setItems(unitService.getAllUnits(true));
   }
 
   private void editUnit(Unit unit) {
@@ -69,7 +87,7 @@ public class OwnerView extends VerticalLayout {
   }
 
   private void configureForm() {
-    ownerForm = new OwnerForm();
+    ownerForm = new OwnerForm(owner_id, userService);
     getOwnerForm().setWidth("25em");
     getOwnerForm().addSaveListener(this::saveUnit);
     getOwnerForm().addDeleteListener(this::deleteUnit);
@@ -93,7 +111,10 @@ public class OwnerView extends VerticalLayout {
   }
 
   private void updateList() {
-    getGrid().setItems(unitService.findUnits(filterText.getValue()));
+    if ((owner_id != null) && !is_admin)
+      getGrid().setItems(unitService.getUserUnitsByFilter(owner_id, filterText.getValue()));
+    else if (owner_id != null)
+      getGrid().setItems(unitService.findUnits(filterText.getValue()));
   }
 
   private void closeEditor() {
@@ -108,23 +129,30 @@ public class OwnerView extends VerticalLayout {
     filterText.setValueChangeMode(ValueChangeMode.LAZY);
     filterText.addValueChangeListener(event -> updateList());
     Button addButton = new Button("Add Unit");
-    addButton.addClickListener(event -> editUnit(new Unit()));
+    addButton.addClickListener(event -> {
+      Unit unit = new Unit();
+      unit.setUser(owner_id);
+      editUnit(unit);
+    });
     HorizontalLayout toolbar = new HorizontalLayout(filterText, addButton);
     toolbar.addClassName("toolbar");
     return toolbar;
   }
 
-/**
- * @return the ownerForm
- */
-public OwnerForm getOwnerForm() {
-	return ownerForm;
-}
+  /**
+   * @return the ownerForm
+   */
+  public OwnerForm getOwnerForm() {
+    return ownerForm;
+  }
 
-/**
- * @return the grid
- */
-public Grid<Unit> getGrid() {
-	return grid;
-}
+  /**
+   * @return the grid
+   */
+  public Grid<Unit> getGrid() {
+    return grid;
+  }
+  boolean getIsAdmin() {
+    return is_admin;
+  }
 }

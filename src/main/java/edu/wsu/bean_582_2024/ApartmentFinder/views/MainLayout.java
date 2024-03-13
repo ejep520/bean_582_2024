@@ -1,5 +1,6 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.views;
 
+import java.io.Serial;
 import java.util.Optional;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -14,6 +15,7 @@ import com.vaadin.flow.router.RouterLink;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.SecurityService;
 
 public class MainLayout extends AppLayout {
+  @Serial
   private static final long serialVersionUID = 6748871135793571144L;
   private final SecurityService securityService;
 
@@ -27,9 +29,9 @@ public class MainLayout extends AppLayout {
 
   private void createHeader() {
     HorizontalLayout header;
-    H1 logo = new H1("Bean 582");
+    H1 logo = new H1("Apartment Finder");
     logo.addClassNames("text-l", "m-m");
-    if (securityService.getAuthenticatedUser() != null) {
+    if (securityService.getAuthenticatedUser().isPresent()) {
       Button logOut = new Button("Log out", e -> securityService.logout());
       header = new HorizontalLayout(new DrawerToggle(), logo, logOut);
     } else {

@@ -3,6 +3,8 @@ package edu.wsu.bean_582_2024.ApartmentFinder.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import edu.wsu.bean_582_2024.ApartmentFinder.data.AuthorityRepository;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.UnitRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.UserRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
@@ -56,7 +58,7 @@ public class UserServiceTests {
   @Test
   @DisplayName("FindAll method returns all users")
   public void findAllReturnsAll() {
-    Mockito.when(userRepository.findAll()).thenReturn(allUsers);
+    Mockito.when(userRepository.getAll()).thenReturn(allUsers);
     initializeUserService();
     List<User> result = userService.getAllUsers();
     assertEquals(allUsers, result);
@@ -65,7 +67,7 @@ public class UserServiceTests {
   @Test
   @DisplayName("FindUsers with null returns all users")
   public void findUsersNullReturnsAllUsers() {
-    Mockito.when(userRepository.findAll()).thenReturn(allUsers);
+    Mockito.when(userRepository.getAll()).thenReturn(allUsers);
     initializeUserService();
     List<User> result = userService.findUsers(null);
     assertEquals(allUsers, result);
@@ -74,7 +76,7 @@ public class UserServiceTests {
   @Test
   @DisplayName("FindUsers with empty string returns all users")
   public void findUsersEmptyReturnsAllUsers() {
-    Mockito.when(userRepository.findAll()).thenReturn(allUsers);
+    Mockito.when(userRepository.getAll()).thenReturn(allUsers);
     initializeUserService();
     List<User> result = userService.findUsers("");
     assertEquals(allUsers, result);
@@ -83,7 +85,7 @@ public class UserServiceTests {
   @Test
   @DisplayName("FindUsers with blank string returns all users")
   public void findUsersBlankReturnsAllUsers() {
-    Mockito.when(userRepository.findAll()).thenReturn(allUsers);
+    Mockito.when(userRepository.getAll()).thenReturn(allUsers);
     initializeUserService();
     List<User> result = userService.findUsers(" ");
     assertEquals(allUsers, result);
@@ -122,14 +124,16 @@ public class UserServiceTests {
     UserRepository spy = Mockito.spy(UserRepository.class);
     initializeUserService(spy);
     userService.saveUser(user1);
-    Mockito.verify(spy).save(user1);
+    Mockito.verify(spy).add(user1);
   }
   
   private void initializeUserService() {
-    userService = new UserService(userRepository);
+    userService = new UserService(userRepository, Mockito.mock(AuthorityRepository.class),
+        Mockito.mock(UnitRepository.class));
   }
   
   private void initializeUserService(UserRepository userRepository) {
-    userService = new UserService(userRepository);
+    userService = new UserService(userRepository, Mockito.mock(AuthorityRepository.class),
+        Mockito.mock(UnitRepository.class));
   }
 }

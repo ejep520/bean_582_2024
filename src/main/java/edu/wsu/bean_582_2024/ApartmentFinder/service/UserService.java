@@ -58,8 +58,4 @@ public class UserService {
   public Optional<User> findUserById(Long id) {
     return userRepository.getUserById(id);
   }
-  
-  public boolean addUnit(User user, Unit unit) {
-    return user.getUnits().add(unit);
-  } 
 }

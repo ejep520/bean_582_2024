@@ -41,25 +41,25 @@ public class UserServiceTests {
   @Mock
   private AuthorityRepository authorityRepository;
   private UserService userService;
-  private final static String USERNAME1 = "TestAdmin";
-  private final static String userPassword1 = "foo";
-  private final static Role userRole1 = Role.ADMIN;
-  private final User user1 = new User(USERNAME1, userPassword1, userRole1);
+  private final static String USERNAME_1 = "TestAdmin";
+  private final static String USER_PASSWORD_1 = "foo";
+  private final static Role USER_ROLE_1 = Role.ADMIN;
+  private final User user1 = new User(USERNAME_1, USER_PASSWORD_1, USER_ROLE_1);
   private final Authority authority1_1 = new Authority(user1, "ADMIN");
   private final Authority authority1_2 = new Authority(user1, "OWNER");
   private final Authority authority1_3 = new Authority(user1, "USER");
   private final List<Authority> authorities_1 = List.of(authority1_1, authority1_2, authority1_3);
-  private final static String userName2 = "TestOwner";
-  private final static String userPassword2 = "bar";
-  private final static Role userRole2 = Role.OWNER;
-  private final User user2 = new User(userName2, userPassword2, userRole2);
+  private final static String USERNAME_2 = "TestOwner";
+  private final static String USER_PASSWORD_2 = "bar";
+  private final static Role USER_ROLE_2 = Role.OWNER;
+  private final User user2 = new User(USERNAME_2, USER_PASSWORD_2, USER_ROLE_2);
   private final Authority authority2_1 = new Authority(user2, "OWNER");
   private final Authority authority2_2 = new Authority(user2, "USER");
   private final List<Authority> authorities_2 = List.of(authority2_1, authority2_2);
-  private final static String username3 = "TestUser";
-  private final static String userPassword3 = "foobar";
-  private final static Role userRole3 = Role.USER;
-  private final User user3 = new User(username3, userPassword3, userRole3);
+  private final static String USERNAME_3 = "TestUser";
+  private final static String USER_PASSWORD_3 = "foobar";
+  private final static Role USER_ROLE_3 = Role.USER;
+  private final User user3 = new User(USERNAME_3, USER_PASSWORD_3, USER_ROLE_3);
   private final Authority authority3 = new Authority(user3, "USER");
   private final List<User> allUsers = List.of(user1, user2, user3);
   private final static String BAD_USERNAME = "BadUsername";
@@ -149,7 +149,7 @@ public class UserServiceTests {
   public void findUsersValidFilterReturnsOne() {
     when(userRepository.getUserByUsername(anyString())).thenReturn(user1);
     initializeUserService();
-    List<User> result = userService.findUsers(USERNAME1);
+    List<User> result = userService.findUsers(USERNAME_1);
     assertEquals(List.of(user1), result);
   }
   
@@ -175,7 +175,7 @@ public class UserServiceTests {
   @Test
   @DisplayName("Tests that SaveUser calls the repository's save method")
   public void saveUserTest() {
-    User user = new User(USERNAME1, userPassword1, userRole1);
+    User user = new User(USERNAME_1, USER_PASSWORD_1, USER_ROLE_1);
     initializeUserService();
     userService.saveUser(user);
     verify(userRepository).add(user);
@@ -185,7 +185,7 @@ public class UserServiceTests {
   @DisplayName("Tests that SaveUser calls the repository's update method")
   public void updateUserTest() {
     initializeUserService();
-    User user = new User(USERNAME1, userPassword1, userRole1);
+    User user = new User(USERNAME_1, USER_PASSWORD_1, USER_ROLE_1);
     user.setId(1L);
     userService.saveUser(user);
     verify(userRepository).update(user);
@@ -211,7 +211,27 @@ public class UserServiceTests {
     Optional<User> result = userService.findUserById(userId);
     assertTrue(result.isEmpty());
   }
+  
+  @ParameterizedTest(name="Search for Users by username {0}")
+  @ValueSource(strings = {USERNAME_1, USERNAME_2, USERNAME_3})
+  public void SearchForUsersByUsername(String searchKey) {
+    when(userRepository.getUserByUsername(searchKey))
+        .thenReturn(allUsers.stream().filter(e -> e.getUsername().equals(searchKey))
+            .findFirst().orElse(null));
+    initializeUserService();
+    Optional<User> result = userService.findUserByUsername(searchKey);
+    assertTrue(result.isPresent());
+  }
 
+  @Test
+  @DisplayName("Save null User makes no repository calls")
+  public void saveNullUserMakesNoRepoCalls() {
+    initializeUserService();
+    userService.saveUser(null);
+    verify(userRepository, times(0)).add(any());
+    verify(userRepository, times(0)).update(any());
+  }
+  
   private void initializeUserService() {
     userService = new UserService(userRepository, authorityRepository, unitRepository);
   }

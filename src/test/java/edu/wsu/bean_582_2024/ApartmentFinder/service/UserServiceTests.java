@@ -21,10 +21,12 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -33,6 +35,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author Erik Jepsen &lt;erik.jepsen@wsu.edu&gt;
  */
 @ExtendWith(MockitoExtension.class)
+@Tag("fast")
 public class UserServiceTests {
   @Mock
   private UserRepository userRepository;
@@ -40,6 +43,7 @@ public class UserServiceTests {
   private UnitRepository unitRepository;
   @Mock
   private AuthorityRepository authorityRepository;
+  @InjectMocks
   private UserService userService;
   private final static String USERNAME_1 = "TestAdmin";
   private final static String USER_PASSWORD_1 = "foo";
@@ -82,7 +86,7 @@ public class UserServiceTests {
   }
   
   @AfterEach
-  public void resetField() {
+  public void resetFields() {
     if (user1.getAuthorities().size() != 3) {
       user1.getAuthorities().clear();
       user1.getAuthorities().addAll(authorities_1);
@@ -104,7 +108,6 @@ public class UserServiceTests {
   @Test
   @DisplayName("Initialization of UserService returns not null")
   public void initializationResultsInNotNull() {
-    initializeUserService();
     assertNotNull(userService);
   }
   
@@ -112,7 +115,6 @@ public class UserServiceTests {
   @DisplayName("FindAll method returns all users")
   public void findAllReturnsAll() {
     when(userRepository.getAll()).thenReturn(allUsers);
-    initializeUserService();
     List<User> result = userService.getAllUsers();
     assertEquals(allUsers, result);
   }
@@ -121,7 +123,6 @@ public class UserServiceTests {
   @DisplayName("FindUsers with null returns all users")
   public void findUsersNullReturnsAllUsers() {
     when(userRepository.getAll()).thenReturn(allUsers);
-    initializeUserService();
     List<User> result = userService.findUsers(null);
     assertEquals(allUsers, result);
   }
@@ -130,7 +131,6 @@ public class UserServiceTests {
   @DisplayName("FindUsers with empty string returns all users")
   public void findUsersEmptyReturnsAllUsers() {
     when(userRepository.getAll()).thenReturn(allUsers);
-    initializeUserService();
     List<User> result = userService.findUsers("");
     assertEquals(allUsers, result);
   }
@@ -139,7 +139,6 @@ public class UserServiceTests {
   @DisplayName("FindUsers with blank string returns all users")
   public void findUsersBlankReturnsAllUsers() {
     when(userRepository.getAll()).thenReturn(allUsers);
-    initializeUserService();
     List<User> result = userService.findUsers(" ");
     assertEquals(allUsers, result);
   }
@@ -148,7 +147,6 @@ public class UserServiceTests {
   @DisplayName("FindUsers with a valid user returns one User")
   public void findUsersValidFilterReturnsOne() {
     when(userRepository.getUserByUsername(anyString())).thenReturn(user1);
-    initializeUserService();
     List<User> result = userService.findUsers(USERNAME_1);
     assertEquals(List.of(user1), result);
   }
@@ -157,7 +155,6 @@ public class UserServiceTests {
   @DisplayName("FindUser with invalid key returns no users")
   public void findUserInvalidFilterReturnsNone() {
     when(userRepository.getUserByUsername(anyString())).thenReturn(null);
-    initializeUserService();
     List<User> result = userService.findUsers(BAD_USERNAME);
     assertEquals(Collections.emptyList(), result);
   }
@@ -165,7 +162,6 @@ public class UserServiceTests {
   @Test
   @DisplayName("Tests that DeleteUser calls the repository's delete method")
   public void deleteUserTest() {
-    initializeUserService();
     userService.deleteUser(user1);
     verify(userRepository).delete(user1);
     verify(authorityRepository, times(3)).remove(any(Authority.class));
@@ -176,7 +172,6 @@ public class UserServiceTests {
   @DisplayName("Tests that SaveUser calls the repository's save method")
   public void saveUserTest() {
     User user = new User(USERNAME_1, USER_PASSWORD_1, USER_ROLE_1);
-    initializeUserService();
     userService.saveUser(user);
     verify(userRepository).add(user);
   }
@@ -184,7 +179,6 @@ public class UserServiceTests {
   @Test
   @DisplayName("Tests that SaveUser calls the repository's update method")
   public void updateUserTest() {
-    initializeUserService();
     User user = new User(USERNAME_1, USER_PASSWORD_1, USER_ROLE_1);
     user.setId(1L);
     userService.saveUser(user);
@@ -196,7 +190,6 @@ public class UserServiceTests {
   public void findingUsersReturnsUsersFaithfully(Long userId) {
     when(userRepository.getUserById(userId))
         .thenReturn(allUsers.stream().filter(e -> e.getId().equals(userId)).findFirst());
-    initializeUserService();
     Optional<User> result = userService.findUserById(userId);
     assertTrue(result.isPresent());
   }
@@ -207,7 +200,6 @@ public class UserServiceTests {
     long userId = 4L;
     when(userRepository.getUserById(userId))
         .thenReturn(allUsers.stream().filter(e -> e.getId().equals(userId)).findFirst());
-    initializeUserService();
     Optional<User> result = userService.findUserById(userId);
     assertTrue(result.isEmpty());
   }
@@ -218,7 +210,6 @@ public class UserServiceTests {
     when(userRepository.getUserByUsername(searchKey))
         .thenReturn(allUsers.stream().filter(e -> e.getUsername().equals(searchKey))
             .findFirst().orElse(null));
-    initializeUserService();
     Optional<User> result = userService.findUserByUsername(searchKey);
     assertTrue(result.isPresent());
   }
@@ -226,13 +217,8 @@ public class UserServiceTests {
   @Test
   @DisplayName("Save null User makes no repository calls")
   public void saveNullUserMakesNoRepoCalls() {
-    initializeUserService();
     userService.saveUser(null);
     verify(userRepository, times(0)).add(any());
     verify(userRepository, times(0)).update(any());
-  }
-  
-  private void initializeUserService() {
-    userService = new UserService(userRepository, authorityRepository, unitRepository);
   }
 }

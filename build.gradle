@@ -11,6 +11,7 @@ plugins {
 	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.1.4'
 	id 'com.vaadin' version '24.3.3'
+	id 'jacoco'
 }
 
 group = 'edu.wsu.bean_582_2024'
@@ -33,24 +34,33 @@ repositories {
 
 dependencies {
 	implementation 'com.vaadin:vaadin-spring-boot-starter'
-	implementation 'com.vaadin:vaadin-testbench'
-	implementation 'com.vaadin:vaadin-testbench-junit5'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'com.vaadin:vaadin-core:24.3.3'
 	implementation 'org.apache.commons:commons-lang3:3.14.0'
-	// implementation 'com.vaadin:vaadin-charts-flow'
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	// runtimeOnly 'com.h2database:h2'
-	//runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
+	testImplementation(platform('org.junit:junit-bom:5.10.2'))
+	testImplementation 'org.junit.jupiter:junit-jupiter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly('org.junit.vintage:junit-vintage-engine')
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'com.vaadin:vaadin-testbench'
+	testImplementation 'com.vaadin:vaadin-testbench-junit5'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
 }
+
+jacoco { }
+
+jacocoTestReport {
+	dependsOn test
+}
+
 dependencyManagement {
 	imports {
 		mavenBom "com.vaadin:vaadin-bom:24.3.3"

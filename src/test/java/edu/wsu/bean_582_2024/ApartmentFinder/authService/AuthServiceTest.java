@@ -1,40 +1,7 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.authService;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.mockito.Mockito.*;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.BooleanSupplier;
-
-import javax.naming.AuthenticationException;
-
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-
-import com.vaadin.flow.router.RouteConfiguration;
-import com.vaadin.flow.server.VaadinServletRequest;
-import com.vaadin.flow.server.VaadinSession;
-
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.data.AuthorityRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.UserRepository;
@@ -42,6 +9,19 @@ import edu.wsu.bean_582_2024.ApartmentFinder.model.Authority;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService;
+import java.lang.reflect.Method;
+import java.util.EnumSet;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+
 
 @ExtendWith(MockitoExtension.class)
 public class AuthServiceTest {
@@ -64,9 +44,9 @@ public class AuthServiceTest {
         user.setPassword("testPass");
         user.setRole(Role.USER);
     }
-    
 
     @Test
+    @DisplayName("Test successful authentication of User")
     public void testSuccessfulAuthenticationUser() {
         when(userRepository.getUserByUsername("testUser")).thenReturn(user);
         Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "testPass");
@@ -76,6 +56,7 @@ public class AuthServiceTest {
     }
 
     @Test
+    @DisplayName("Authenticate User not found")
     public void authenticateUserNotFound() {
         when(userRepository.getUserByUsername("nonexistent")).thenReturn(null);
         Authentication authentication = new UsernamePasswordAuthenticationToken("nonexistent", "pass");
@@ -83,9 +64,10 @@ public class AuthServiceTest {
     }
 
     @Test
+    @DisplayName("Register new User success")
     public void registerNewUserSuccess() throws Exception {
         // Create a mock AuthService
-        AuthService authService = Mockito.mock(AuthService.class);
+        AuthService authService = mock(AuthService.class);
 
         // Get the authService's class
         Class<?> authServiceClass = authService.getClass();
@@ -108,6 +90,7 @@ public class AuthServiceTest {
     
     // Not sure if we will have a function to check if username already exists
     @Test
+    @DisplayName("Username is taken test")
     public void usernameTakenCheck() {
         when(userRepository.getUserByUsername("testUser")).thenReturn(user);
         assertTrue(authService.usernameTaken("testUser"));
@@ -115,6 +98,7 @@ public class AuthServiceTest {
 
     // Not sure if we will have a function to check if username already exists
     @Test
+    @DisplayName("Username is not taken test")
     public void usernameNotTakenCheck() {
         when(userRepository.getUserByUsername("uniqueUser")).thenReturn(null);
         assertFalse(authService.usernameTaken("uniqueUser"));
@@ -130,12 +114,14 @@ public class AuthServiceTest {
     
     // When there is no authenticated user
     @Test
+    @DisplayName("isAuthenticated returns false when there is no User")
     public void isAuthenticatedShouldReturnFalseWhenNoUser() {
         assertFalse(AuthService.isAuthenticated());
     }
     
     // Checks after an authority has been deleted
     @Test
+    @DisplayName("When Authority is deleted, repository remove call is made")
     public void deleteAuthoritySuccess() {
         Authority authority = new Authority(user, "ROLE_USER");
         doNothing().when(authorityRepository).remove(authority);
@@ -145,6 +131,7 @@ public class AuthServiceTest {
 
     // Test authentication for each role to ensure the correct authorities are granted
     @Test
+    @DisplayName("Authenticate each role test")
     public void authenticateWithDifferentRoles() {       
         EnumSet.allOf(Role.class).forEach(role -> {
             User userWithRole = new User();
@@ -163,6 +150,7 @@ public class AuthServiceTest {
     }
 
     @Test
+    // @DisplayName("Test the experience of a database outage?")
     public void authenticateExceptionThrown() {
         // Create a mock UserRepository
         UserRepository userRepository = mock(UserRepository.class);
@@ -182,6 +170,7 @@ public class AuthServiceTest {
 
     // Test that the correct routes are returned for different roles   
     @Test
+    @DisplayName("Test the presence of authorized routes")
     public void getAuthorizedRoutesForRoles() {
         EnumSet.allOf(Role.class).forEach(role -> {
             List<AuthService.AuthorizedRoute> routes = authService.getAuthorizedRoutes(role);
@@ -197,17 +186,18 @@ public class AuthServiceTest {
         });
     }
     
-    
     // The first user should be assigned the ADMIN role
     @Test
     public void registerUserFirstAdminSpecialCase() throws Exception {
-
+        // TODO write this test.
     }
     
     @Test
+    @DisplayName("Test that null authentication values returns null result")
     public void authenticateMethodWithNullValues() {
         // Test authentication method with null username and password
-        Authentication authentication = new UsernamePasswordAuthenticationToken(null, null);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(null,
+            null);
         assertNull(authService.authenticate(authentication),
                    "Authentication with null credentials should return null");
     }
@@ -273,8 +263,8 @@ public class AuthServiceTest {
     }
     */
 
-
-	@Test
+  	@Test
+    @DisplayName("Test that isAuthenticated returns false when authenticated User is null")
     public void isAuthenticatedWhenSessionUserIsNull() {
         // Mock VaadinServletRequest and VaadinSession to simulate a user not being logged in
         // Assuming there's a way to mock or simulate these static calls to return a null user
@@ -283,6 +273,7 @@ public class AuthServiceTest {
     }
 
     @Test
+    @DisplayName("Delete nonexistent Authority test")
     public void deleteNonExistentAuthority() {
         // Test deleting an authority that doesn't exist in the repository
         Authority nonExistentAuthority = new Authority(user, "ROLE_NON_EXISTENT");
@@ -293,6 +284,8 @@ public class AuthServiceTest {
 
     
     @Test
+    @DisplayName("Registering with null as either a username or password throws a null pointer" 
+        + " exception.")
     public void registerWithNullCredentials() {
         // Verify that attempting to register with null username or password results in a NullPointerException
         assertThrows(NullPointerException.class, () -> authService.register(null, "password", Role.USER),
@@ -301,18 +294,17 @@ public class AuthServiceTest {
                      "Registration with null password should throw NullPointerException");
     }
 
-
-
     @Test
+    @DisplayName("GetUserCount returns UserRepository's count")
     public void getUserCountReflectsActualCount() {
         // Test that getUserCount accurately reflects the number of users
         when(userRepository.count()).thenReturn(42L);
         assertEquals(42L, authService.getUserCount(), "getUserCount should return the actual number of users in the repository");
     }
-
-
     
     @Test
+    @DisplayName("Test whether AuthService supports authentication methods other than" 
+        + " UsernamePassword Authentication")
     public void supportsNonUsernamePasswordAuthenticationToken() {
         // Ensure the AuthService correctly reports it does not support authentication types other than UsernamePasswordAuthenticationToken
         assertFalse(authService.supports(Authentication.class),
@@ -320,6 +312,7 @@ public class AuthServiceTest {
     }
     
     @Test
+    @DisplayName("Test that authenticating a nonexistent user returns null")
     public void authenticateWhenUserIsNullAndExceptionHandling() {
         // Covering the scenario when UserRepository returns null (user not found)
         when(userRepository.getUserByUsername("nonexistent")).thenReturn(null);
@@ -330,13 +323,11 @@ public class AuthServiceTest {
         assertNull(result, "Authentication should return null for non-existent users");
     }
         
-
+    // Is this the same test as supportsNonUsernamePasswordAuthenticationToken() because it kinda looks like.
     @Test
     public void supportsAuthenticationClassNotAssignable() {
         // Verifying the AuthService's supports method correctly identifies unsupported Authentication implementations.
         assertFalse(authService.supports(Authentication.class),
                     "AuthService should only support UsernamePasswordAuthenticationToken, not generic Authentication");
     }
-
-
 }

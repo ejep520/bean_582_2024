@@ -1,6 +1,7 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.dao;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Authority;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
 import java.util.List;
@@ -13,7 +14,11 @@ public class AuthorityDao extends DaoHelper implements Dao<Authority> {
 
   public AuthorityDao(EntityManagerFactory entityManagerFactory) {
     super(entityManagerFactory, LoggerFactory.getLogger(AuthorityDao.class));
-  }  
+  }
+  
+  AuthorityDao(EntityManagerFactory entityManagerFactory, EntityManager entityManager) {
+    super(entityManagerFactory, LoggerFactory.getLogger(Authority.class), entityManager);
+  }
   
   @Override
   public Optional<Authority> get(long id) {

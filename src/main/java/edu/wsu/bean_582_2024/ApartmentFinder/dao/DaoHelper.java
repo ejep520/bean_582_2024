@@ -16,8 +16,13 @@ public abstract class DaoHelper{
   EntityManagerFactory entityManagerFactory;
   Logger logger;
   public DaoHelper(EntityManagerFactory entityManagerFactory, Logger logger) {
-    this.entityManagerFactory = entityManagerFactory; 
-    this.entityManager = entityManagerFactory.createEntityManager();
+    this(entityManagerFactory, logger, entityManagerFactory.createEntityManager());
+  }
+  
+  public DaoHelper(EntityManagerFactory entityManagerFactory, Logger logger,
+      EntityManager entityManager) {
+    this.entityManagerFactory = entityManagerFactory;
+    this.entityManager = entityManager;
     this.logger = logger;
   }
   <T extends AbstractEntity> List<T> castList(Class<? extends T> clazz, Collection<?> rawCollection) {

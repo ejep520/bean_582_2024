@@ -18,10 +18,6 @@ public class AuthorityDao extends DaoHelper implements Dao<Authority> {
     super(entityManagerFactory, LoggerFactory.getLogger(AuthorityDao.class));
   }
   
-  AuthorityDao(EntityManagerFactory entityManagerFactory, EntityManager entityManager) {
-    super(entityManagerFactory, LoggerFactory.getLogger(Authority.class), entityManager);
-  }
-  
   @Override
   public Optional<Authority> get(long id) {
     return Optional.ofNullable(entityManager.find(Authority.class, id));

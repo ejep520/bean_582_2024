@@ -2,17 +2,15 @@ package edu.wsu.bean_582_2024.ApartmentFinder.views;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.vaadin.flow.component.listbox.ListBox;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
-import edu.wsu.bean_582_2024.ApartmentFinder.views.AdminForm;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public class AdminFormTest {
+public class AdminFormTests {
 
     private User adminUser;
     private User ownerUser;

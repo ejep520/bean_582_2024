@@ -4,19 +4,19 @@ import com.vaadin.flow.component.grid.Grid;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import edu.wsu.bean_582_2024.ApartmentFinder.views.AdminForm;
 import edu.wsu.bean_582_2024.ApartmentFinder.views.AdminView;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @SpringBootTest
 public class AdminViewTest {
+
     static {
         // Prevent Vaadin Development mode to launch browser window
-        System.setProperty("vaadin.launch-browser", "false");
+        System.setProperty("vaadin.launch-browser", "true");
     }
 
     @Autowired
@@ -28,12 +28,11 @@ public class AdminViewTest {
         User firstUser = getFirstItem(userGrid);
         AdminForm adminForm = adminView.getAdminForm();
 
-        Assert.assertFalse(adminForm.isVisible());
+        assertFalse(adminForm.isVisible());
 
         userGrid.asSingleSelect().setValue(firstUser);
 
-        Assert.assertTrue(adminForm.isVisible());
-
+        assertTrue(adminForm.isVisible());
     }
 
     private User getFirstItem(Grid<User> grid) {

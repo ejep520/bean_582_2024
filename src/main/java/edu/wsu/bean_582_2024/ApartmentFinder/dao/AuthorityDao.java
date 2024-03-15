@@ -3,6 +3,7 @@ package edu.wsu.bean_582_2024.ApartmentFinder.dao;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Authority;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import java.util.List;
 import java.util.Optional;
@@ -41,8 +42,10 @@ public class AuthorityDao extends DaoHelper implements Dao<Authority> {
 
   @Override
   public void delete(Authority authority) {
-    executeInsideTransaction(entityManager ->
-        entityManager.remove(entityManager.contains(authority) ? authority :
-            entityManager.merge(authority)));
+    EntityManager localManager = entityManagerFactory.createEntityManager();
+    EntityTransaction transaction = localManager.getTransaction();
+    transaction.begin();
+    localManager.remove(localManager.contains(authority) ? authority : localManager.merge(authority));
+    transaction.commit();
   }
 }

@@ -36,7 +36,7 @@ public class UserService {
   
   public void deleteUser(User user) {
     for (Authority authority : user.getAuthorities()) {
-      authRepository.remove(authority);
+      authRepository.delete(authority);
       
     }
     for (Unit unit : user.getUnits()) {

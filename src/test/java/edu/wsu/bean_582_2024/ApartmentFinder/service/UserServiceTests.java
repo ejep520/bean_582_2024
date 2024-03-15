@@ -164,7 +164,7 @@ public class UserServiceTests {
   public void deleteUserTest() {
     userService.deleteUser(user1);
     verify(userRepository).delete(user1);
-    verify(authorityRepository, times(3)).remove(any(Authority.class));
+    verify(authorityRepository, times(3)).delete(any(Authority.class));
     verify(unitRepository).delete(any(Unit.class));
   }
 

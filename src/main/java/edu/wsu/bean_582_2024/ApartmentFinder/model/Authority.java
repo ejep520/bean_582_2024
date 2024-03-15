@@ -21,8 +21,7 @@ import jakarta.persistence.Table;
 public class Authority extends AbstractEntity implements GrantedAuthority, Serializable {
   @Serial
   private static final long serialVersionUID = 612727736166545439L;
-  @ManyToOne(targetEntity = User.class, optional = false,
-      fetch = FetchType.EAGER)
+  @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
   @JoinColumn(name = "userid")
   private User user;
   private String authority;

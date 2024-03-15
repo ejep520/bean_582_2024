@@ -1,6 +1,7 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Authority;
@@ -23,10 +24,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @AutoConfigureTestDatabase
 @Tag("slow")
 public class AuthorityDaoTests {
-  
-  private final EntityManagerFactory entityManagerFactory;
-  private EntityManager entityManager;
-  private AuthorityDao authorityDao;
+
+  private final EntityManager entityManager;
+  private final AuthorityDao authorityDao;
   private static final String USERNAME = "TestAdmin";
   private static final String PASSWORD = "foo";
   private static final Role ROLE = Role.ADMIN;
@@ -38,8 +38,7 @@ public class AuthorityDaoTests {
   
   @Autowired
   public AuthorityDaoTests(EntityManagerFactory entityManagerFactory) {
-    this.entityManagerFactory = entityManagerFactory;
-    this.entityManager = this.entityManagerFactory.createEntityManager();
+    this.entityManager = entityManagerFactory.createEntityManager();
     authority_1 = new Authority(user, AUTHORITY_STRING_1);
     authority_2 = new Authority(user, AUTHORITY_STRING_2);
     authority_3 = new Authority(user, AUTHORITY_STRING_3);
@@ -49,7 +48,7 @@ public class AuthorityDaoTests {
   @AfterEach
   // @Modifying
   // @Transactional
-  public void clearAuthorities() throws Exception{
+  public void clearAuthorities() {
     EntityTransaction transaction;
     user.getAuthorities().clear();
     transaction = entityManager.getTransaction();
@@ -160,5 +159,28 @@ public class AuthorityDaoTests {
     Authority result = entityManager.find(Authority.class, novelAuthority.getId()); 
     
     assertEquals(differentUser, result.getUser());
+  }
+  
+  @Test
+  @DisplayName("Test Delete function")
+  public void testDeleteFunction() {
+    user.getAuthorities().add(authority_1);
+    EntityTransaction transaction = entityManager.getTransaction();
+    transaction.begin();
+    entityManager.persist(user);
+    transaction.commit();
+    transaction.begin();
+    entityManager.persist(authority_1);
+    transaction.commit();
+    user.getAuthorities().clear();
+    authority_1.setUser(null);
+    transaction.begin();
+    entityManager.merge(user);
+    transaction.commit();
+    authorityDao.delete(authority_1);
+    transaction.begin();
+    List<Authority> result = authorityDao.getAll();
+    transaction.commit();
+    assertTrue(result.isEmpty());
   }
 }

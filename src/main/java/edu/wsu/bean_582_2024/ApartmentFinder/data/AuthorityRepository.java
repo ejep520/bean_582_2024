@@ -8,5 +8,5 @@ public interface AuthorityRepository {
   Authority get(Long id);
   void add(Authority authority);
   void update(Authority authority);
-  void remove(Authority authority);
+  void delete(Authority authority);
 }

@@ -21,14 +21,14 @@ import jakarta.annotation.security.RolesAllowed;
 @RolesAllowed("ADMIN")
 public class AdminForm extends FormLayout {
   private final Binder<User> binder;
-  private final TextField username = new TextField("username");
-  private final PasswordField pass1 = new PasswordField("password");
-  private final PasswordField pass2 = new PasswordField("confirm password");
-  private final ListBox<Role> role = new ListBox<>();
-  private final Checkbox enabled = new Checkbox("enabled");
-  private final Button save = new Button("save");
-  private final Button delete = new Button("delete");
-  private final Button cancel = new Button("cancel");
+  final TextField username = new TextField("username");
+  final PasswordField pass1 = new PasswordField("password");
+  final PasswordField pass2 = new PasswordField("confirm password");
+  final ListBox<Role> role = new ListBox<>();
+  final Checkbox enabled = new Checkbox("enabled");
+  Button save = new Button("save");
+  Button delete = new Button("delete");
+  Button cancel = new Button("cancel");
 
   public AdminForm() {
     addClassName("admin-form");
@@ -57,7 +57,7 @@ public class AdminForm extends FormLayout {
     binder.readBean(user);
   }
 
-  private void validateAndSave() {
+  public void validateAndSave() {
     if (binder.isValid())
       fireEvent(new SaveEvent(this, binder.getBean()));
   }

@@ -12,12 +12,12 @@ set bean_mysql_admin_name=root
 set bean_mysql_admin_pass=%~1
 set bean_mysql_conn=jdbc:mysql://mysql:3306/aptFinder
 echo Building the jar...
-call gradlew clean vaadinClean bootJar
+call gradle clean vaadinClean bootJar
 echo Copying the jar...
 copy .\build\libs\ApartmentFinder-0.0.1-SNAPSHOT.jar .\
 echo Composing the Docker container...
 start /B /WAIT docker compose up --no-start
-call gradlew clean vaadinClean
+call gradle clean vaadinClean
 set bean_mysql_conn=""
 set bean_mysql_admin_name=""
 set bean_mysql_admin_pass=""

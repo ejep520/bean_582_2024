@@ -47,6 +47,7 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   
 
   public User() {
+    generateSalt();
     username = "";
     passwordHash = "";
     enabled = false;
@@ -70,17 +71,17 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
 
   @Override
   public boolean isAccountNonExpired() {
-    return false;
+    return true;
   }
 
   @Override
   public boolean isAccountNonLocked() {
-    return false;
+    return true;
   }
 
   @Override
   public boolean isCredentialsNonExpired() {
-    return false;
+    return true;
   }
 
   @Override
@@ -102,8 +103,7 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   }
 
   public void setPassword(String password) {
-    this.passwordHash =
-        DigestUtils.md5DigestAsHex((password + passwordSalt).getBytes(StandardCharsets.UTF_8));
+    setNewPassword(password);
   }
 
   public Boolean getEnabled() {
@@ -123,7 +123,8 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   }
 
   public boolean checkPassword(String password) {
-    String attemptHash = DigestUtils.md5DigestAsHex((password + passwordSalt).getBytes(StandardCharsets.UTF_8)); 
+    String attemptHash = DigestUtils
+        .md5DigestAsHex((password + passwordSalt).getBytes(StandardCharsets.UTF_8)); 
     return attemptHash.equals(passwordHash);
   }
 
@@ -134,7 +135,7 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
   public List<Unit> getUnits() {
     return units;
   }
-  
+
   @Override
   public void eraseCredentials() {}
   
@@ -170,8 +171,7 @@ public class User extends AbstractEntity implements UserDetails, CredentialsCont
     this.passwordSalt = passwordSalt;
   }
 
-  public void setAuthorities(
-      List<Authority> authorities) {
+  public void setAuthorities(List<Authority> authorities) {
     this.authorities = authorities;
   }
 

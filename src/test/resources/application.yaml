@@ -1,0 +1,25 @@
+junit:
+  jupiter:
+    execution:
+      parallel:
+        enabled: "true"
+        mode:
+          default: "concurrent"
+          classes:
+            default: "same_thread"
+spring:
+  datasource:
+    url: "jdbc:h2:mem:aptFinder"
+    username: "sa"
+    password: "sa"
+    driverClassName: "org.h2.Driver"
+  jpa:
+    defer-dataset-initialization: "true"
+    database: h2
+    hibernate:
+      ddl-auto: "create-drop"
+    database-platform: org.hibernate.dialect.H2Dialect
+  sql:
+    init-mode: "always"
+  main:
+    banner-mode: off

@@ -184,7 +184,7 @@ public class AuthService implements AuthenticationProvider {
   }
   
   public void delete(Authority authority) {
-    authRepository.remove(authority);
+    authRepository.delete(authority);
   }
 }
   

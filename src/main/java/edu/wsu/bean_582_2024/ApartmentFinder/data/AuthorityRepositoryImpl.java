@@ -30,7 +30,7 @@ public class AuthorityRepositoryImpl implements AuthorityRepository {
   }
 
   @Override
-  public void remove(Authority authority) {
+  public void delete(Authority authority) {
     authorityDao.delete(authority);
   }
 }

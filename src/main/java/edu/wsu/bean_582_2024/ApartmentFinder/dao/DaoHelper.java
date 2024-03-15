@@ -16,10 +16,11 @@ public abstract class DaoHelper{
   EntityManagerFactory entityManagerFactory;
   Logger logger;
   public DaoHelper(EntityManagerFactory entityManagerFactory, Logger logger) {
-    this.entityManagerFactory = entityManagerFactory; 
-    this.entityManager = entityManagerFactory.createEntityManager();
+    this.entityManagerFactory = entityManagerFactory;
+    this.entityManager = this.entityManagerFactory.createEntityManager();
     this.logger = logger;
   }
+  
   <T extends AbstractEntity> List<T> castList(Class<? extends T> clazz, Collection<?> rawCollection) {
     List<T> returnValue = new ArrayList<>(rawCollection.size());
     for (Object o : rawCollection) {

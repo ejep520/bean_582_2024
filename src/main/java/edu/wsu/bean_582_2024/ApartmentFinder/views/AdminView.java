@@ -9,6 +9,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.UserService;
@@ -36,6 +37,14 @@ public class AdminView extends VerticalLayout {
     add(getToolbar(), getContent());
     updateList();
     closeEditor();
+  }
+
+  public Grid<User> getGrid() {
+    return grid;
+  }
+
+  public AdminForm getAdminForm() {
+    return adminForm;
   }
 
   private Component getContent() {

@@ -45,23 +45,12 @@ public class AdminViewTests {
 
       when(userService.getAllUsers()).thenReturn(users);
       when(userService.findUsers(anyString())).thenReturn(users);
-      /*
-      when(userService.findUsers(isNull())).thenReturn(users);
-      when(userService.findUserByUsername("user1")).thenReturn(Optional.of(user1));
-      when(userService.findUserByUsername("user2")).thenReturn(Optional.of(user2));
-      when(userService.findUserByUsername("user3")).thenReturn(Optional.of(user3));
-      when(userService.findUserById(0L)).thenReturn(Optional.of(user1));
-      when(userService.findUserById(1L)).thenReturn(Optional.of(user2));
-      when(userService.findUserById(2L)).thenReturn(Optional.of(user3));
-      when(authService.authenticate("user1", "password1")).thenReturn(true);
-      when(authService.authenticate("user2", "password2")).thenReturn(true);
-      when(authService.authenticate("user3", "password3")).thenReturn(true);
-      */
+
       adminView = new AdminView(userService, authService);
     }
 
     @Test
-    public void formShownWhenUserIsSelectedTest() {
+    public void formShownAndClosedWhenUserIsSavedTest() {
         Grid<User> userGrid = adminView.getGrid();
         User firstUser = getNextItem(userGrid);
         assertEquals("user1", firstUser.getUsername());
@@ -73,6 +62,42 @@ public class AdminViewTests {
         userGrid.asSingleSelect().setValue(firstUser);
 
         assertTrue(adminForm.isVisible());
+        adminForm.save.click();
+        assertFalse(adminForm.isVisible());
+    }
+
+    @Test
+    public void formShownAndClosedWhenUserIsDeletedTest() {
+        Grid<User> userGrid = adminView.getGrid();
+        User firstUser = getNextItem(userGrid);
+        assertEquals("user1", firstUser.getUsername());
+        assertEquals(Role.ADMIN, firstUser.getRole());
+        AdminForm adminForm = adminView.getAdminForm();
+
+        assertFalse(adminForm.isVisible());
+
+        userGrid.asSingleSelect().setValue(firstUser);
+
+        assertTrue(adminForm.isVisible());
+        adminForm.delete.click();
+        assertFalse(adminForm.isVisible());
+    }
+
+    @Test
+    public void formShownAndClosedWhenUserIsCancelledTest() {
+        Grid<User> userGrid = adminView.getGrid();
+        User firstUser = getNextItem(userGrid);
+        assertEquals("user1", firstUser.getUsername());
+        assertEquals(Role.ADMIN, firstUser.getRole());
+        AdminForm adminForm = adminView.getAdminForm();
+
+        assertFalse(adminForm.isVisible());
+
+        userGrid.asSingleSelect().setValue(firstUser);
+
+        assertTrue(adminForm.isVisible());
+        adminForm.cancel.click();
+        assertFalse(adminForm.isVisible());
     }
 
     private User getNextItem(Grid<User> grid) {

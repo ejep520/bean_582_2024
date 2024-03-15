@@ -50,6 +50,7 @@ dependencies {
 	testImplementation 'org.seleniumhq.selenium:selenium-java:4.18.1'
 	testImplementation 'org.mockito:mockito-core:5.10.0'
 	testImplementation 'org.mockito:mockito-junit-jupiter:5.10.0'
+	testRuntimeOnly 'com.h2database:h2:2.2.224'
 	testRuntimeOnly('org.junit.vintage:junit-vintage-engine') {
 		because 'Vaadin sneaks in junit 4.'
 	}

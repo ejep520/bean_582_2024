@@ -7,11 +7,13 @@ import jakarta.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthorityDao extends DaoHelper implements Dao<Authority> {
 
+  @Autowired
   public AuthorityDao(EntityManagerFactory entityManagerFactory) {
     super(entityManagerFactory, LoggerFactory.getLogger(AuthorityDao.class));
   }
@@ -38,7 +40,7 @@ public class AuthorityDao extends DaoHelper implements Dao<Authority> {
 
   @Override
   public void update(Authority authority) {
-    executeInsideTransaction(entityManager1 -> entityManager.merge(authority));
+    executeInsideTransaction(entityManager -> entityManager.merge(authority));
   }
 
   @Override

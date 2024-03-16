@@ -1,6 +1,7 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -46,8 +47,6 @@ public class AuthorityDaoTests {
   }
  
   @AfterEach
-  // @Modifying
-  // @Transactional
   public void clearAuthorities() {
     EntityTransaction transaction;
     user.getAuthorities().clear();
@@ -125,40 +124,9 @@ public class AuthorityDaoTests {
    * In practical terms, this should never happen, but for purposes of "painting it green"...
    */
   @Test
-  @DisplayName("Test update function")
+  @DisplayName("Updating authorities is NOT supported.")
   public void updateFunctionTest() {
-    EntityTransaction transaction1, transaction2;
-    transaction1 = entityManager.getTransaction();
-    Authority novelAuthority = new Authority(user, "USER");
-    User differentUser = new User("DifferentUser", "FOOBAR", Role.USER);
-    user.getAuthorities().add(novelAuthority);
-    transaction1.begin();
-    try {
-      entityManager.persist(user);
-      entityManager.persist(differentUser);
-      entityManager.persist(novelAuthority);
-    } catch (Exception err) {
-      transaction1.rollback();
-      fail(err);
-      return;
-    }
-    transaction1.commit();
-    transaction2 = entityManager.getTransaction();
-    transaction2.begin();
-    novelAuthority.setUser(differentUser);
-    transaction2.commit();
-    transaction2.begin();
-    authorityDao.update((entityManager.contains(novelAuthority))? novelAuthority : entityManager.merge(novelAuthority));
-    transaction2.commit();
-    transaction2.begin();
-    entityManager.merge(user);
-    transaction2.commit();
-    transaction2.begin();
-    entityManager.merge(differentUser);
-    transaction2.commit();
-    Authority result = entityManager.find(Authority.class, novelAuthority.getId()); 
-    
-    assertEquals(differentUser, result.getUser());
+    assertThrows(UnsupportedOperationException.class, () -> authorityDao.update(authority_1));
   }
   
   @Test

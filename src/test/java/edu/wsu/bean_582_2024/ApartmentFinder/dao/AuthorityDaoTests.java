@@ -13,7 +13,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -46,12 +46,13 @@ public class AuthorityDaoTests {
     authorityDao = new AuthorityDao(entityManagerFactory);
   }
  
-  @AfterEach
+  @BeforeEach
   public void clearAuthorities() {
     EntityTransaction transaction;
     user.getAuthorities().clear();
     transaction = entityManager.getTransaction();
     transaction.begin();
+    entityManager.createQuery("delete from Unit").executeUpdate();
     entityManager.createQuery("delete from Authority").executeUpdate();
     entityManager.createQuery("delete from User").executeUpdate();
     transaction.commit();

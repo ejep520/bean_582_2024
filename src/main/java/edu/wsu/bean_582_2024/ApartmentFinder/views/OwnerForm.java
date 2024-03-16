@@ -59,7 +59,7 @@ public class OwnerForm extends FormLayout {
     bedrooms.setMin(0);
     bedrooms.setMax(20);
     bedrooms.setStep(1);
-    bathrooms.setMin(0f);
+    bathrooms.setMin(0d);
     bathrooms.setMax(10.5d);
     bathrooms.setStep(0.5d);
     user.setItems(userService.getAllUsers());
@@ -91,6 +91,7 @@ public class OwnerForm extends FormLayout {
     binder.readBean(unit);
   }
 
+  @SuppressWarnings("serial")
   public static abstract class OwnerFormEvent extends ComponentEvent<OwnerForm> {
 
     private final Unit unit;

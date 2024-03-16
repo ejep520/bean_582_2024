@@ -36,7 +36,7 @@ public class UserService {
   
   public void deleteUser(User user) {
     for (Authority authority : user.getAuthorities()) {
-      authRepository.remove(authority);
+      authRepository.delete(authority);
       
     }
     for (Unit unit : user.getUnits()) {
@@ -58,8 +58,4 @@ public class UserService {
   public Optional<User> findUserById(Long id) {
     return userRepository.getUserById(id);
   }
-  
-  public boolean addUnit(User user, Unit unit) {
-    return user.getUnits().add(unit);
-  } 
 }

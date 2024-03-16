@@ -14,12 +14,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 /**
  * Tests for the User class
  * @author Erik Jepsen &lt;erik.jepsen@wsu.edu&gt;
  */
 @Tag("fast")
+@Execution(ExecutionMode.CONCURRENT)
 public class UserTests extends AuthenticationTestsTemplate{
   private User user;
   @AfterEach

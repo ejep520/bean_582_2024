@@ -37,7 +37,7 @@ public class AuthorityDao extends DaoHelper implements Dao<Authority> {
 
   @Override
   public void update(Authority authority) {
-    executeInsideTransaction(entityManager -> entityManager.merge(authority));
+    throw new UnsupportedOperationException("Authorities may not be updated directly.");
   }
 
   @Override

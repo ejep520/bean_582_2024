@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.LoggerFactory;
@@ -31,14 +30,18 @@ public class UnitDao extends DaoHelper implements Dao<Unit>{
   public List<Unit> getAll() {
     return castList(Unit.class,
         entityManager
-          .createQuery("SELECT e FROM unit e")
+          .createQuery("SELECT e FROM Unit e")
           .getResultList());
   }
 
   @Override
   @Transactional(propagation = Propagation.NEVER)
   public void save(Unit unit) {
-    executeInsideTransaction(entityManager -> entityManager.persist(unit));
+    EntityManager localManager = entityManagerFactory.createEntityManager();
+    EntityTransaction transaction = localManager.getTransaction();
+    transaction.begin();
+    localManager.persist(unit);
+    transaction.commit();
   }
 
   @Override
@@ -53,7 +56,7 @@ public class UnitDao extends DaoHelper implements Dao<Unit>{
     EntityTransaction transaction = manager.getTransaction();
     transaction.begin();
     try {
-      manager.createQuery("delete from unit where id = :id")
+      manager.createQuery("delete from Unit where id = :id")
           .setParameter("id", unit.getId())
           .executeUpdate();
     } catch (PersistenceException err) {
@@ -63,31 +66,23 @@ public class UnitDao extends DaoHelper implements Dao<Unit>{
   }
   
   public List<Unit> find(String searchKey) {
-    if ((searchKey == null) || searchKey.isEmpty() || searchKey.isBlank()) return getAll();
-    List<Unit> returnValue = new ArrayList<>();
-    for (Object o : entityManager
-        .createQuery("SELECT e from unit e where lower(e.address) LIKE :searchKey OR lower(e.livingRoom) LIKE :searchKey OR lower(e.kitchen) LIKE :searchKey")
+    if ((searchKey == null) ||  searchKey.isBlank()) return getAll();
+    return castList(Unit.class, entityManager
+        .createQuery("SELECT e from Unit e where lower(e.address) LIKE :searchKey OR lower(e.livingRoom) LIKE :searchKey OR lower(e.kitchen) LIKE :searchKey")
         .setParameter("searchKey", searchKey.toLowerCase())
-        .getResultList()) {
-      try {
-        returnValue.add((Unit) o);
-      } catch (ClassCastException err) {
-        logger.atWarn().log(String.format("Unable to cast to Unit. %s", err));
-      }
-    }
-    return returnValue;
+        .getResultList());
   }
   
   public Long count() {
     return (Long) entityManager
-        .createQuery("select count (e.id) from unit e")
+        .createQuery("select count (e.id) from Unit e")
         .getSingleResult();
   }
   
   public List<Unit> findByUser(User user) {
     return castList(Unit.class,
         entityManager
-            .createQuery("select e from unit e where user = :userKey")
+            .createQuery("select e from Unit e where e.user = :userKey")
             .setParameter("userKey", user)
             .getResultList());
   }
@@ -95,7 +90,7 @@ public class UnitDao extends DaoHelper implements Dao<Unit>{
   public List<Unit> findOwnedUnitsByFilter(User user, String searchKey) {
     return castList(Unit.class,
         entityManager
-            .createQuery("select e from unit e where User = :userKey and (lower(e.address) like :searchKey or lower(e.kitchen) like :searchKey or lower(e.livingRoom) like :searchKey)")
+            .createQuery("select e from Unit e where e.user = :userKey and (lower(e.address) like :searchKey or lower(e.kitchen) like :searchKey or lower(e.livingRoom) like :searchKey)")
             .setParameter("userKey", user)
             .setParameter("searchKey", searchKey.toLowerCase())
             .getResultList());

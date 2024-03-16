@@ -72,6 +72,8 @@ pitest {
 	pitestVersion = "1.14.4"
 	junit5PluginVersion = "1.2.1"
 	verbose = true
+	useClasspathJar = true
+	useClasspathFile = true
 }
 
 jacocoTestReport {

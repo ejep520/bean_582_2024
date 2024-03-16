@@ -1,9 +1,10 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.dao;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,11 @@ public class UserDao extends DaoHelper implements Dao<User>{
 
   @Override
   public void update(User user) {
-    executeInsideTransaction(entityManager -> entityManager.merge(user));
+    EntityManager localManager = entityManagerFactory.createEntityManager();
+    EntityTransaction transaction = localManager.getTransaction();
+    transaction.begin();
+    localManager.merge(user);
+    transaction.commit();
   }
 
   @Override
@@ -44,16 +49,10 @@ public class UserDao extends DaoHelper implements Dao<User>{
   }
   
   public User findUser(String searchKey) {
-    List<User> listUser = new ArrayList<>();
-    for (Object o : entityManager.createQuery("SELECT e from User e WHERE e.username LIKE :searchKey")
-        .setParameter("searchKey", searchKey)
-        .getResultList()) {
-      try {
-        listUser.add((User) o);
-      } catch (ClassCastException err) {
-        logger.atWarn().log(String.format("Error casting to User class. %s", err));
-      }
-    }
+    List<User> listUser = castList(User.class,
+        entityManager.createQuery("SELECT e from User e WHERE e.username LIKE :searchKey")
+            .setParameter("searchKey", searchKey)
+            .getResultList());
     try {
       return listUser.get(0);
     } catch (IndexOutOfBoundsException err) {

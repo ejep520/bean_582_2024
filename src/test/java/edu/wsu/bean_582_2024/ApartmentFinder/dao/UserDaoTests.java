@@ -1,14 +1,18 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -48,18 +52,124 @@ public class UserDaoTests {
     transaction.begin();
     entityManager.createQuery("delete from User").executeUpdate();
     transaction.commit();
+    if (!user_1.getUsername().equals(USERNAME_1))
+      user_1.setUsername(USERNAME_1);
   }
-  
+
   @Test
-  public void testSaveUserFunction() {
-    userDao.save(user_1);
-    List<User> result = userDao.getAll();
+  public void getUserByIdTest() {
+    try {
+      addAllUsers();
+    } catch (Exception err) {
+      fail(err);
+      return;
+    }
+
+    Optional<User> result = userDao.get(user_1.getId());
+
+    if (result.isPresent())
+      assertEquals(user_1, result.get());
+    else
+      fail("User could not be found.");
+  }
+
+  @Test
+  public void findUserByUsernameSuccessReturnsUser() {
+    EntityTransaction transaction = entityManager.getTransaction();
+    transaction.begin();
+    entityManager.persist(user_1);
+    transaction.commit();
+    entityManager.refresh(user_1);
     
-    assertEquals(List.of(user_1), result);
+    User result = userDao.findUser(USERNAME_1);
+    
+    assertEquals(user_1, result);
+  }
+
+  @Test
+  public void findUserByUsernameFailureReturnsNull() {
+    EntityTransaction transaction = entityManager.getTransaction();
+    transaction.begin();
+    entityManager.persist(user_1);
+    transaction.commit();
+    entityManager.refresh(user_1);
+
+    User result = userDao.findUser(USERNAME_3);
+    
+    assertNull(result);
   }
   
   @Test
   public void testGetAllFunction() {
+    try {
+      addAllUsers();
+    } catch (Exception err) {
+      fail(err);
+      return;
+    }
+    
+    List<User> result = userDao.getAll();
+    
+    assertEquals(userList, result);
+  }
+
+  @Test
+  public void testSaveUserFunction() {
+    userDao.save(user_1);
+    List<User> result = userDao.getAll();
+
+    assertEquals(List.of(user_1), result);
+  }
+  
+  @Test
+  public void testUpdateFunction() {
+    EntityTransaction transaction = entityManager.getTransaction();
+    transaction.begin();
+    entityManager.persist(user_1);
+    transaction.commit();
+    
+    user_1.setUsername(USERNAME_2);
+    userDao.update(user_1);
+    
+    User result = entityManager.find(User.class, user_1.getId());
+    if (result == null)
+      fail("User was not found.");
+    else 
+      assertEquals(user_1.getUsername(), result.getUsername());
+    
+    entityManager.refresh(user_1);
+  }
+
+  @Test
+  public void deleteUserFunctionTest() {
+    try {
+      addAllUsers();
+    } catch (Exception err) {
+      fail(err);
+      return;
+    }
+    
+    userDao.delete(user_2);
+    
+    List<User> result = userDao.castList(User.class, entityManager.createQuery("select e from User e").getResultList());
+    assertThrows(EntityNotFoundException.class, () -> entityManager.refresh(user_2));
+    assertEquals(List.of(user_1, user_3), result);
+  }
+  
+  @Test
+  public void countFunctionTest() {
+    assertEquals(0L, userDao.count());
+    
+    try {
+      addAllUsers();
+    } catch (Exception err) {
+      fail(err);
+    }
+    
+    assertEquals(3L, userDao.count());
+  }
+  
+  private void addAllUsers() throws Exception{
     EntityTransaction transaction = entityManager.getTransaction();
     transaction.begin();
     try {
@@ -68,13 +178,8 @@ public class UserDaoTests {
       entityManager.persist(user_3);
     } catch (Exception err) {
       transaction.rollback();
-      fail(err);
-      return;
+      throw err;
     }
     transaction.commit();
-    
-    List<User> result = userDao.getAll();
-    
-    assertEquals(userList, result);
   }
 }

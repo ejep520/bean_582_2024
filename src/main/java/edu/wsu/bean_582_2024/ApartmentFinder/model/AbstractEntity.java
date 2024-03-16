@@ -17,7 +17,7 @@ public abstract class AbstractEntity {
     private Long id;
 
     @Version
-    private int version;
+    private Integer version = 0;
 
     public Long getId() {
         return id;
@@ -27,7 +27,7 @@ public abstract class AbstractEntity {
         this.id = id;
     }
 
-    public int getVersion() {
+    public Integer getVersion() {
         return version;
     }
 

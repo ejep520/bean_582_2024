@@ -13,7 +13,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +46,12 @@ public class UserDaoTests {
     userDao = new UserDao(entityManagerFactory);
   }
   
-  @AfterEach
+  @BeforeEach
   public void clearTable() {
     EntityTransaction transaction = entityManager.getTransaction();
     transaction.begin();
+    entityManager.createQuery("delete from Unit").executeUpdate();
+    entityManager.createQuery("delete from Authority").executeUpdate();
     entityManager.createQuery("delete from User").executeUpdate();
     transaction.commit();
     if (!user_1.getUsername().equals(USERNAME_1))

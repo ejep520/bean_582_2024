@@ -69,6 +69,7 @@ public class UnitDaoTests {
     EntityTransaction transaction = entityManager.getTransaction();
     transaction.begin();
     entityManager.createQuery("delete from Unit").executeUpdate();
+    entityManager.createQuery("delete from Authority").executeUpdate();
     entityManager.createQuery("delete from User").executeUpdate();
     transaction.commit();
     if (!ADDRESS_1.equals(unit_1.getAddress()))

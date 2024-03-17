@@ -9,6 +9,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.UnitService;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.data.domain.Sort;
@@ -59,5 +60,13 @@ public class HomeView extends VerticalLayout {
     HorizontalLayout toolbar = new HorizontalLayout(filterText);
     toolbar.addClassName("toolbar");
     return toolbar;
+  }
+  
+  public Grid<Unit> getGrid() {
+	    return grid;
+	  }
+  
+  public boolean isFormVisible() {
+      return !filterText.isVisible();
   }
 }

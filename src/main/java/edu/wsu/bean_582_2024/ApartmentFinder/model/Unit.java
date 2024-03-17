@@ -8,7 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-@Entity(name = "unit")
+@Entity
 @Table(name = "UNITS")
 public class Unit extends AbstractEntity {
   private String address;

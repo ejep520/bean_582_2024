@@ -23,22 +23,25 @@ import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService.AuthException;
 @RouteAlias("/")
 @PageTitle("Login")
 @AnonymousAllowed
-@SuppressWarnings("serial")
 public class LoginView extends VerticalLayout
     implements BeforeEnterObserver, ComponentEventListener<AbstractLogin.LoginEvent> {
   private static final Class<? extends Component> LOGIN_SUCCESS_URL = HomeView.class;
-  private final LoginForm login = new LoginForm();
+  final LoginForm login = new LoginForm();
   private final AuthService authService;
-  private final UI ui = UI.getCurrent();
+  final UI ui = UI.getCurrent();
+  final static String CLASS_NAME = "login-view";
 
+  public LoginView() {
+    this.authService = null;
+  }
+  
   public LoginView(AuthService authService) {
     this.authService = authService;
-    long userCount = this.authService.getUserCount();
-    if (userCount == 0) {
-      UI.getCurrent().navigate(NewUserView.class);
-      return;
+    if (this.authService.getUserCount() == 0) {
+      ui.getPage().setLocation("/newuser");
+      ui.getSession().close();
     }
-    addClassName("login-view");
+    addClassName(CLASS_NAME);
     setSizeFull();
     setAlignItems(Alignment.CENTER);
     setJustifyContentMode(JustifyContentMode.CENTER);
@@ -56,19 +59,19 @@ public class LoginView extends VerticalLayout
       login.setError(true);
       return;
     }
-    if (authenticated) {
+    if (authenticated)
       ui.navigate(LOGIN_SUCCESS_URL);
-      // Page page = ui.getPage();
-      // page.setLocation(LOGIN_SUCCESS_URL);
-      // page.open(LOGIN_SUCCESS_URL);
-    } else
+    else
       login.setError(true);
   }
 
   @Override
   public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-    if (beforeEnterEvent.getLocation().getQueryParameters().getParameters().containsKey("error"))
-      login.setError(true);
+    login.setError(
+        beforeEnterEvent
+            .getLocation()
+            .getQueryParameters()
+            .getParameters()
+            .containsKey("error"));
   }
 }
-

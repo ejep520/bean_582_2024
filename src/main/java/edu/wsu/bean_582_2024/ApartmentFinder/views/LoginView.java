@@ -34,7 +34,7 @@ public class LoginView extends VerticalLayout
   public LoginView() {
     this.authService = null;
   }
-  
+
   public LoginView(AuthService authService) {
     this.authService = authService;
     if (this.authService.getUserCount() == 0) {

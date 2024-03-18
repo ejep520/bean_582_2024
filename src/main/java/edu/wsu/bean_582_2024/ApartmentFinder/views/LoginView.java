@@ -23,25 +23,22 @@ import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService.AuthException;
 @RouteAlias("/")
 @PageTitle("Login")
 @AnonymousAllowed
+@SuppressWarnings("serial")
 public class LoginView extends VerticalLayout
     implements BeforeEnterObserver, ComponentEventListener<AbstractLogin.LoginEvent> {
   private static final Class<? extends Component> LOGIN_SUCCESS_URL = HomeView.class;
-  final LoginForm login = new LoginForm();
+  private final LoginForm login = new LoginForm();
   private final AuthService authService;
-  final UI ui = UI.getCurrent();
-  final static String CLASS_NAME = "login-view";
-
-  public LoginView() {
-    this.authService = null;
-  }
+  private final UI ui = UI.getCurrent();
 
   public LoginView(AuthService authService) {
     this.authService = authService;
-    if (this.authService.getUserCount() == 0) {
-      ui.getPage().setLocation("/newuser");
-      ui.getSession().close();
+    long userCount = this.authService.getUserCount();
+    if (userCount == 0) {
+      UI.getCurrent().navigate(NewUserView.class);
+      return;
     }
-    addClassName(CLASS_NAME);
+    addClassName("login-view");
     setSizeFull();
     setAlignItems(Alignment.CENTER);
     setJustifyContentMode(JustifyContentMode.CENTER);
@@ -59,19 +56,19 @@ public class LoginView extends VerticalLayout
       login.setError(true);
       return;
     }
-    if (authenticated)
+    if (authenticated) {
       ui.navigate(LOGIN_SUCCESS_URL);
-    else
+      // Page page = ui.getPage();
+      // page.setLocation(LOGIN_SUCCESS_URL);
+      // page.open(LOGIN_SUCCESS_URL);
+    } else
       login.setError(true);
   }
 
   @Override
   public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-    login.setError(
-        beforeEnterEvent
-            .getLocation()
-            .getQueryParameters()
-            .getParameters()
-            .containsKey("error"));
+    if (beforeEnterEvent.getLocation().getQueryParameters().getParameters().containsKey("error"))
+      login.setError(true);
   }
 }
+

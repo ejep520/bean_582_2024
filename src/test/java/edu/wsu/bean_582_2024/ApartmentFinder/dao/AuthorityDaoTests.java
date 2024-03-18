@@ -1,6 +1,7 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -12,7 +13,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -45,14 +46,13 @@ public class AuthorityDaoTests {
     authorityDao = new AuthorityDao(entityManagerFactory);
   }
  
-  @AfterEach
-  // @Modifying
-  // @Transactional
+  @BeforeEach
   public void clearAuthorities() {
     EntityTransaction transaction;
     user.getAuthorities().clear();
     transaction = entityManager.getTransaction();
     transaction.begin();
+    entityManager.createQuery("delete from Unit").executeUpdate();
     entityManager.createQuery("delete from Authority").executeUpdate();
     entityManager.createQuery("delete from User").executeUpdate();
     transaction.commit();
@@ -125,40 +125,9 @@ public class AuthorityDaoTests {
    * In practical terms, this should never happen, but for purposes of "painting it green"...
    */
   @Test
-  @DisplayName("Test update function")
+  @DisplayName("Updating authorities is NOT supported.")
   public void updateFunctionTest() {
-    EntityTransaction transaction1, transaction2;
-    transaction1 = entityManager.getTransaction();
-    Authority novelAuthority = new Authority(user, "USER");
-    User differentUser = new User("DifferentUser", "FOOBAR", Role.USER);
-    user.getAuthorities().add(novelAuthority);
-    transaction1.begin();
-    try {
-      entityManager.persist(user);
-      entityManager.persist(differentUser);
-      entityManager.persist(novelAuthority);
-    } catch (Exception err) {
-      transaction1.rollback();
-      fail(err);
-      return;
-    }
-    transaction1.commit();
-    transaction2 = entityManager.getTransaction();
-    transaction2.begin();
-    novelAuthority.setUser(differentUser);
-    transaction2.commit();
-    transaction2.begin();
-    authorityDao.update((entityManager.contains(novelAuthority))? novelAuthority : entityManager.merge(novelAuthority));
-    transaction2.commit();
-    transaction2.begin();
-    entityManager.merge(user);
-    transaction2.commit();
-    transaction2.begin();
-    entityManager.merge(differentUser);
-    transaction2.commit();
-    Authority result = entityManager.find(Authority.class, novelAuthority.getId()); 
-    
-    assertEquals(differentUser, result.getUser());
+    assertThrows(UnsupportedOperationException.class, () -> authorityDao.update(authority_1));
   }
   
   @Test

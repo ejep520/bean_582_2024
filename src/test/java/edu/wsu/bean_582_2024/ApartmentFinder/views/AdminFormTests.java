@@ -1,10 +1,10 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.views;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -41,10 +41,10 @@ public class AdminFormTests {
 
         User savedUser = savedUserRef.get();
 
-        assertEquals(adminUser.getUsername(), savedUser.getUsername());
-        assertEquals(true, savedUser.getEnabled());
-        assertEquals(Role.ADMIN, savedUser.getRole());
-        assertEquals(adminUser.getPassword(), savedUser.getPassword());
+        Assert.assertEquals(adminUser.getUsername(), savedUser.getUsername());
+        Assert.assertEquals(true, savedUser.getEnabled());
+        Assert.assertEquals(Role.ADMIN, savedUser.getRole());
+        Assert.assertEquals(adminUser.getPassword(), savedUser.getPassword());
     }
 
     @Test
@@ -57,10 +57,10 @@ public class AdminFormTests {
 
         User savedUser = savedUserRef.get();
 
-        assertEquals(adminUser.getUsername(), savedUser.getUsername());
-        assertEquals(true, savedUser.getEnabled());
-        assertEquals(Role.ADMIN, savedUser.getRole());
-        assertEquals(adminUser.getPassword(), savedUser.getPassword());
+        Assert.assertEquals(adminUser.getUsername(), savedUser.getUsername());
+        Assert.assertEquals(true, savedUser.getEnabled());
+        Assert.assertEquals(Role.ADMIN, savedUser.getRole());
+        Assert.assertEquals(adminUser.getPassword(), savedUser.getPassword());
     }
 
     @Test
@@ -74,10 +74,10 @@ public class AdminFormTests {
 
         User deletedUser = deletedUserRef.get();
 
-        assertEquals(ownerUser.getPassword(), deletedUser.getPassword());
-        assertEquals(false, deletedUser.getEnabled());
-        assertEquals(Role.OWNER, deletedUser.getRole());
-        assertEquals(ownerUser.getUsername(), deletedUser.getUsername());
+        Assert.assertEquals(ownerUser.getPassword(), deletedUser.getPassword());
+        Assert.assertEquals(false, deletedUser.getEnabled());
+        Assert.assertEquals(Role.OWNER, deletedUser.getRole());
+        Assert.assertEquals(ownerUser.getUsername(), deletedUser.getUsername());
     }
 
     @Test
@@ -89,6 +89,6 @@ public class AdminFormTests {
         adminForm.cancel.click();
 
         User cancelledUser = cancelledUserRef.get();
-        assertNull(cancelledUser);
+        Assert.assertNull(cancelledUser);
     }
 }

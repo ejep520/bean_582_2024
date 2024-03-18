@@ -1,11 +1,9 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.views;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.vaadin.flow.data.provider.ListDataProvider;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.SecurityService;
@@ -23,6 +21,7 @@ import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,10 +36,8 @@ public class OwnerViewTests {
 	}
 
 	private OwnerView ownerView;
-	private Unit unit1;
-	private Unit unit2;
-	private Unit unit3;
-
+  private List<Unit> units;
+	
 	@Mock
 	UserService userService;
 
@@ -65,30 +62,27 @@ public class OwnerViewTests {
 
 		List<User> users = List.of(user1, user2, user3);
 
-		unit1 = new Unit("123 876th Drive", 5, 3.75, "Living room #1", "Kitchen #1", true, user2);
-		unit2 = new Unit("1234 876th Drive", 4, 2.75, "Living room #2", "Kitchen #2", true, user2);
-		unit3 = new Unit("12345 876th Drive", 3, 1.75, "Living room #3", "Kitchen #3", true, user2);
-		List<Unit> units = List.of(unit1, unit2, unit3);
+    Unit unit1 = new Unit("123 876th Drive", 5, 3.5, "Living room #1", "Kitchen #1", true, user2);
+    Unit unit2 = new Unit("1234 876th Drive", 4, 2.5, "Living room #2", "Kitchen #2", true, user2);
+    Unit unit3 = new Unit("12345 876th Drive", 3, 1.5, "Living room #3", "Kitchen #3", true, user2);
+		units = List.of(unit1, unit2, unit3);
 
 		when(userService.getAllUsers()).thenReturn(users);
-		when(userService.findUsers(anyString())).thenReturn(users);
 		when(userService.findUserByUsername(anyString())).thenReturn(Optional.of(user2));
 		when(securityService.getAuthenticatedUser()).thenReturn(Optional.of(user2));
-		when(unitService.getAllUnits(anyBoolean())).thenReturn(units);
-		when(unitService.getUnitCount()).thenReturn(3L);
 		when(unitService.getUsersUnits(any())).thenReturn(units);
+		when(unitService.getUserUnitsByFilter(any(User.class), anyString())).thenReturn(units);
 		ownerView = new OwnerView(unitService, securityService, userService);
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void formShownWhenUnitSelectedTest() {
-		Grid<Unit> grid = ownerView.getGrid();
-		ListDataProvider<Unit> ldp = (ListDataProvider<Unit>) grid.getDataProvider();
-		assertEquals(3, unitService.getAllUnits(true).stream().count());
-		assertEquals(3, ldp.getItems().stream().count());
-		Unit firstUnit = getFirstItem(grid);
+		when(unitService.getAllUnits(anyBoolean())).thenReturn(units);
 
+		Grid<Unit> grid = ownerView.getGrid();
+		assertEquals(3, unitService.getAllUnits(true).size());
+		assertEquals(3L, grid.getListDataView().getItems().count());
+		Unit firstUnit = getFirstItem(grid);
 		OwnerForm form = ownerView.getOwnerForm();
 		assertFalse(form.isVisible());
 		grid.asSingleSelect().setValue(firstUnit);
@@ -119,7 +113,10 @@ public class OwnerViewTests {
 		assertNotNull(unitChanged1);
 
 		assertFalse(form.isVisible());
-		assertEquals("THIS IS A CHANGED ADDRESS", unitChanged1.get().getAddress());
+		if (unitChanged1.isPresent())
+			assertEquals("THIS IS A CHANGED ADDRESS", unitChanged1.get().getAddress());
+		else 
+			fail("The changed unit could not be recovered.");
 	}
 
 	@Test
@@ -128,7 +125,6 @@ public class OwnerViewTests {
 		Unit firstUnit = getFirstItem(grid);
 
 		OwnerForm form = ownerView.getOwnerForm();
-		System.out.println(firstUnit.getAddress());
 		assertFalse(form.isVisible());
 		grid.asSingleSelect().setValue(firstUnit);
 
@@ -136,7 +132,7 @@ public class OwnerViewTests {
 		form.delete.click();
 		assertFalse(form.isVisible());
 
-		assertEquals(2, grid.getListDataView().getItems().count());
+		verify(unitService).deleteUnit(firstUnit);
 	}
 
 	private Unit getFirstItem(Grid<Unit> grid) throws NullPointerException {

@@ -14,6 +14,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.Location;
 import com.vaadin.flow.router.QueryParameters;
+import com.vaadin.flow.router.RouteConfiguration;
+import com.vaadin.flow.server.VaadinServletRequest;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.testbench.unit.UIUnitTest;
 import com.vaadin.testbench.unit.ViewPackages;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService;
@@ -39,6 +42,12 @@ public class LoginViewTests extends UIUnitTest {
   @Mock
   private AuthService authService;
   private final static String ONE_HUNDRED_PERCENT = "100%";
+  @Mock
+  private VaadinServletRequest request;
+  @Mock
+  private VaadinSession session;
+  @Mock
+  private RouteConfiguration configuration;
   
   @Test
   public void propertiesOfLoginView() {
@@ -59,12 +68,12 @@ public class LoginViewTests extends UIUnitTest {
   @Test
   public void componentEventTestLoginError() throws AuthException {
     String username = "testUser";
-    String password = "testPass"; 
+    String password = "testPass";
     LoginEvent loginEvent = mock(LoginEvent.class);
     when(loginEvent.getUsername()).thenReturn(username);
     when(loginEvent.getPassword()).thenReturn(password);
     when(authService.getUserCount()).thenReturn(1L);
-    when(authService.authenticate(username, password)).thenThrow(AuthException.class);
+    when(authService.authenticate(username, password, request, session, configuration)).thenThrow(AuthException.class);
     loginView = new LoginView(authService);
     
     loginView.onComponentEvent(loginEvent);
@@ -80,7 +89,7 @@ public class LoginViewTests extends UIUnitTest {
     when(loginEvent.getUsername()).thenReturn(username);
     when(loginEvent.getPassword()).thenReturn(password);
     when(authService.getUserCount()).thenReturn(1L);
-    when(authService.authenticate(username, password)).thenReturn(false);
+    when(authService.authenticate(username, password, request, session, configuration)).thenReturn(false);
     loginView = new LoginView(authService);
 
     loginView.onComponentEvent(loginEvent);
@@ -96,7 +105,7 @@ public class LoginViewTests extends UIUnitTest {
     when(loginEvent.getUsername()).thenReturn(username);
     when(loginEvent.getPassword()).thenReturn(password);
     when(authService.getUserCount()).thenReturn(1L);
-    when(authService.authenticate(username, password)).thenReturn(true);
+    when(authService.authenticate(username, password, request, session, configuration)).thenReturn(true);
     loginView = new LoginView(authService);
 
     loginView.onComponentEvent(loginEvent);

@@ -1,0 +1,373 @@
+---
+title: BEAN Apartment Finder Class Diagram
+---
+classDiagram
+direction LR
+class ApartmentFinderApplication {
+    + ApartmentFinderApplication()
+    + main(String[]) void
+}
+class AbstractEntity {
+  + AbstractEntity()
+  + equals(Object) boolean
+  + hashCode() int
+   Long id
+   Integer version
+}
+class AdminForm {
+  + AdminForm()
+  + addDeleteListener(ComponentEventListener~DeleteEvent~) void
+  + addSaveListener(ComponentEventListener~SaveEvent~) void
+  + addCloseListener(ComponentEventListener~CloseEvent~) void
+  + validateAndSave() void
+  - createButtonLayout() Component
+   User user
+}
+class AdminFormEvent {
+  + AdminFormEvent(AdminForm, User) 
+   User user
+}
+class AdminView {
+  + AdminView(UserService, AuthService) 
+  - editUser(User) void
+  - configureForm() void
+  - configureGrid() void
+  - deleteUser(DeleteEvent) void
+  - closeEditor() void
+  - saveUser(SaveEvent) void
+  - addUser() void
+  - updateList() void
+   AdminForm adminForm
+   Grid~User~ grid
+   Component content
+   Component toolbar
+}
+class AuthException {
+  + AuthException() 
+}
+class AuthService {
+  + AuthService(UserRepository, AuthorityRepository)
+  + getAuthorizedRoutes(Role) List~AuthorizedRoute~
+  + delete(Authority) void
+  + authenticate(Authentication) Authentication
+  + register(String, String, Role) void
+  + authenticate(String, String) boolean
+  - createRoutes(Role) void
+  + register(User) void
+  + usernameTaken(String) boolean
+  + supports(Class~?~) boolean
+   boolean authenticated
+   long userCount
+}
+class Authority {
+  + Authority(User, String) 
+  + Authority() 
+   String authority
+   User user
+}
+class AuthorityDao {
+  + AuthorityDao(EntityManagerFactory) 
+  + delete(Authority) void
+  + save(Authority) void
+  + get(long) Optional~Authority~
+  + update(Authority) void
+   List~Authority~ all
+}
+class AuthorityRepository {
+<<Interface>>
+  + add(Authority) void
+  + delete(Authority) void
+  + update(Authority) void
+  + get(Long) Authority
+}
+class AuthorityRepositoryImpl {
+  + AuthorityRepositoryImpl(AuthorityDao) 
+  + get(Long) Authority
+  + update(Authority) void
+  + add(Authority) void
+  + delete(Authority) void
+}
+class AuthorizedRoute {
+  + AuthorizedRoute(String, String, Class~Component~) 
+  + view() Class~Component~
+  + route() String
+  + name() String
+}
+class CloseEvent {
+  + CloseEvent(OwnerForm) 
+}
+class CloseEvent {
+  + CloseEvent(AdminForm) 
+}
+class Dao~T~ {
+<<Interface>>
+  + delete(T) void
+  + update(T) void
+  + get(long) Optional~T~
+  + save(T) void
+   List~T~ all
+}
+class DaoHelper {
+  + DaoHelper(EntityManagerFactory, Logger) 
+  ~ executeInsideTransaction(Consumer~EntityManager~) void
+  ~ castList(Class~T~, Collection~?~) List~T~
+}
+class DeleteEvent {
+  + DeleteEvent(OwnerForm, Unit) 
+}
+class DeleteEvent {
+  + DeleteEvent(AdminForm, User) 
+}
+class HomeView {
+  + HomeView(UnitService) 
+  - configureGrid() void
+  - updateList() void
+   boolean formVisible
+   Grid~Unit~ grid
+   Component content
+   Component toolbar
+}
+class LoginView {
+  + LoginView(AuthService) 
+  + beforeEnter(BeforeEnterEvent) void
+  + onComponentEvent(LoginEvent) void
+}
+class MainLayout {
+  + MainLayout(SecurityService) 
+  + MainLayout() 
+  - createDrawer() void
+  - createHeader() void
+}
+class NewUserView {
+  + NewUserView(AuthService) 
+  # initContent() Component
+  - register(String, String, String) void
+}
+class OwnerForm {
+  + OwnerForm(User, UserService)
+  + addCloseListener(ComponentEventListener~CloseEvent~) void
+  - validateAndSave() void
+  - configureForm() void
+  + addDeleteListener(ComponentEventListener~DeleteEvent~) void
+  - createButtonLayout() Component
+  + addSaveListener(ComponentEventListener~SaveEvent~) void
+   Unit unit
+}
+class OwnerFormEvent {
+  + OwnerFormEvent(OwnerForm, Unit) 
+   Unit unit
+}
+class OwnerView {
+  + OwnerView(UnitService, SecurityService, UserService) 
+  - closeEditor() void
+  - configureForm() void
+  - editUnit(Unit) void
+  - updateList() void
+  - configureGrid() void
+  - deleteUnit(DeleteEvent) void
+  - saveUnit(SaveEvent) void
+   boolean isAdmin
+   Grid~Unit~ grid
+   Component content
+   Component toolbar
+   OwnerForm ownerForm
+}
+class Role {
+<<enumeration>>
+  - Role() 
+  + valueOf(String) Role
+  + values() Role[]
+}
+class SaveEvent {
+  + SaveEvent(AdminForm, User) 
+}
+class SaveEvent {
+  + SaveEvent(OwnerForm, Unit) 
+}
+class SecurityConfig {
+  + SecurityConfig() 
+  # configure(HttpSecurity) void
+  + users(DataSource) UserDetailsService
+}
+class SecurityService {
+  + SecurityService(AuthenticationContext, UserDetailsService) 
+  + logout() void
+   Optional~UserDetails~ authenticatedUser
+}
+class Unit {
+  + Unit(String, Integer, Double, String, String, Boolean, User) 
+  + Unit() 
+  + hashCode() int
+  + equals(Object) boolean
+   String kitchen
+   Integer bedrooms
+   Boolean featured
+   String address
+   Double bathrooms
+   String livingRoom
+   User user
+}
+class UnitDao {
+  + UnitDao(EntityManagerFactory) 
+  + findOwnedUnitsByFilter(User, String) List~Unit~
+  + delete(Unit) void
+  + count() Long
+  + save(Unit) void
+  + update(Unit) void
+  + find(String) List~Unit~
+  + findByUser(User) List~Unit~
+  + get(long) Optional~Unit~
+   List~Unit~ all
+}
+class UnitRepository {
+<<Interface>>
+  + findByUser(User) List~Unit~
+  + search(String) List~Unit~
+  + get(Long) Unit
+  + delete(Unit) void
+  + findOwnedUnitsByFilter(User, String) List~Unit~
+  + count() Long
+  + add(Unit) void
+  + update(Unit) void
+   List~Unit~ all
+}
+class UnitRepositoryImpl {
+  + UnitRepositoryImpl(UnitDao) 
+  + add(Unit) void
+  + findOwnedUnitsByFilter(User, String) List~Unit~
+  + search(String) List~Unit~
+  + get(Long) Unit
+  + delete(Unit) void
+  + update(Unit) void
+  + findByUser(User) List~Unit~
+  + count() Long
+   List~Unit~ all
+}
+class UnitService {
+  + UnitService(UnitRepository, UserRepository)
+  + getAllUnits(Boolean) List~Unit~
+  + saveUnit(Unit) void
+  + deleteUnit(Unit) void
+  + findUnits(String) List~Unit~
+  + getUserUnitsByFilter(User, String) List~Unit~
+  + getUsersUnits(User) List~Unit~
+   long unitCount
+}
+class User {
+  + User(String, String, Role) 
+  + User() 
+  + checkPassword(String) boolean
+  - digestNewPassword() boolean
+  + isEnabled() boolean
+  + generateSalt() void
+  + toString() String
+  + eraseCredentials() void
+   String password
+   Role role
+   Boolean enabled
+   String passwordSalt
+   boolean accountNonExpired
+   List~Unit~ units
+   boolean credentialsNonExpired
+   boolean accountNonLocked
+   Collection~Authority~ authorities
+   boolean passwordChanged
+   String username
+   String newPassword
+}
+class UserDao {
+  + UserDao(EntityManagerFactory) 
+  + save(User) void
+  + delete(User) void
+  + count() Long
+  + update(User) void
+  + get(long) Optional~User~
+  + findUser(String) User
+   List~User~ all
+}
+class UserRepository {
+<<Interface>>
+  + count() Long
+  + add(User) void
+  + getUserByUsername(String) User
+  + getUserById(Long) Optional~User~
+  + update(User) void
+  + delete(User) void
+   List~User~ all
+}
+class UserRepositoryImpl {
+  + UserRepositoryImpl(UserDao) 
+  + update(User) void
+  + delete(User) void
+  + add(User) void
+  + getUserByUsername(String) User
+  + count() Long
+  + getUserById(Long) Optional~User~
+   List~User~ all
+}
+class UserService {
+  + UserService(UserRepository, AuthorityRepository, UnitRepository)
+  + deleteUser(User) void
+  + findUserById(Long) Optional~User~
+  + saveUser(User) void
+  + findUserByUsername(String) Optional~User~
+  + findUsers(String) List~User~
+   List~User~ allUsers
+}
+
+AdminForm  -->  AdminFormEvent
+AdminForm  -->  CloseEvent
+AdminForm  -->  DeleteEvent
+AdminForm  -->  SaveEvent
+AdminView --> AdminForm
+AdminView --> UserService
+AdminView --> AuthService
+Authority  -->  AbstractEntity
+AuthorityDao  ..>  Dao~T~ : Implements
+AuthorityDao  -->  DaoHelper
+AuthorityRepositoryImpl  ..>  AuthorityRepository : Implements
+AuthorityRepositoryImpl --> AuthorityDao
+AuthService  -->  AuthException
+AuthService  -->  AuthorizedRoute
+AuthService --> UserRepositoryImpl
+AuthService --> AuthorityRepositoryImpl
+CloseEvent  -->  AdminFormEvent
+CloseEvent  -->  OwnerFormEvent
+LoginView --> AuthService
+OwnerForm  -->  CloseEvent 
+Dao~T~  ..>  AbstractEntity : Implements
+DeleteEvent  -->  AdminFormEvent
+OwnerForm  -->  DeleteEvent 
+DeleteEvent  -->  OwnerFormEvent 
+OwnerForm  -->  OwnerFormEvent
+SaveEvent  -->  AdminFormEvent
+OwnerForm  -->  SaveEvent
+SaveEvent  -->  OwnerFormEvent
+Unit  -->  AbstractEntity 
+UnitDao  ..>  Dao~T~ : Implements
+UnitDao  -->  DaoHelper 
+UnitRepositoryImpl  ..>  UnitRepository : Implements
+User  -->  AbstractEntity 
+UserDao  ..>  Dao~T~ : Implements
+UserDao  -->  DaoHelper 
+UserRepositoryImpl  ..>  UserRepository : Implements
+UserRepositoryImpl --> UserDao
+NewUserView --> AuthService
+UnitService --> UnitRepositoryImpl
+UnitService --> UserRepositoryImpl
+UserService --> UserRepositoryImpl
+UserService --> AuthorityRepositoryImpl
+UserService --> UnitRepositoryImpl
+OwnerView --> UnitService
+OwnerView --> SecurityService
+OwnerView --> UserService
+OwnerView --> OwnerForm
+MainLayout --> SecurityService
+HomeView --> UnitService
+User --> Role
+AuthService --> Role
+AdminForm --> Role
+OwnerForm --> Role
+UnitService --> Role
+OwnerView --> Role
+NewUserView --> Role

@@ -1,0 +1,209 @@
+---
+title: BEAN Apartment Finder Call Graph
+---
+%% This is best viewed through the Mermain Live Editor https://mermaid.live
+%% Just copy the contents of this file into the editor
+graph LR
+    subgraph MainLayout
+        mlCreateDrawer(createDrawer)
+        mlCreateHeader(createHeader)
+    end
+    %% Views
+    subgraph AdminView
+        adminViewGetAdminForm(getAdminForm)
+        adminViewEditUser(editUser)
+        adminViewSaveUser(saveUser)
+        adminViewDeleteUser(deleteUser)
+        adminViewUpdateList(updateList)
+        adminViewConfigureGrid(configureGrid)
+    end
+    subgraph HomeView
+        homeViewConfigureGrid(configureGrid)
+        homeViewUpdateList(updateList)
+    end
+    subgraph LoginView
+        loginViewOnComponentEvent(onComponentEvent)
+    end
+    subgraph NewUserView
+        newUserViewRegister(register)
+    end
+    subgraph OwnerView
+        ownerViewConfigureGrid(configureGrid)
+        ownerViewSaveUnit(saveUnit)
+        ownerViewDeleteUnit(deleteUnit)
+        ownerViewUpdateList(updateList)
+        ownerViewGetOwnerForm(getOwnerForm)
+    end
+    %% Forms
+    subgraph AdminForm
+    end
+    subgraph OwnerForm
+        ownerFormConfigureForm(configureForm)
+    end
+    %% Services
+    subgraph SecurityService
+        securitySvcGetAuthenticatedUser(getAuthenticatedUser)
+        securitySvcLogout(logout)
+    end
+    subgraph AuthService
+        authSvcAuthenticate(authenticate)
+        authSvcIsAuthenticated(isAuthenticated)
+        authSvcGetAuthorizedRoutes(getAuthorizedRoutes)
+        authSvcUsernameTaken(usernameTaken)
+        authSvcRegister(register)
+        authSvcGetUserCount(getUserCount)
+        authSvcDelete(delete)
+    end
+    subgraph UnitService
+        unitSvcGetAllUnits(getAllUnits)
+        unitSvcFindUnits(findUnits)
+        unitSvcGetUnitCount(getUnitCount)
+        unitSvcDeleteUnit(deleteUnit)
+        unitSvcSaveUnit(saveUnit)
+        unitSvcGetUsersUnits(getUsersUnits)
+        unitSvcGetUserUnitsByFilter(getUserUnitsByFilter)
+    end
+    subgraph UserService
+        userSvcGetAllUsers(getAllUsers)
+        userSvcFindUsers(findUsers)
+        userSvcDeleteUser(deleteUser)
+        userSvcSaveUser(saveUser)
+        userSvcFindUserByUsername(findUserByUsername)
+        userSvcFindUserById(findUserById)
+    end
+    %% Repositories
+    subgraph UnitRepository
+        unitRepoGetAll(getAll)
+        unitRepoGet(get)
+        unitRepoSearch(search)
+        unitRepoCount(count)
+        unitRepoUpdate(update)
+        unitRepoDelete(delete)
+        unitRepoAdd(add)
+        unitRepoFindByUser(findByUser)
+        unitRepoSearch(search)
+        unitRepoFindOwnedUnitsByFilter(findOwnedUnitsByFilter)
+    end
+    subgraph UserRepository
+        userRepoGetAll(getAll)
+        userRepoGetUserById(getUserById)
+        userRepoAdd(add)
+        userRepoUpdate(update)
+        userRepoDelete(delete)
+        userRepoCount(count)
+        userRepoGetUserByUsername(getUserByUsername)
+    end
+    subgraph AuthorityRepository
+        authRepoGet(get)
+        authRepoAdd(add)
+        authRepoUpdate(update)
+        authRepoDelete(delete)
+    end
+    %% Data Access Objects
+    subgraph AuthorityDao
+        authDaoGet(get)
+        authDaoSave(save)
+        authDaoUpdate(update)
+        authDaoDelete(delete)
+    end
+    subgraph UnitDao
+        unitDaoGet(get)
+        unitDaoGetAll(getAll)
+        unitDaoSave(save)
+        unitDaoUpdate(update)
+        unitDaoDelete(delete)
+        unitDaoFind(find)
+        unitDaoCount(count)
+        unitDaoFindByUser(findByUser)
+        unitDaoFindOwnedUnitsByFilter(findOwnedUnitsByFilter)
+    end
+    subgraph UserDao
+        userDaoGet(get)
+        userDaoGetAll(getAll)
+        userDaoSave(save)
+        userDaoUpdate(update)
+        userDaoDelete(delete)
+        userDaoFindUser(findUser)
+        userDaoCount(count)
+    end
+    %% Relationships
+    mlCreateDrawer --> securitySvcGetAuthenticatedUser
+    mlCreateHeader --> securitySvcGetAuthenticatedUser
+    mlCreateHeader --> securitySvcLogout
+    mlCreateDrawer --> OwnerView
+    mlCreateDrawer --> AdminView
+    mlCreateDrawer --> HomeView
+    %% Form relationships
+    ownerFormConfigureForm --> userSvcGetAllUsers
+    %% View relationships
+    AdminForm --> adminViewGetAdminForm
+    adminViewEditUser --> adminFormSetUser
+    adminViewSaveUser --> userSvcSaveUser
+    adminViewSaveUser --> authSvcRegister
+    adminViewDeleteUser --> userSvcDeleteUser
+    adminViewConfigureGrid --> userSvcGetAllUsers
+    adminViewUpdateList --> userSvcFindUsers
+    homeViewConfigureGrid --> unitSvcGetAllUnits
+    homeViewUpdateList --> unitSvcFindUnits
+    loginViewOnComponentEvent --> authSvcAuthenticate
+    newUserViewRegister --> authSvcUsernameTaken
+    newUserViewRegister --> authSvcRegister
+    ownerViewConfigureGrid --> unitSvcGetUsersUnits
+    ownerViewConfigureGrid --> unitSvcGetAllUnits
+    ownerViewSaveUnit --> unitSvcSaveUnit
+    ownerViewDeleteUnit --> unitSvcDeleteUnit
+    ownerViewUpdateList --> unitSvcGetUserUnitsByFilter
+    ownerViewUpdateList --> unitSvcFindUnits
+    OwnerForm --> ownerViewGetOwnerForm
+    %% Service relationships
+    AuthenticationProvider --> AuthService
+    authSvcAuthenticate --> userRepoGetUserByUsername
+    authSvcUsernameTaken --> userRepoGetUserByUsername
+    authSvcRegister --> userRepoAdd
+    authSvcRegister --> authRepoAdd
+    authSvcRegister --> userRepoUpdate
+    authSvcRegister --> userRepoGetUserByUsername
+    authSvcGetUserCount --> userRepoCount
+    authSvcDelete --> authRepoDelete
+    unitSvcGetAllUnits --> unitRepoGetAll
+    unitSvcFindUnits --> unitRepoSearch
+    unitSvcGetUnitCount --> unitRepoCount
+    unitSvcDeleteUnit --> unitRepoUpdate
+    unitSvcDeleteUnit --> unitRepoDelete
+    unitSvcSaveUnit --> unitRepoAdd
+    unitSvcSaveUnit --> unitRepoUpdate
+    unitSvcGetUsersUnits --> unitRepoGetAll
+    unitSvcGetUsersUnits --> unitRepoFindByUser
+    unitSvcGetUserUnitsByFilter --> unitRepoSearch
+    unitSvcGetUserUnitsByFilter --> unitRepoFindOwnedUnitsByFilter
+    userSvcGetAllUsers --> userRepoGetAll
+    userSvcFindUsers --> userRepoGetUserByUsername
+    userSvcFindUsers --> userRepoGetAll
+    userSvcDeleteUser --> authRepoDelete
+    userSvcDeleteUser --> unitRepoDelete
+    userSvcDeleteUser --> userRepoDelete
+    userSvcSaveUser --> userRepoAdd
+    userSvcSaveUser --> userRepoUpdate
+    userSvcFindUserByUsername --> userRepoGetUserByUsername
+    userSvcFindUserById --> userRepoGetUserById
+    %% Repository relationships
+    authRepoGet --> authDaoGet
+    authRepoAdd --> authDaoSave
+    authRepoUpdate --> authDaoUpdate
+    authRepoDelete --> authDaoDelete
+    unitRepoGetAll --> unitDaoGetAll
+    unitRepoGet --> unitDaoGet
+    unitRepoDelete --> unitDaoDelete
+    unitRepoAdd --> unitDaoSave
+    unitRepoUpdate --> unitDaoUpdate
+    unitRepoSearch --> unitDaoFind
+    unitRepoFindByUser --> unitDaoFindByUser
+    unitRepoFindOwnedUnitsByFilter --> unitDaoFindOwnedUnitsByFilter
+    unitRepoCount --> unitDaoCount
+    userRepoGetAll --> userDaoGetAll
+    userRepoGetUserById --> userDaoGet
+    userRepoAdd --> userDaoSave
+    userRepoUpdate --> userDaoUpdate
+    userRepoDelete --> userDaoDelete
+    userRepoCount --> userDaoCount
+    userRepoGetUserByUsername --> userDaoFindUser

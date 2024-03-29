@@ -48,7 +48,6 @@ graph LR
     end
     subgraph AuthService
         authSvcAuthenticate(authenticate)
-        authSvcIsAuthenticated(isAuthenticated)
         authSvcUsernameTaken(usernameTaken)
         authSvcRegister(register)
         authSvcGetUserCount(getUserCount)
@@ -142,7 +141,6 @@ graph LR
     ownerFormConfigureForm --> userSvcGetAllUsers
     %% View relationships
     AdminForm --> adminViewGetAdminForm
-    adminViewEditUser --> adminFormSetUser
     adminViewSaveUser --> userSvcSaveUser
     adminViewSaveUser --> authSvcRegister
     adminViewDeleteUser --> userSvcDeleteUser

@@ -22,6 +22,7 @@ graph LR
         homeViewUpdateList(updateList)
     end
     subgraph LoginView
+        loginViewCtor(LoginView ctor)
         loginViewOnComponentEvent(onComponentEvent)
     end
     subgraph NewUserView
@@ -47,12 +48,11 @@ graph LR
     end
     subgraph AuthService
         authSvcAuthenticate(authenticate)
-        authSvcIsAuthenticated(isAuthenticated)
-        authSvcGetAuthorizedRoutes(getAuthorizedRoutes)
+        authSvcIsAuthenticated(isAuthenticated) %% Not used
         authSvcUsernameTaken(usernameTaken)
         authSvcRegister(register)
         authSvcGetUserCount(getUserCount)
-        authSvcDelete(delete)
+        authSvcDelete(delete) %% Not used
     end
     subgraph UnitService
         unitSvcGetAllUnits(getAllUnits)
@@ -68,8 +68,8 @@ graph LR
         userSvcFindUsers(findUsers)
         userSvcDeleteUser(deleteUser)
         userSvcSaveUser(saveUser)
-        userSvcFindUserByUsername(findUserByUsername)
-        userSvcFindUserById(findUserById)
+        userSvcFindUserByUsername(findUserByUsername) %% Not used
+        userSvcFindUserById(findUserById) %% Not used
     end
     %% Repositories
     subgraph UnitRepository
@@ -102,6 +102,7 @@ graph LR
     %% Data Access Objects
     subgraph AuthorityDao
         authDaoGet(get)
+        authDaoGetAll(getAll)
         authDaoSave(save)
         authDaoUpdate(update)
         authDaoDelete(delete)
@@ -126,6 +127,10 @@ graph LR
         userDaoFindUser(findUser)
         userDaoCount(count)
     end
+    subgraph DaoHelper
+        daoHelpCastList(castList)
+        daoHelpExecuteInsideTransaction(executeInsideTransaction)
+    end
     %% Relationships
     mlCreateDrawer --> securitySvcGetAuthenticatedUser
     mlCreateHeader --> securitySvcGetAuthenticatedUser
@@ -146,6 +151,7 @@ graph LR
     homeViewConfigureGrid --> unitSvcGetAllUnits
     homeViewUpdateList --> unitSvcFindUnits
     loginViewOnComponentEvent --> authSvcAuthenticate
+    loginViewCtor --> authSvcGetUserCount
     newUserViewRegister --> authSvcUsernameTaken
     newUserViewRegister --> authSvcRegister
     ownerViewConfigureGrid --> unitSvcGetUsersUnits
@@ -163,6 +169,7 @@ graph LR
     authSvcRegister --> authRepoAdd
     authSvcRegister --> userRepoUpdate
     authSvcRegister --> userRepoGetUserByUsername
+    authSvcRegister --> authSvcGetUserCount
     authSvcGetUserCount --> userRepoCount
     authSvcDelete --> authRepoDelete
     unitSvcGetAllUnits --> unitRepoGetAll
@@ -207,3 +214,13 @@ graph LR
     userRepoDelete --> userDaoDelete
     userRepoCount --> userDaoCount
     userRepoGetUserByUsername --> userDaoFindUser
+    authDaoGetAll --> daoHelpCastList
+    unitDaoFindByUser --> daoHelpCastList
+    unitDaoFindOwnedUnitsByFilter --> daoHelpCastList
+    unitDaoFind --> daoHelpCastList
+    userDaoGetAll --> daoHelpCastList
+    userDaoFindUser --> daoHelpCastList
+    authDaoSave --> daoHelpExecuteInsideTransaction
+    unitDaoUpdate --> daoHelpExecuteInsideTransaction
+    userDaoSave --> daoHelpExecuteInsideTransaction
+    userDaoDelete --> daoHelpExecuteInsideTransaction

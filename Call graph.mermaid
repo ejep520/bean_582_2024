@@ -48,11 +48,11 @@ graph LR
     end
     subgraph AuthService
         authSvcAuthenticate(authenticate)
-        authSvcIsAuthenticated(isAuthenticated) %% Not used
+        authSvcIsAuthenticated(isAuthenticated)
         authSvcUsernameTaken(usernameTaken)
         authSvcRegister(register)
         authSvcGetUserCount(getUserCount)
-        authSvcDelete(delete) %% Not used
+        authSvcDelete(delete)
     end
     subgraph UnitService
         unitSvcGetAllUnits(getAllUnits)
@@ -68,8 +68,8 @@ graph LR
         userSvcFindUsers(findUsers)
         userSvcDeleteUser(deleteUser)
         userSvcSaveUser(saveUser)
-        userSvcFindUserByUsername(findUserByUsername) %% Not used
-        userSvcFindUserById(findUserById) %% Not used
+        userSvcFindUserByUsername(findUserByUsername)
+        userSvcFindUserById(findUserById)
     end
     %% Repositories
     subgraph UnitRepository

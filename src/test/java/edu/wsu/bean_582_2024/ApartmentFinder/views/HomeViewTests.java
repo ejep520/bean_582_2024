@@ -3,32 +3,25 @@ package edu.wsu.bean_582_2024.ApartmentFinder.views;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.vaadin.flow.component.HasOrderedComponents;
-import com.vaadin.flow.component.HasValue.ValueChangeEvent;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.function.SerializablePredicate;
-
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.UnitService;
+import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class HomeViewTests {
@@ -37,24 +30,19 @@ public class HomeViewTests {
         // Prevent Vaadin Development mode to launch browser window
         System.setProperty("vaadin.launch-browser", "false");
     }
-
     private HomeView homeView;
-
     @Mock
     private UnitService unitService;
-    
-    @BeforeEach
-    public void initialSetup() {
-        when(unitService.getAllUnits(true)).thenReturn(Collections.emptyList());
-        homeView = new HomeView(unitService);
-    }
+    private final static String ONE_HUNDRED_PERCENT = "100%";
+
+    private record Children(HorizontalLayout toolbar, HorizontalLayout content){ }
     
     @Test
     public void testGridSetupWithEmptyUnitList() {
-    	when(unitService.getAllUnits(true)).thenReturn(Collections.emptyList());
+      	when(unitService.getAllUnits(true)).thenReturn(Collections.emptyList());
         homeView = new HomeView(unitService);
         Grid<Unit> grid = homeView.getGrid();
-
+  
         assertEquals(0, grid.getDataProvider().size(new Query<>())); // Ensure the grid is empty
     }
 
@@ -86,6 +74,13 @@ public class HomeViewTests {
     }
 
     @Test
+    public void homeViewPropertiesTest() {
+        assertEquals("home-view", homeView.getClassName());
+        assertEquals(ONE_HUNDRED_PERCENT, homeView.getWidth());
+        assertEquals(ONE_HUNDRED_PERCENT, homeView.getHeight());
+    }
+
+    @Test
     public void testGridSetup() {
         Grid<Unit> grid = homeView.getGrid();
 
@@ -99,6 +94,21 @@ public class HomeViewTests {
         assertEquals("featured", grid.getColumns().get(5).getKey());
 
         assertEquals(2, grid.getDataProvider().size(new Query<>())); // Ensure correct number of items are present
+        assertEquals("owner-grid", grid.getClassName());
+        assertEquals(ONE_HUNDRED_PERCENT, grid.getWidth());
+        assertEquals(ONE_HUNDRED_PERCENT, grid.getHeight());
+        for (Column<Unit> column : grid.getColumns())
+            assertTrue(column.isAutoWidth());
+        Children children = getChildren();
+        assertEquals(2d, children.content.getFlexGrow(grid));
+        assertEquals("content", children.content.getClassName());
+        assertEquals(ONE_HUNDRED_PERCENT, children.content.getHeight());
+        assertEquals(ONE_HUNDRED_PERCENT, children.content.getWidth());
+        TextField filterText = (TextField) children.toolbar.getChildren().findFirst()
+            .orElseThrow();
+        assertEquals("Filter by address", filterText.getPlaceholder());
+        assertTrue(filterText.isClearButtonVisible());
+        assertEquals(ValueChangeMode.LAZY, filterText.getValueChangeMode());
     }
     
     @Test
@@ -121,9 +131,9 @@ public class HomeViewTests {
     }
     
     
-    // Test will pass if filter Text and updateList() are changed to packages instead of private
-    // I am unable to find a work around for when they are kept as private.
-    /*@Test
+    /* Test will pass if filter Text and updateList() are changed to packages instead of private
+    // I am unable to find a workaround for when they are kept as private.
+    // @Test
     public void testUpdateListWithEmptyFilterText() {
         String emptyFilterText = "";
 
@@ -136,19 +146,6 @@ public class HomeViewTests {
     
 
     @Test
-    public void testFormNotShownWhenUnitIsSelected() {
-        
-        Unit selectedUnit = new Unit(); // Create a mock selected unit
-
-        
-        Grid<Unit> grid = homeView.getGrid();
-        grid.asSingleSelect().setValue(selectedUnit);
-
-        
-        assertFalse(homeView.isFormVisible());
-    }
-    
-    @Test
     public void testFormNotShownWhenUnitIsDeleted() {
         
         Unit unitToDelete = new Unit(); // Create a mock unit to delete
@@ -158,7 +155,7 @@ public class HomeViewTests {
 
         grid.setItems();
 
-        assertTrue(grid.getDataProvider().size(new Query<>()) == 0); // Ensure no items in the grid
+        assertEquals(0, grid.getDataProvider().size(new Query<>())); // Ensure no items in the grid
     }
     
     @Test
@@ -172,16 +169,27 @@ public class HomeViewTests {
         grid.setItems(); // Clear items in the grid (simulating cancellation)
 
         
-        assertTrue(grid.getDataProvider().size(new Query<>()) == 0); // Ensure no items in the grid
+        assertEquals(0, grid.getDataProvider().size(new Query<>())); // Ensure no items in the grid
     }
        
-
+    
     /*
     //testFilterTextPlaceholder - future tests
     //testFilterTextClearButtonVisibility - future tests
     //testFilterTextValueChangeListener - future tests
     */
     
-
-    
+    private Children getChildren() {
+        HorizontalLayout toolbar, content;
+        List<Component> childrenList = homeView.getChildren().toList();
+        toolbar = (HorizontalLayout) childrenList.stream()
+            .filter(e -> "toolbar".equals(e.getClassName()))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Unable to find the toolbar."));
+        content = (HorizontalLayout) childrenList.stream()
+            .filter(e -> "content".equals(e.getClassName()))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Unable to find the content."));
+        return new Children(toolbar, content);
+    }
 }

@@ -35,26 +35,20 @@ repositories {
 
 dependencies {
 	implementation 'com.vaadin:vaadin-spring-boot-starter'
-	implementation 'com.vaadin:vaadin-testbench'
-	implementation 'com.vaadin:vaadin-testbench-junit5'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'com.vaadin:vaadin-core:24.3.3'
 	implementation 'org.apache.commons:commons-lang3:3.14.0'
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	testImplementation(platform('org.junit:junit-bom:5.10.2'))
-	testImplementation 'org.junit.jupiter:junit-jupiter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.seleniumhq.selenium:selenium-java:4.18.1'
 	testImplementation 'org.mockito:mockito-core:5.10.0'
 	testImplementation 'org.mockito:mockito-junit-jupiter:5.10.0'
+	testImplementation 'com.vaadin:vaadin-testbench'
+	testImplementation 'com.vaadin:vaadin-testbench-junit5'
+	testImplementation 'io.github.bonigarcia:selenium-jupiter:5.1.0'
 	testRuntimeOnly 'com.h2database:h2:2.2.224'
-	testRuntimeOnly('org.junit.vintage:junit-vintage-engine') {
-		because 'Vaadin sneaks in junit 4.'
-	}
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {

@@ -19,20 +19,11 @@ public class MainLayout extends AppLayout {
   private static final long serialVersionUID = 6748871135793571144L;
   private final SecurityService securityService;
 
-  /**
-   * This is a do-nothing constructor that should not be used.
-   */
-  public MainLayout() {
-    securityService = null;
-  }
-  
   public MainLayout(SecurityService securityService) {
     this.securityService = securityService;
     createHeader();
     createDrawer();
   }
-
-
 
   private void createHeader() {
     HorizontalLayout header;

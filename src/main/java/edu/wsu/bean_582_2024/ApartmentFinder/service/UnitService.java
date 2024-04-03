@@ -1,31 +1,36 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.service;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.data.UnitRepository;
-import edu.wsu.bean_582_2024.ApartmentFinder.data.UserRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UnitService {
+
   private final UnitRepository unitRepository;
-  private final UserRepository userRepository;
-  public UnitService(UnitRepository unitRepository, UserRepository userRepository) {
+
+  public UnitService(UnitRepository unitRepository) {
     this.unitRepository = unitRepository;
-    this.userRepository = userRepository;
   }
+
   public List<Unit> getAllUnits(Boolean sortByFeatured) {
-    List<Unit> units = unitRepository.getAll();
+    List<Unit> fetchedUnits = unitRepository.getAll();
+    List<Unit> processedUnits = new ArrayList<>(fetchedUnits.size());
+    processedUnits.addAll(fetchedUnits);
     if (sortByFeatured != null && sortByFeatured)
-      units.sort((e, f) -> f.getFeatured().compareTo(e.getFeatured()));
-    return units;
+      processedUnits.sort((e, f) -> f.getFeatured().compareTo(e.getFeatured()));
+    return processedUnits;
   }
+ 
   public List<Unit> findUnits(String filter) {
     return unitRepository.search(filter);
   }
+ 
   public long getUnitCount() {
     return unitRepository.count();
   }

@@ -9,15 +9,12 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
-import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.UnitService;
 import jakarta.annotation.security.PermitAll;
-import org.springframework.data.domain.Sort;
 
 @PageTitle("Apartment Finder")
 @Route(value = "/home", layout = MainLayout.class)
 @PermitAll
-@SuppressWarnings("serial")
 public class HomeView extends VerticalLayout {
   private final UnitService unitService;
   private final TextField filterText = new TextField("Filter");
@@ -64,9 +61,5 @@ public class HomeView extends VerticalLayout {
   
   public Grid<Unit> getGrid() {
 	    return grid;
-	  }
-  
-  public boolean isFormVisible() {
-      return !filterText.isVisible();
   }
 }

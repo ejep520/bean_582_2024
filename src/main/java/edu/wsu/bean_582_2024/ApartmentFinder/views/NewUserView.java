@@ -42,7 +42,7 @@ public class NewUserView extends Composite<Component> {
     return layout;
   }
 
-  private void register(String username, String password1, String password2) {
+  void register(String username, String password1, String password2) {
     if (username.trim().isEmpty())
       Notification.show("Enter a username");
     else if (authService.usernameTaken(username.trim()))

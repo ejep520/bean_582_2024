@@ -3,6 +3,7 @@ package edu.wsu.bean_582_2024.ApartmentFinder.views;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
@@ -16,7 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 //Unit testing
@@ -44,122 +45,146 @@ public class OwnerFormTest {
   private final static Role ROLE = Role.USER;
   private final User USER = new User(USERNAME, PASSWORD, ROLE);
   private final List<User> USER_LIST = List.of(USER);
+  @Mock
   private UserService userService;
   
 	
-    @BeforeEach  
-    public void setupData() {
-      units.clear();
-      
-    	unit1.setAddress(ADDRESS_1);
-    	unit1.setBathrooms(BATHROOMS_1);
-    	unit1.setBedrooms(BEDROOMS_1);
-    	unit1.setFeatured(FEATURED_1);
-    	unit1.setKitchen(KITCHEN_1);
-    	unit1.setLivingRoom(LIVING_ROOM_1);
-      unit1.setUser(USER);
-    	units.add(unit1);
-    	
-    	unit2.setAddress(ADDRESS_2);
-    	unit2.setBathrooms(BATHROOMS_2);
-    	unit2.setBedrooms(BEDROOMS_2);
-    	unit2.setFeatured(FEATURED_2);
-    	unit2.setKitchen(KITCHEN_2);
-    	unit2.setLivingRoom(LIVING_ROOM_2);
-      unit2.setUser(USER);
-    	units.add(unit2);    	
-      
-      userService = Mockito.mock(UserService.class);
-      Mockito.when(userService.getAllUsers()).thenReturn(USER_LIST);
-    }
+  @BeforeEach  
+  public void setupData() {
+    units.clear();
     
-    @Test
-    @DisplayName("OwnerForm setting the Unit populates the fields")
-    public void formFieldsPopulated() {
-      OwnerForm form1, form2;
-      
-      form1 = createFormWithUnitOne();
-      
-      assertEquals(ADDRESS_1, form1.address.getValue());
-      assertEquals(BATHROOMS_1, form1.bathrooms.getValue());
-      assertEquals(BEDROOMS_1, form1.bedrooms.getValue());
-      assertTrue(form1.featured.getValue());
-      assertEquals(KITCHEN_1, form1.kitchen.getValue());
-      assertEquals(LIVING_ROOM_1, form1.livingRoom.getValue());
-      assertEquals(USER, form1.user.getValue());
-        
-      form2 = new OwnerForm(USER, userService);
-      form2.setUnit(unit2); 
-      assertEquals(ADDRESS_2, form2.address.getValue());
-      assertEquals(BATHROOMS_2, form2.bathrooms.getValue());
-      assertEquals(BEDROOMS_2, form2.bedrooms.getValue());
-      assertFalse(form2.featured.getValue());
-      assertEquals(KITCHEN_2, form2.kitchen.getValue());
-      assertEquals(LIVING_ROOM_2, form2.livingRoom.getValue());
-    }
+    unit1.setAddress(ADDRESS_1);
+    unit1.setBathrooms(BATHROOMS_1);
+    unit1.setBedrooms(BEDROOMS_1);
+    unit1.setFeatured(FEATURED_1);
+    unit1.setKitchen(KITCHEN_1);
+    unit1.setLivingRoom(LIVING_ROOM_1);
+    unit1.setUser(USER);
+    units.add(unit1);
     
-    @Test
-    @DisplayName("OwnerForm adds a listener for and fires off save event")
-    public void formFiresSaveEventTest() {
-      OwnerForm form = createFormWithUnitOne();
-      AtomicBoolean saveFired = new AtomicBoolean(false);
-      form.addSaveListener(e -> saveFired.set(true));
-      form.save.click();
-      assertTrue(saveFired.get());
-    }
+    unit2.setAddress(ADDRESS_2);
+    unit2.setBathrooms(BATHROOMS_2);
+    unit2.setBedrooms(BEDROOMS_2);
+    unit2.setFeatured(FEATURED_2);
+    unit2.setKitchen(KITCHEN_2);
+    unit2.setLivingRoom(LIVING_ROOM_2);
+    unit2.setUser(USER);
+    units.add(unit2);    	
     
-    @Test
-    @DisplayName("OwnerForm adds a listener for and fires off delete event")
-    public void formFiresDeleteEventTest() {
-      OwnerForm form = createFormWithUnitOne();
-      AtomicBoolean deleteFired = new AtomicBoolean(false);
-      form.addDeleteListener(e -> deleteFired.set(true));
-      form.delete.click();
-      assertTrue(deleteFired.get());
-    }
+    when(userService.getAllUsers()).thenReturn(USER_LIST);
+  }
     
-    @Test
-    @DisplayName("OwnerForm adds listener to and fires off cancel/close event")
-    public void formFiresCancelEventTest() {
-      OwnerForm form = createFormWithUnitOne();
-      AtomicBoolean cancelFired = new AtomicBoolean(false);
-      form.addCloseListener(e -> cancelFired.set(true));
-      form.cancel.click();
-      assertTrue(cancelFired.get());
-    }
+  @Test
+  public void propertiesTest() {
+    OwnerForm form = createFormWithUnitOne();
     
-    @Test
-    @DisplayName("OwnerForm Save Event fired off the updated Unit")
-    public void formSaveEventFiresUpdatedUnit() {
-      OwnerForm form = createFormWithUnitOne();
-      
-      form.address.setValue(ADDRESS_2);
-      form.bedrooms.setValue(BEDROOMS_2);
-      form.bathrooms.setValue(BATHROOMS_2);
-      form.featured.setValue(FEATURED_2);
-      form.kitchen.setValue(KITCHEN_2);
-      form.livingRoom.setValue(LIVING_ROOM_2);
+    assertEquals("owner-form", form.getClassName());
+    assertTrue(form.address.isRequired());
+    assertFalse(form.kitchen.isRequired());
+    assertFalse(form.livingRoom.isRequired());
+    assertTrue(form.bedrooms.isRequired());
+    assertTrue(form.bathrooms.isRequired());
+    assertTrue(form.user.isRequired());
+    assertEquals(0, form.bedrooms.getMin());
+    assertEquals(20, form.bedrooms.getMax());
+    assertEquals(1, form.bedrooms.getStep());
+    assertEquals(0d, form.bathrooms.getMin());
+    assertEquals(10.5d, form.bathrooms.getMax());
+    assertEquals(0.5d, form.bathrooms.getStep());
+    assertTrue(form.user.isReadOnly());
+    assertEquals("primary", form.save.getThemeName());
+    assertEquals("tertiary", form.cancel.getThemeName());
+    assertEquals("error", form.delete.getThemeName());
+  }
 
-      AtomicReference<Unit> savedUnitRef = new AtomicReference<>(); 
-      form.addSaveListener(e -> savedUnitRef.set(e.getUnit()));
-        
-      form.save.click();
-        
-      assertEquals(unit2, savedUnitRef.get());
-    }
+
+  @Test
+  @DisplayName("OwnerForm setting the Unit populates the fields")
+  public void formFieldsPopulated() {
+    OwnerForm form1, form2;
     
-    @Test
-    @DisplayName("OwnerForm will not fire if form contains invalid data")
-    public void saveFormWithInvalidDataDoesntFireSave() {
-      OwnerForm form = createFormWithUnitOne();
-      AtomicBoolean saveFired = new AtomicBoolean(false);
-      form.addSaveListener(e -> saveFired.set(true));
+    form1 = createFormWithUnitOne();
+    
+    assertEquals(ADDRESS_1, form1.address.getValue());
+    assertEquals(BATHROOMS_1, form1.bathrooms.getValue());
+    assertEquals(BEDROOMS_1, form1.bedrooms.getValue());
+    assertTrue(form1.featured.getValue());
+    assertEquals(KITCHEN_1, form1.kitchen.getValue());
+    assertEquals(LIVING_ROOM_1, form1.livingRoom.getValue());
+    assertEquals(USER, form1.user.getValue());
       
-      form.bathrooms.setValue(3.333d);
-      form.save.click();
+    form2 = new OwnerForm(USER, userService);
+    form2.setUnit(unit2); 
+    assertEquals(ADDRESS_2, form2.address.getValue());
+    assertEquals(BATHROOMS_2, form2.bathrooms.getValue());
+    assertEquals(BEDROOMS_2, form2.bedrooms.getValue());
+    assertFalse(form2.featured.getValue());
+    assertEquals(KITCHEN_2, form2.kitchen.getValue());
+    assertEquals(LIVING_ROOM_2, form2.livingRoom.getValue());
+  }
+    
+  @Test
+  @DisplayName("OwnerForm adds a listener for and fires off save event")
+  public void formFiresSaveEventTest() {
+    OwnerForm form = createFormWithUnitOne();
+    AtomicBoolean saveFired = new AtomicBoolean(false);
+    form.addSaveListener(e -> saveFired.set(true));
+    form.save.click();
+    assertTrue(saveFired.get());
+  }
+  
+  @Test
+  @DisplayName("OwnerForm adds a listener for and fires off delete event")
+  public void formFiresDeleteEventTest() {
+    OwnerForm form = createFormWithUnitOne();
+    AtomicBoolean deleteFired = new AtomicBoolean(false);
+    form.addDeleteListener(e -> deleteFired.set(true));
+    form.delete.click();
+    assertTrue(deleteFired.get());
+  }
+  
+  @Test
+  @DisplayName("OwnerForm adds listener to and fires off cancel/close event")
+  public void formFiresCancelEventTest() {
+    OwnerForm form = createFormWithUnitOne();
+    AtomicBoolean cancelFired = new AtomicBoolean(false);
+    form.addCloseListener(e -> cancelFired.set(true));
+    form.cancel.click();
+    assertTrue(cancelFired.get());
+  }
+  
+  @Test
+  @DisplayName("OwnerForm Save Event fired off the updated Unit")
+  public void formSaveEventFiresUpdatedUnit() {
+    OwnerForm form = createFormWithUnitOne();
+    
+    form.address.setValue(ADDRESS_2);
+    form.bedrooms.setValue(BEDROOMS_2);
+    form.bathrooms.setValue(BATHROOMS_2);
+    form.featured.setValue(FEATURED_2);
+    form.kitchen.setValue(KITCHEN_2);
+    form.livingRoom.setValue(LIVING_ROOM_2);
+
+    AtomicReference<Unit> savedUnitRef = new AtomicReference<>(); 
+    form.addSaveListener(e -> savedUnitRef.set(e.getUnit()));
       
-      assertFalse(saveFired.get());
-    }
+    form.save.click();
+      
+    assertEquals(unit2, savedUnitRef.get());
+  }
+  
+  @Test
+  @DisplayName("OwnerForm will not fire if form contains invalid data")
+  public void saveFormWithInvalidDataDoesntFireSave() {
+    OwnerForm form = createFormWithUnitOne();
+    AtomicBoolean saveFired = new AtomicBoolean(false);
+    form.addSaveListener(e -> saveFired.set(true));
+    
+    form.bathrooms.setValue(3.333d);
+    form.save.click();
+    
+    assertFalse(saveFired.get());
+  }
     
   private OwnerForm createFormWithUnitOne() {
       OwnerForm returnValue = new OwnerForm(USER, userService);

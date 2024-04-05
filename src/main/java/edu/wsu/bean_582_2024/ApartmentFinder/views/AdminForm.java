@@ -57,7 +57,11 @@ public class AdminForm extends FormLayout {
     binder.readBean(user);
   }
 
-  public void validateAndSave() {
+  User getUser() {
+    return binder.getBean();
+  }
+
+  void validateAndSave() {
     if (binder.isValid())
       fireEvent(new SaveEvent(this, binder.getBean()));
   }

@@ -14,6 +14,7 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService.AuthException;
@@ -23,7 +24,6 @@ import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService.AuthException;
 @RouteAlias("/")
 @PageTitle("Login")
 @AnonymousAllowed
-@SuppressWarnings("serial")
 public class LoginView extends VerticalLayout
     implements BeforeEnterObserver, ComponentEventListener<AbstractLogin.LoginEvent> {
   private static final Class<? extends Component> LOGIN_SUCCESS_URL = HomeView.class;
@@ -36,6 +36,7 @@ public class LoginView extends VerticalLayout
     long userCount = this.authService.getUserCount();
     if (userCount == 0) {
       UI.getCurrent().navigate(NewUserView.class);
+      VaadinSession.getCurrent().close();
       return;
     }
     addClassName("login-view");
@@ -71,4 +72,3 @@ public class LoginView extends VerticalLayout
       login.setError(true);
   }
 }
-

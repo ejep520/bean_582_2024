@@ -1,9 +1,15 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.views;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.vaadin.flow.component.grid.Grid.Column;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.SecurityService;
@@ -46,6 +52,8 @@ public class OwnerViewTests {
 
 	@Mock
 	UnitService unitService;
+	
+	private final static String ONE_HUNDRED_PERCENT = "100%";
 
 	@BeforeEach
 	public void setup() {
@@ -75,6 +83,52 @@ public class OwnerViewTests {
 		ownerView = new OwnerView(unitService, securityService, userService);
 	}
 
+	@Test
+	public void allPropertiesTest() {
+		Grid<Unit> grid = ownerView.getGrid();
+		List<Column<Unit>> columns = grid.getColumns();
+		OwnerForm form = ownerView.getOwnerForm();
+		List<Component> children = ownerView.getChildren().toList();
+		HorizontalLayout toolbar = (HorizontalLayout) children.stream()
+				.filter(e -> "toolbar".equals(e.getClassName()))
+				.findFirst()
+				.orElse(null);
+		List<Component> toolbarChildren = Objects.requireNonNull(toolbar).getChildren().toList();
+		HorizontalLayout content = (HorizontalLayout) children.stream().filter(e -> "content"
+						.equals(e.getClassName()))
+				.findFirst()
+				.orElse(null);
+		TextField filterText = (TextField) toolbarChildren.stream().filter(e -> TextField
+						.class.isAssignableFrom(e.getClass()))
+				.findFirst()
+				.orElse(null);
+		Button addNewButton = (Button) toolbarChildren.stream().filter(e -> Button
+						.class.isAssignableFrom(e.getClass()))
+				.findFirst()
+				.orElse(null);
+		
+		assertNotNull(filterText);
+		assertNotNull(addNewButton);
+		assertEquals("owner-view", ownerView.getClassName());
+		assertEquals(ONE_HUNDRED_PERCENT, ownerView.getHeight());
+		assertEquals(ONE_HUNDRED_PERCENT, ownerView.getWidth());
+		assertEquals("owner-grid", grid.getClassName());
+		assertEquals(ONE_HUNDRED_PERCENT, grid.getHeight());
+		assertEquals(ONE_HUNDRED_PERCENT, grid.getWidth());
+		assertEquals(6, columns.size());
+		assertEquals("25em", form.getWidth());
+		assertEquals("Filter", filterText.getPlaceholder());
+		assertTrue(filterText.isClearButtonVisible());
+		assertEquals(ValueChangeMode.LAZY, filterText.getValueChangeMode());
+		assertEquals(2d, toolbar.getFlexGrow(grid));
+		assertEquals(1d, toolbar.getFlexGrow(form));
+		assertEquals("toolbar", toolbar.getClassName());
+		assertEquals("content", Objects.requireNonNull(content).getClassName());
+		assertEquals(ONE_HUNDRED_PERCENT, content.getHeight());
+		assertEquals(ONE_HUNDRED_PERCENT, content.getWidth());
+		assertEquals("Add Unit", addNewButton.getText());
+	}
+	
 	@Test
 	public void formShownWhenUnitSelectedTest() {
 		when(unitService.getAllUnits(anyBoolean())).thenReturn(units);

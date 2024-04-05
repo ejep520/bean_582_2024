@@ -30,11 +30,11 @@ import jakarta.servlet.ServletException;
 public class AuthService implements AuthenticationProvider {
   private final UserRepository UserRepository;
   private final AuthorityRepository authRepository;
-  private static final List<SimpleGrantedAuthority> USER_AUTHORITY =
+  static final List<SimpleGrantedAuthority> USER_AUTHORITY =
       List.of(new SimpleGrantedAuthority("ROLE_USER"));
-  private static final List<SimpleGrantedAuthority> OWNER_AUTHORITY =
+  static final List<SimpleGrantedAuthority> OWNER_AUTHORITY =
       List.of(new SimpleGrantedAuthority("ROLE_OWNER"), new SimpleGrantedAuthority("ROLE_USER"));
-  private static final List<GrantedAuthority> ADMIN_AUTHORITY =
+  static final List<GrantedAuthority> ADMIN_AUTHORITY =
       List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_OWNER"),
           new SimpleGrantedAuthority("ROLE_USER"));
 

@@ -1,43 +1,17 @@
 # Apartment Finder TMS
+NOTE: This TMS requires [IntelliJ Early Access Program Edition](https://www.jetbrains.com/idea/nextversion/) </br>
+NOTE: This TMS requires the [IntelliJ Test Management Plugin](https://plugins.jetbrains.com/plugin/15109-test-management)
 
+Tags: Unit tests
 ## 1 AdminFormTests
 * 11 whenUserIsSavedTest
-    * Setup admin form
-    * Set user to new admin user
-    * Save new user
-    * Get saved user
-    * Assert username
-    * Assert user enabled
-    * Assert user role
-    * Assert user password
 * 12 whenUserIsValidatedAndSavedTest
-  * Setup admin form
-  * Set new user
-  * Validate and save user
-  * Get user
-  * Assert username
-  * Assert user enabled
-  * Assert user role
-  * Assert user password
 * 13 whenUserIsDeletedTest
-  * Setup admin form
-  * Delete owner user
-  * Get deleted user
-  * Assert username
-  * Assert user enabled
-  * Assert user role
-  * Assert user password
- * 14 whenUserIsCancelledTest
-   * Setup admin form
-   * Set the user to a normal user
-   * Click cancel
-   * Assert the cancelled user
- 
+* 14 whenUserIsCancelledTest
 ## 2 AdminViewTests
 * 21 formShownAndClosedWhenUserIsSavedTest
 * 22 formShownAndClosedWhenUserIsDeletedTest
 * 23 formShownAndClosedWhenUserIsCancelledTest
-
 ## 3 HomeViewTests
 * 31 testGridSetupWithEmptyUnitList
 * 32 testGridSetup
@@ -47,19 +21,173 @@
 * 36 testFormNotShownWhenUnitIsSelected
 * 37 testFormNotShownWhenUnitIsDeleted
 * 38 testFormNotShownWhenUnitIsCancelled
-
 ## 4 OwnerFormTests
+* 41 formFieldsPopulated
+* 42 formFiresSaveEventTest
+* 43 formFiresDeleteEventTest
+* 44 formFiresCancelEventTest
+* 45 formSaveEventFiresUpdatedUnit
+* 46 saveFormWithInvalidDataDoesntFireSave
 ## 5 OwnerViewTests
+* 51 allPropertiesTest
 ## 6 ApartmentFinderApplicationTests
-## 7 UnitServiceTests
-## 8 UserServiceTests
-## 9 AbstractClassTests
-## 10 AuthorityTests
-## 11 UnitTests
-## 12 UserTests
-## 13 AuthorityRepositoryTests
-## 14 UnitRepositoryTests
-## 15 UserRepositoryTests
-## 16 AuthorityDaoTests
-## 17 UnitDaoTests
-## 18 UserDaoTests
+* 61 contextLoads
+## 7 AuthServiceTests
+* 71 authenticateEachEnumTest
+* 72 authenticateNullReturnsNull
+* 73 supportsTests
+* 74 getUserCountTest
+* 75 deleteAuthorityTest
+* 76 getAuthorizedRoutesTest
+* 77 registerTest
+## 8 UnitServiceTest
+* 81 testGetAllUnits
+* 82 testFindUnits
+* 83 testGetUnitCount
+* 84 testDeleteUnit
+* 85 testSaveUnit
+## 9 UnitServiceTests
+* 91 testGetAllUnits
+* 92 testFindUnits
+* 93 testGetUnitCount
+## 10 UserServiceTests
+* 101 initializationResultsInNotNull
+* 102 findAllReturnsAll
+* 103 findUsersNullReturnsAllUsers
+* 104 findUsersEmptyReturnsAllUsers
+* 105 findUsersBlankReturnsAllUsers
+* 106 findUsersValidFilterReturnsOne
+* 107 findUserInvalidFilterReturnsNone
+* 108 deleteUserTest
+* 109 saveUserTest
+* 1010 updateUserTest
+* 1011 findingUsersReturnsUsersFaithfully
+* 1012 unableToFindNonexistentUserById
+* 1013 SearchForUsersByUsername
+* 1014 saveNullUserMakesNoRepoCalls
+## 11 AbstractClassTests
+* 111 setIdsStick
+* 112 versionIsAnInt
+## 12 AuthorityTests
+* 121 defaultAuthorityInitReturnsNotNullTest
+* 122 parameterizedAuthorityInitializationNotNullTest
+* 123 parameterizedAuthorityWithoutValidUserReturnsNotNull
+* 124 defaultAuthorityUserIsNull
+* 125 defaultAuthorityAuthorityIsNull
+* 126 parameterizedAuthorityKeepsItsUser
+* 127 parameterizedAuthorityKeepsItsAuthority
+* 128 defaultAuthorityKeepsItsSetUser
+## 13 UnitTests
+* 131 defaultUnitInitializationIsNotNull
+* 132 parameterizedUnitInitializationIsNotNull
+* 133 defaultUnitAddressIsNotNull
+* 134 parameterizedUnitAddressIsNotNull
+* 135 defaultUnitAddressIsEmpty
+* 136 parameterizedUnitAddressIsKept
+* 137 changedAddressIsKept
+* 138 defaultUnitBedroomsIsZero
+* 139 parameterizedUnitBedroomsAreKept
+* 1310 changedBedroomsAreKept
+* 1311 defaultUnitBathroomsIsZero
+* 1312 parameterizedUnitBathroomsAreKept
+* 1313 changedBathroomsAreKept
+* 1314 defaultUnitKitchenIsEmpty
+* 1315 parameterizedUnitKitchenIsKept
+* 1316 changedKitchenIsKept
+* 1317 defaultUnitLivingRoomIsEmpty
+* 1318 parameterizedUnitLivingRoomIsKept
+* 1319 changedUnitLivingRoomIsKept
+* 1320 defaultUnitFeaturedIsFalse
+* 1321 parameterizedUnitFeaturedIsKept
+* 1322 changedUnitFeaturedIsKept
+* 1323 defaultUnitHasNullUser
+* 1324 parameterizedUnitKeepsItsUser
+* 1325 changedUnitKeepsItsUser
+* 1326 unitNullUnequal
+* 1327 aUnitIsEqualToItself
+* 1328 differentUnitsNotEqual
+* 1329 unitAndOtherClassInstanceAreNotEqual
+## 14 UserTests
+* 141 defaultUserCreationNotNull
+* 142 defaultUserNotEnabled
+* 143 defaultUsernameNotNull
+* 144 defaultUsernameEmpty
+* 145 defaultUserPasswordNotNull
+* 146 defaultUserPasswordEmpty
+* 147 parameterizedUsername
+* 148 parameterizedPasswordHashed
+* 149 parameterizedPasswordPasses
+* 1410 parameterizedUserWrongPasswordFails
+* 1411 defaultUserUnexpired
+* 1412 defaultUserUnlocked
+* 1413 parameterizedUserIsEnabled
+* 1414 defaultUserRoleIsNull
+* 1415 parameterizedUserKeepsItsRole
+* 1416 userSetUsernameHolds
+* 1417 defaultUserSetPasswordTest
+* 1418 parameterizedUserSetPasswordTest
+* 1419 userSetRoleHolds
+* 1420 userGetAuthorities
+* 1421 userSetEnabledTest
+* 1422 userEraseCredentialsTest
+* 1423 userCredentialsAreUnexpiredTest
+* 1424 changingPasswordSetsChangedPasswordFlag
+* 1425 gettingUnitsReturnsListOfUnits
+* 1426 usernameIsReturnedByUserToString
+* 1427 settingNewAuthoritiesCollectionReplacesExistingCollection
+* 1428 affirmativelyNotChangingThePasswordWontRaiseChangePasswordFlag
+* 1429 changingSaltInvalidatesPasswordHash
+## 15 AuthorityRepositoryTests
+* 151 getAllFunctionTest
+* 152 addFunctionTest
+* 153 updateFunctionTest
+* 154 deleteFunctionTest
+## 16 UnitRepositoryTests
+* 161 getAllFunctionTest
+* 162 getByIdFunctionTest
+* 163 saveFunctionTest
+* 164 updateFunctionTest
+* 165 deleteFunctionTest
+* 166 searchFunctionTest
+* 167 findByOwnerFunctionTest
+* 168 findOwnedUnitsByFilter
+* 169 countFunctionTest
+## 17 UserRepositoryTests
+* 171 testGetAllFunctionPassesCall
+* 172 testGetById
+* 173 addFunctionTest
+* 174 updateFunctionTest
+* 175 deleteFunctionTest
+* 176 getUserByUsernameTest
+* 177 countFunctionTest
+## 18 AuthorityDaoTests
+* 181 findAllAuthoritiesTest
+* 182 testGetById
+* 183 testSaveFunction
+* 184 updateFunctionTest
+* 185 testDeleteFunction
+## 19 UnitDaoTests
+* 191 countFunctionTest
+* 192 getByIdTest
+* 193 getAllFunctionTest
+* 194 saveFunctionTest
+* 195 updateFunctionTest
+* 196 deleteFunctionTest
+* 197 findFunctionTest
+* 198 findFunctionWithoutKeyTest
+* 199 findFunctionWithNullKeyTest
+* 1910 findByUserFunction
+* 1911 findByUserFunctionWithNullUserFindsNoUnits
+* 1912 findOwnedUnitsWithFilterTestValidInputs
+* 1913 findOwnedUnitsWithValidBadDataReturnsNothing
+## 20 UserDaoTests
+* 201 getUserByIdTest
+* 202 findUserByUsernameSuccessReturnsUser
+* 203 findUserByUsernameFailureReturnsNull
+* 204 testGetAllFunction
+* 205 testSaveUserFunction
+* 206 testUpdateFunction
+* 207 deleteUserFunctionTest
+* 208 countFunctionTest
+
+## 21 System Tests

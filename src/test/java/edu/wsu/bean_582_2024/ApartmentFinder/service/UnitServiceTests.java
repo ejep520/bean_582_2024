@@ -66,13 +66,4 @@ public class UnitServiceTests {
 
         verify(unitRepositoryMock, times(1)).delete(unitToDelete);
     }
-
-    //@Test -- This test is broken. There is no .save()
-    public void testSaveUnit() {
-        Unit unitToSave = new Unit("100 Pullman Rd", 2, 1.5, "Elegant Living spaces", "Modern kitchen", true, null);
-        unitService.saveUnit(unitToSave);
-
-        // There is no save method
-        //verify(unitRepositoryMock, times(1)).save(unitToSave);
-    }
 }

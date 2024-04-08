@@ -1,0 +1,60 @@
+package edu.wsu.bean_582_2024.ApartmentFinder.data;
+
+import edu.wsu.bean_582_2024.ApartmentFinder.dao.UnitDao;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import java.util.List;
+import org.junit.jupiter.api.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+@DataJpaTest
+@Tag("Slow")
+public class UnitRepositoryIntegrationTests {
+  private final EntityManagerFactory entityManagerFactory;
+  private final EntityManager entityManager;
+  private final UnitDao unitDao;
+  private final UnitRepository unitRepository;
+  private final static String ADDRESS_1 = "Address 1";
+  private final static String ADDRESS_2 = "Address 2";
+  private final static String ADDRESS_3 = "Address 3";
+  private final static Integer BEDROOMS_1 = 1;
+  private final static Integer BEDROOMS_2 = 2;
+  private final static Integer BEDROOMS_3 = 3;
+  private final static Double BATHROOMS_1 = 2.5D;
+  private final static Double BATHROOMS_2 = 3.0D;
+  private final static Double BATHROOMS_3 = 3.5D;
+  private final static Boolean FEATURED_1 = true;
+  private final static Boolean FEATURED_2 = false;
+  private final static Boolean FEATURED_3 = true;
+  private final static String KITCHEN_1 = "Kitchen 1";
+  private final static String KITCHEN_2 = "Kitchen 2";
+  private final static String KITCHEN_3 = "Kitchen 3";
+  private final static String LIVING_ROOM_1 = "Living Room 1";
+  private final static String LIVING_ROOM_2 = "Living Room 2";
+  private final static String LIVING_ROOM_3 = "Living Room 3";
+  private final static String USERNAME = "testOwner";
+  private final static String PASSWORD = "testPass";
+  private final static Role ROLE = Role.OWNER;
+  private final static User user = new User(USERNAME, PASSWORD, ROLE);
+  private final static Unit unit_1 = new Unit(ADDRESS_1, BEDROOMS_1, BATHROOMS_1, LIVING_ROOM_1,
+      KITCHEN_1, FEATURED_1, user);
+  private final static Unit unit_2 = new Unit(ADDRESS_2, BEDROOMS_2, BATHROOMS_2, LIVING_ROOM_2,
+      KITCHEN_2, FEATURED_2, user);
+  private final static Unit unit_3 = new Unit(ADDRESS_3, BEDROOMS_3, BATHROOMS_3, LIVING_ROOM_3,
+      KITCHEN_3, FEATURED_3, null);
+  private final static List<Unit> units = List.of(unit_1, unit_2, unit_3);
+
+  @Autowired
+  public UnitRepositoryIntegrationTests(EntityManagerFactory entityManagerFactory) {
+    this.entityManagerFactory = entityManagerFactory;
+    entityManager = this.entityManagerFactory.createEntityManager();
+    unitDao = new UnitDao(this.entityManagerFactory);
+    unitRepository = new UnitRepositoryImpl(unitDao);
+  }
+  
+  
+}

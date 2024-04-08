@@ -109,8 +109,8 @@ public class AuthorityDaoTests {
     try {
       entityManager.persist(user);
     } catch (Exception err) {
-      fail(err);
       transaction.rollback();
+      fail(err);
       return;
     }
     transaction.commit();

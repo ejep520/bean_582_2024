@@ -18,6 +18,9 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService.AuthException;
+import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @Route("login")
@@ -35,8 +38,11 @@ public class LoginView extends VerticalLayout
     this.authService = authService;
     long userCount = this.authService.getUserCount();
     if (userCount == 0) {
-      UI.getCurrent().navigate(NewUserView.class);
+      Logger logger = LoggerFactory.getLogger(getClass());
       VaadinSession.getCurrent().close();
+      ui.close();
+      Optional<NewUserView> attempt = ui.navigate(NewUserView.class);
+      if (attempt.isEmpty()) logger.atError().log("Unable to navigate to New User Page.");
       return;
     }
     addClassName("login-view");

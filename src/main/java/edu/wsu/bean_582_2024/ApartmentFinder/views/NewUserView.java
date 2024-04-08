@@ -26,6 +26,7 @@ public class NewUserView extends Composite<Component> {
 
   public NewUserView(AuthService authService) {
     this.authService = authService;
+    initContent();
   }
 
   @Override

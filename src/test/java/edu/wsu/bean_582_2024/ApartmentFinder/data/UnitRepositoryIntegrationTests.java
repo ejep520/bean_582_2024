@@ -1,13 +1,20 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.data;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import edu.wsu.bean_582_2024.ApartmentFinder.dao.UnitDao;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import java.util.Collections;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -56,5 +63,61 @@ public class UnitRepositoryIntegrationTests {
     unitRepository = new UnitRepositoryImpl(unitDao);
   }
   
+  @BeforeEach
+  public void resetDatabase() {
+    EntityTransaction transaction = entityManager.getTransaction();
+    transaction.begin();
+    entityManager.createQuery("DELETE FROM Authority").executeUpdate();
+    entityManager.createQuery("DELETE FROM Unit").executeUpdate();
+    entityManager.createQuery("DELETE FROM User").executeUpdate();
+    transaction.commit();
+    if (user.getId() != null) user.setId(null);
+    if (unit_1.getId() != null) unit_1.setId(null);
+    if (unit_2.getId() != null) unit_2.setId(null);
+    if (unit_3.getId() != null) unit_3.setId(null);
+  }
+
+  @Test
+  public void resetTest() {
+    assertEquals(Collections.emptyList(), unitRepository.getAll());
+  }
   
+  @Test
+  public void addUnitTest() {
+    EntityTransaction transaction = entityManager.getTransaction();
+    transaction.begin();
+    entityManager.persist(user);
+    transaction.commit();
+
+    user.getUnits().add(unit_1);
+    unitRepository.add(unit_1);
+
+    assertEquals(List.of(unit_1), unitRepository.getAll());
+  }
+  
+  @Test
+  public void getUnitTest() {
+    unitRepository.add(unit_3);
+    
+    assertEquals(unit_3, unitRepository.get(unit_3.getId()));
+  }
+  
+  @Test
+  public void updateUnitTest() {
+    unitRepository.add(unit_3);
+    
+    unit_3.setAddress(ADDRESS_1);
+    unitRepository.update(unit_3);
+    
+    assertEquals(ADDRESS_1, unitRepository.get(unit_3.getId()).getAddress());
+  }
+  
+  @Test
+  public void deleteUnitTest() {
+    unitRepository.add(unit_3);
+    assertNotNull(unitRepository.get(unit_3.getId()));
+    
+    unitRepository.delete(unit_3);
+    assertEquals(Collections.emptyList(), unitRepository.getAll());
+  } 
 }

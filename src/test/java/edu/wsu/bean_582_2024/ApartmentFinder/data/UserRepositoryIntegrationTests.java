@@ -18,7 +18,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
 public class UserRepositoryIntegrationTests {
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
   private final static String USERNAME_1 = "testAdmin";
   private final static String USERNAME_2 = "testOwner";
   private final static String USERNAME_3 = "testUser";

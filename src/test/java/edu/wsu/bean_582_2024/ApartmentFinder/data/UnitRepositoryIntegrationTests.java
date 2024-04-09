@@ -21,9 +21,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @DataJpaTest
 @Tag("Slow")
 public class UnitRepositoryIntegrationTests {
-  private final EntityManagerFactory entityManagerFactory;
   private final EntityManager entityManager;
-  private final UnitDao unitDao;
   private final UnitRepository unitRepository;
   private final static String ADDRESS_1 = "Address 1";
   private final static String ADDRESS_2 = "Address 2";
@@ -53,14 +51,11 @@ public class UnitRepositoryIntegrationTests {
       KITCHEN_2, FEATURED_2, user);
   private final static Unit unit_3 = new Unit(ADDRESS_3, BEDROOMS_3, BATHROOMS_3, LIVING_ROOM_3,
       KITCHEN_3, FEATURED_3, null);
-  private final static List<Unit> units = List.of(unit_1, unit_2, unit_3);
 
   @Autowired
   public UnitRepositoryIntegrationTests(EntityManagerFactory entityManagerFactory) {
-    this.entityManagerFactory = entityManagerFactory;
-    entityManager = this.entityManagerFactory.createEntityManager();
-    unitDao = new UnitDao(this.entityManagerFactory);
-    unitRepository = new UnitRepositoryImpl(unitDao);
+    entityManager = entityManagerFactory.createEntityManager();
+    unitRepository = new UnitRepositoryImpl(new UnitDao(entityManagerFactory));
   }
   
   @BeforeEach

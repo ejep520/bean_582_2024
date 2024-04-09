@@ -13,7 +13,6 @@ import edu.wsu.bean_582_2024.ApartmentFinder.data.AuthorityRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.UnitRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.UserRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Authority;
-import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import java.util.Collections;
@@ -45,28 +44,21 @@ public class UserServiceTests {
   private AuthorityRepository authorityRepository;
   @InjectMocks
   private UserService userService;
-  private final static String USERNAME_1 = "TestAdmin";
-  private final static String USER_PASSWORD_1 = "foo";
-  private final static Role USER_ROLE_1 = Role.ADMIN;
-  private final User user1 = new User(USERNAME_1, USER_PASSWORD_1, USER_ROLE_1);
+  private final User user1 = new User(TestUsers.USERNAME_1, TestUsers.USER_PASSWORD_1,
+      TestUsers.USER_ROLE_1);
   private final Authority authority1_1 = new Authority(user1, "ADMIN");
   private final Authority authority1_2 = new Authority(user1, "OWNER");
   private final Authority authority1_3 = new Authority(user1, "USER");
   private final List<Authority> authorities_1 = List.of(authority1_1, authority1_2, authority1_3);
-  private final static String USERNAME_2 = "TestOwner";
-  private final static String USER_PASSWORD_2 = "bar";
-  private final static Role USER_ROLE_2 = Role.OWNER;
-  private final User user2 = new User(USERNAME_2, USER_PASSWORD_2, USER_ROLE_2);
+  private final User user2 = new User(TestUsers.USERNAME_2, TestUsers.USER_PASSWORD_2,
+      TestUsers.USER_ROLE_2);
   private final Authority authority2_1 = new Authority(user2, "OWNER");
   private final Authority authority2_2 = new Authority(user2, "USER");
   private final List<Authority> authorities_2 = List.of(authority2_1, authority2_2);
-  private final static String USERNAME_3 = "TestUser";
-  private final static String USER_PASSWORD_3 = "foobar";
-  private final static Role USER_ROLE_3 = Role.USER;
-  private final User user3 = new User(USERNAME_3, USER_PASSWORD_3, USER_ROLE_3);
+  private final User user3 = new User(TestUsers.USERNAME_3, TestUsers.USER_PASSWORD_3,
+      TestUsers.USER_ROLE_3);
   private final Authority authority3 = new Authority(user3, "USER");
   private final List<User> allUsers = List.of(user1, user2, user3);
-  private final static String BAD_USERNAME = "BadUsername";
   private final static String ADDRESS = "Address String";
   private final static String KITCHEN = "Kitchen String";
   private final static String LIVING_ROOM = "Living Room String";
@@ -147,7 +139,7 @@ public class UserServiceTests {
   @DisplayName("FindUsers with a valid user returns one User")
   public void findUsersValidFilterReturnsOne() {
     when(userRepository.getUserByUsername(anyString())).thenReturn(user1);
-    List<User> result = userService.findUsers(USERNAME_1);
+    List<User> result = userService.findUsers(TestUsers.USERNAME_1);
     assertEquals(List.of(user1), result);
   }
   
@@ -155,7 +147,7 @@ public class UserServiceTests {
   @DisplayName("FindUser with invalid key returns no users")
   public void findUserInvalidFilterReturnsNone() {
     when(userRepository.getUserByUsername(anyString())).thenReturn(null);
-    List<User> result = userService.findUsers(BAD_USERNAME);
+    List<User> result = userService.findUsers(TestUsers.BAD_USERNAME);
     assertEquals(Collections.emptyList(), result);
   }
   
@@ -171,7 +163,7 @@ public class UserServiceTests {
   @Test
   @DisplayName("Tests that SaveUser calls the repository's save method")
   public void saveUserTest() {
-    User user = new User(USERNAME_1, USER_PASSWORD_1, USER_ROLE_1);
+    User user = new User(TestUsers.USERNAME_1, TestUsers.USER_PASSWORD_1, TestUsers.USER_ROLE_1);
     userService.saveUser(user);
     verify(userRepository).add(user);
   }
@@ -179,7 +171,7 @@ public class UserServiceTests {
   @Test
   @DisplayName("Tests that SaveUser calls the repository's update method")
   public void updateUserTest() {
-    User user = new User(USERNAME_1, USER_PASSWORD_1, USER_ROLE_1);
+    User user = new User(TestUsers.USERNAME_1, TestUsers.USER_PASSWORD_1, TestUsers.USER_ROLE_1);
     user.setId(1L);
     userService.saveUser(user);
     verify(userRepository).update(user);
@@ -205,7 +197,7 @@ public class UserServiceTests {
   }
   
   @ParameterizedTest(name="Search for Users by username {0}")
-  @ValueSource(strings = {USERNAME_1, USERNAME_2, USERNAME_3})
+  @ValueSource(strings = {TestUsers.USERNAME_1, TestUsers.USERNAME_2, TestUsers.USERNAME_3})
   public void SearchForUsersByUsername(String searchKey) {
     when(userRepository.getUserByUsername(searchKey))
         .thenReturn(allUsers.stream().filter(e -> e.getUsername().equals(searchKey))

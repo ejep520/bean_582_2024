@@ -4,21 +4,24 @@ NOTE: This TMS requires the [IntelliJ Test Management Plugin](https://plugins.je
 
 Tags: Unit tests
 ## 1 AdminFormTests
-* 11 whenUserIsSavedTest
-* 12 whenUserIsValidatedAndSavedTest
-* 13 whenUserIsDeletedTest
-* 14 whenUserIsCancelledTest
+* 11 fromPropertiesTest
+* 12 whenUserIsSavedTest
+* 13 whenUserIsValidatedAndSavedTest
+* 14 whenUserIsDeletedTest
+* 15 whenUserIsCancelledTest
 ## 2 AdminViewTests
-* 21 formShownAndClosedWhenUserIsSavedTest
-* 22 formShownAndClosedWhenUserIsDeletedTest
-* 23 formShownAndClosedWhenUserIsCancelledTest
+* 21 viewPropertiesTest
+* 22 gridPropertiesTest
+* 23 formShownAndClosedWhenUserIsSavedTest
+* 24 formShownAndClosedWhenUserIsDeletedTest
+* 25 formShownAndClosedWhenUserIsCancelledTest
 ## 3 HomeViewTests
 * 31 testGridSetupWithEmptyUnitList
-* 32 testGridSetup
-* 33 testConstructor
-* 34 testGetGrid
-* 35 testGridSetupWithNonEmptyUnitList
-* 36 testFormNotShownWhenUnitIsSelected
+* 32  homeViewPropertiesTest
+* 33 testGridSetup
+* 34 testConstructor
+* 35 testGetGrid
+* 36 testGridSetupWithNonEmptyUnitList
 * 37 testFormNotShownWhenUnitIsDeleted
 * 38 testFormNotShownWhenUnitIsCancelled
 ## 4 OwnerFormTests
@@ -28,10 +31,14 @@ Tags: Unit tests
 * 44 formFiresCancelEventTest
 * 45 formSaveEventFiresUpdatedUnit
 * 46 saveFormWithInvalidDataDoesntFireSave
+* 47 propertiesTest
 ## 5 OwnerViewTests
 * 51 allPropertiesTest
+* 52 formShownWhenUnitSelectedTest
+* 53 unitEditedAndSavedTst
+* 54 unitEditDeletedTest
 ## 6 ApartmentFinderApplicationTests
-* 61 contextLoads
+* 61 contextLoads (Default test that starts Spring bootloader)
 ## 7 AuthServiceTests
 * 71 authenticateEachEnumTest
 * 72 authenticateNullReturnsNull
@@ -66,8 +73,9 @@ Tags: Unit tests
 * 1013 SearchForUsersByUsername
 * 1014 saveNullUserMakesNoRepoCalls
 ## 11 AbstractClassTests
-* 111 setIdsStick
-* 112 versionIsAnInt
+* 111 newInstancesHaveNullId 
+* 112 setIdsStick
+* 113 versionIsAnInt
 ## 12 AuthorityTests
 * 121 defaultAuthorityInitReturnsNotNullTest
 * 122 parameterizedAuthorityInitializationNotNullTest
@@ -189,5 +197,21 @@ Tags: Unit tests
 * 206 testUpdateFunction
 * 207 deleteUserFunctionTest
 * 208 countFunctionTest
-
-## 21 System Tests
+## 21 LoginViewTests
+* 211 propertiesOfLoginView
+* 212 componentEventTestLoginError
+* 213 componentEventTestLoginFalse
+* 214 onComponentEventSuccessfulLoginTest
+* 215 beforeEnterTests
+## 22 MainLayoutTests
+* 221 loginScreenPreviewTest ("Simulate a page view without an authorized user")
+* 222 authorizedUserTest ("Simulate an authorized user.")
+## 23 NewUserViewTests
+* 231 formSettingsTest
+* 232 noUsernamePreventsRegistration
+* 233 takenUsernamePreventsRegistration
+* 234 firstEmptyPasswordPreventsRegistration
+* 235 secondEmptyPasswordPreventsRegistration
+* 236 mismatchedPasswordsPreventRegistration
+* 237 successfulRegistrationTest
+## 30 System Tests

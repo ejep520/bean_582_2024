@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.SecurityService;
@@ -35,14 +36,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class OwnerViewTests {
-
+	// S5
 	static {
 		// Prevent Vaadin Development mode to launch browser window
 		System.setProperty("vaadin.launch-browser", "false");
 	}
 
 	private OwnerView ownerView;
-  private List<Unit> units;
+    private List<Unit> units;
 	
 	@Mock
 	UserService userService;
@@ -83,6 +84,7 @@ public class OwnerViewTests {
 		ownerView = new OwnerView(unitService, securityService, userService);
 	}
 
+	@TestCase("C51")
 	@Test
 	public void allPropertiesTest() {
 		Grid<Unit> grid = ownerView.getGrid();
@@ -128,7 +130,8 @@ public class OwnerViewTests {
 		assertEquals(ONE_HUNDRED_PERCENT, content.getWidth());
 		assertEquals("Add Unit", addNewButton.getText());
 	}
-	
+
+	@TestCase("C52")
 	@Test
 	public void formShownWhenUnitSelectedTest() {
 		when(unitService.getAllUnits(anyBoolean())).thenReturn(units);
@@ -147,6 +150,7 @@ public class OwnerViewTests {
 		assertFalse(form.isVisible());
 	}
 
+	@TestCase("C53")
 	@Test
 	public void unitEditedAndSavedTst() {
 		Grid<Unit> grid = ownerView.getGrid();
@@ -173,6 +177,7 @@ public class OwnerViewTests {
 			fail("The changed unit could not be recovered.");
 	}
 
+	@TestCase("C54")
 	@Test
 	public void unitEditDeletedTest() {
 		Grid<Unit> grid = ownerView.getGrid();

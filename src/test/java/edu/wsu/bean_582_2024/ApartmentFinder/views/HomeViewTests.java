@@ -12,6 +12,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.UnitService;
 import java.util.Collections;
@@ -25,7 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class HomeViewTests {
-	
+	// S3
     static {
         // Prevent Vaadin Development mode to launch browser window
         System.setProperty("vaadin.launch-browser", "false");
@@ -36,7 +37,8 @@ public class HomeViewTests {
     private final static String ONE_HUNDRED_PERCENT = "100%";
 
     private record Children(HorizontalLayout toolbar, HorizontalLayout content){ }
-    
+
+    @TestCase("C31")
     @Test
     public void testGridSetupWithEmptyUnitList() {
       	when(unitService.getAllUnits(true)).thenReturn(Collections.emptyList());
@@ -73,6 +75,7 @@ public class HomeViewTests {
         homeView = new HomeView(unitService);
     }
 
+    @TestCase("C32")
     @Test
     public void homeViewPropertiesTest() {
         assertEquals("home-view", homeView.getClassName());
@@ -80,6 +83,7 @@ public class HomeViewTests {
         assertEquals(ONE_HUNDRED_PERCENT, homeView.getHeight());
     }
 
+    @TestCase("C33")
     @Test
     public void testGridSetup() {
         Grid<Unit> grid = homeView.getGrid();
@@ -110,7 +114,8 @@ public class HomeViewTests {
         assertTrue(filterText.isClearButtonVisible());
         assertEquals(ValueChangeMode.LAZY, filterText.getValueChangeMode());
     }
-    
+
+    @TestCase("C34")
     @Test
     void testConstructor() {
         assertNotNull(homeView);
@@ -118,10 +123,12 @@ public class HomeViewTests {
     }
  
     @Test
+    @TestCase("C35")
     void testGetGrid() {
         assertNotNull(homeView.getGrid());
     }
-    
+
+    @TestCase("C36")
     @Test
     public void testGridSetupWithNonEmptyUnitList() {
         Grid<Unit> grid = homeView.getGrid();
@@ -143,8 +150,9 @@ public class HomeViewTests {
         // Verify that unitService.findUnits("") is called
         verify(unitService).findUnits(emptyFilterText);
     }*/
-    
 
+
+    @TestCase("C37")
     @Test
     public void testFormNotShownWhenUnitIsDeleted() {
         
@@ -157,7 +165,8 @@ public class HomeViewTests {
 
         assertEquals(0, grid.getDataProvider().size(new Query<>())); // Ensure no items in the grid
     }
-    
+
+    @TestCase("C38")
     @Test
     public void testFormNotShownWhenUnitIsCancelled() {
         

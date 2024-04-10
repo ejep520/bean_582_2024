@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 @Tag("fast")
 public class UnitTests {
+  // S13
 
   private Unit unit;
   private static final String ADDRESS = "123 Test Ave";
@@ -42,6 +45,7 @@ public class UnitTests {
     unit = null;
   }
 
+  @TestCase("C131")
   @Test
   @DisplayName("Default Unit Initialization is not null")
   public void defaultUnitInitializationIsNotNull() {
@@ -49,6 +53,7 @@ public class UnitTests {
     assertNotNull(unit);
   }
 
+  @TestCase("C132")
   @Test
   @DisplayName("Parameterized Unit Initialization is not null")
   public void parameterizedUnitInitializationIsNotNull() {
@@ -56,6 +61,7 @@ public class UnitTests {
     assertNotNull(unit);
   }
 
+  @TestCase("C133")
   @Test
   @DisplayName("Default Unit address is not null")
   public void defaultUnitAddressIsNotNull() {
@@ -63,6 +69,7 @@ public class UnitTests {
     assertNotNull(unit.getAddress());
   }
 
+  @TestCase("C134")
   @Test
   @DisplayName("Parameterized Unit address is not null")
   public void parameterizedUnitAddressIsNotNull() {
@@ -70,6 +77,7 @@ public class UnitTests {
     assertNotNull(unit.getAddress());
   }
 
+  @TestCase("C135")
   @Test
   @DisplayName("Default Unit address is empty")
   public void defaultUnitAddressIsEmpty() {
@@ -77,13 +85,15 @@ public class UnitTests {
     assertTrue(unit.getAddress().isEmpty());
   }
 
+  @TestCase("C136")
   @Test
   @DisplayName("Parameterized Unit address is kept")
   public void parameterizedUnitAddressIsKept() {
     initializeParameterizedUnit();
     assertEquals(ADDRESS, unit.getAddress());
   }
-  
+
+  @TestCase("C137")
   @Test
   @DisplayName("Changed Unit address is kept")
   public void changedAddressIsKept() {
@@ -93,6 +103,7 @@ public class UnitTests {
     assertEquals(BAD_ADDRESS, unit.getAddress()); // Asserts the address has changed.
   }
 
+  @TestCase("C138")
   @Test
   @DisplayName("Default Unit bedrooms is zero")
   public void defaultUnitBedroomsIsZero() {
@@ -100,6 +111,7 @@ public class UnitTests {
     assertEquals(0, unit.getBedrooms());
   }
 
+  @TestCase("C139")
   @Test
   @DisplayName("Parameterized Unit bedrooms are kept")
   public void parameterizedUnitBedroomsAreKept() {
@@ -107,6 +119,7 @@ public class UnitTests {
     assertEquals(BEDROOMS, unit.getBedrooms());
   }
 
+  @TestCase("C1310")
   @Test
   @DisplayName("Changed Bedrooms are kept")
   public void changedBedroomsAreKept() {
@@ -115,7 +128,8 @@ public class UnitTests {
     unit.setBedrooms(BAD_BEDROOMS);
     assertEquals(BAD_BEDROOMS, unit.getBedrooms()); // Asserts the number of bedrooms has changed.
   }
-  
+
+  @TestCase("C1311")
   @Test
   @DisplayName("Default Unit bathrooms is zero")
   public void defaultUnitBathroomsIsZero() {
@@ -123,6 +137,7 @@ public class UnitTests {
     assertEquals(0.0d, unit.getBathrooms());
   }
 
+  @TestCase("C1312")
   @Test
   @DisplayName("Parameterized Unit bathrooms are kept")
   public void parameterizedUnitBathroomsAreKept() {
@@ -130,6 +145,7 @@ public class UnitTests {
     assertEquals(BATHROOMS, unit.getBathrooms());
   }
 
+  @TestCase("C1313")
   @Test
   @DisplayName("Changed Bathrooms are kept")
   public void changedBathroomsAreKept() {
@@ -138,7 +154,8 @@ public class UnitTests {
     unit.setBathrooms(BAD_BATHROOMS);
     assertEquals(BAD_BATHROOMS, unit.getBathrooms());
   }
-  
+
+  @TestCase("C1314")
   @Test
   @DisplayName("Default Unit kitchen is empty")
   public void defaultUnitKitchenIsEmpty() {
@@ -146,13 +163,15 @@ public class UnitTests {
     assertTrue(unit.getKitchen().isEmpty());
   }
 
+  @TestCase("C1315")
   @Test
   @DisplayName("Parameterized Unit kitchen is kept")
   public void parameterizedUnitKitchenIsKept() {
     initializeParameterizedUnit();
     assertEquals(KITCHEN, unit.getKitchen());
   }
-  
+
+  @TestCase("C1316")
   @Test
   @DisplayName("Changed Unit kitchen is kept")
   public void changedKitchenIsKept() {
@@ -162,6 +181,7 @@ public class UnitTests {
     assertEquals(BAD_KITCHEN, unit.getKitchen());
   }
 
+  @TestCase("C1317")
   @Test
   @DisplayName("Default Unit living room is empty")
   public void defaultUnitLivingRoomIsEmpty() {
@@ -169,13 +189,15 @@ public class UnitTests {
     assertTrue(unit.getLivingRoom().isEmpty());
   }
 
+  @TestCase("C1318")
   @Test
   @DisplayName("Parameterized Unit living room is kept")
   public void parameterizedUnitLivingRoomIsKept() {
     initializeParameterizedUnit();
     assertEquals(LIVING_ROOM, unit.getLivingRoom());
   }
-  
+
+  @TestCase("C1319")
   @Test
   @DisplayName("Changed Unit living room is kept")
   public void changedUnitLivingRoomIsKept() {
@@ -185,6 +207,7 @@ public class UnitTests {
     assertEquals(BAD_LIVING_ROOM, unit.getLivingRoom());
   }
 
+  @TestCase("C1320")
   @Test
   @DisplayName("Default Unit featured is false")
   public void defaultUnitFeaturedIsFalse() {
@@ -192,6 +215,7 @@ public class UnitTests {
     assertFalse(unit.getFeatured());
   }
 
+  @TestCase("C1321")
   @Test
   @DisplayName("Parameterized Unit featured is kept")
   public void parameterizedUnitFeaturedIsKept() {
@@ -199,6 +223,7 @@ public class UnitTests {
     assertEquals(FEATURED, unit.getFeatured());
   }
 
+  @TestCase("C1322")
   @Test
   @DisplayName("Changed Unit featured is kept")
   public void changedUnitFeaturedIsKept() {
@@ -207,21 +232,24 @@ public class UnitTests {
     unit.setFeatured(BAD_FEATURED);
     assertEquals(BAD_FEATURED, unit.getFeatured());
   }
-  
+
+  @TestCase("C1323")
   @Test
   @DisplayName("Default Unit has null User")
   public void defaultUnitHasNullUser() {
     initializeDefaultUnit();
     assertNull(unit.getUser());
   }
-  
+
+  @TestCase("C1324")
   @Test
   @DisplayName("Parameterized Unit keeps its User")
   public void parameterizedUnitKeepsItsUser() {
     initializeParameterizedUnit();
     assertEquals(user, unit.getUser());
   }
-  
+
+  @TestCase("C1325")
   @Test
   @DisplayName("Changed Unit keeps its User")
   public void changedUnitKeepsItsUser() {
@@ -230,21 +258,24 @@ public class UnitTests {
     unit.setUser(bad_user);
     assertEquals(bad_user, unit.getUser());
   }
-  
+
+  @TestCase("C1326")
   @Test
   @DisplayName("A unit and null are not equal")
   public void unitNullUnequal() {
     initializeParameterizedUnit();
     assertNotEquals(unit, null);
   }
-  
+
+  @TestCase("C1327")
   @Test
   @DisplayName("A unit is equal to itself")
   public void aUnitIsEqualToItself() {
     initializeParameterizedUnit();
     assertTrue(unit.equals(unit));
   }
-  
+
+  @TestCase("C1328")
   @Test
   @DisplayName("Different Units are not equal")
   public void differentUnitsNotEqual() {
@@ -254,6 +285,7 @@ public class UnitTests {
     assertNotEquals(unit2, unit);
   }
 
+  @TestCase("C1329")
   @Test
   @DisplayName("A unit and another class instance are not equal.")
   public void unitAndOtherClassInstanceAreNotEqual() {

@@ -11,4 +11,10 @@ public final class TestUnits {
   public static final String KITCHEN_1 = "Modern kitchen";
   public static final String KITCHEN_2 = "Traditional kitchen";
 
+  /**
+   * @throws UnsupportedOperationException This class may not be instantiated.
+   */
+  public TestUnits() {
+    throw new UnsupportedOperationException("This class may not be instantiated.");
+  } 
 }

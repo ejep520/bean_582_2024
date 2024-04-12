@@ -14,4 +14,10 @@ public final class TestUsers {
   public final static Role USER_ROLE_3 = Role.USER;
   public final static String BAD_USERNAME = "BadUsername";
 
+  /**
+   * @throws UnsupportedOperationException This class may not be instantiated.
+   */
+  public TestUsers() {
+    throw new UnsupportedOperationException("This class may not be instantiated.");
+  }
 }

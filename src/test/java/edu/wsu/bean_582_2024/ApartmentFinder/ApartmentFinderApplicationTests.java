@@ -11,6 +11,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 class ApartmentFinderApplicationTests {
 
+	// C151
+	@TestCase("C151")
 	@Test
 	void contextLoads() {
 	}

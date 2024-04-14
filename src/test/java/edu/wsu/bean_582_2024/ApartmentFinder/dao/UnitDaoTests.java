@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
@@ -25,7 +26,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @AutoConfigureTestDatabase
 @Tag("slow")
 public class UnitDaoTests {
-
+  // S19
   private final EntityManager entityManager;
   private final UnitDao unitDao;
   private final static String ADDRESS_1 = "Address 1";
@@ -75,7 +76,9 @@ public class UnitDaoTests {
     if (!ADDRESS_1.equals(unit_1.getAddress()))
       unit_1.setAddress(ADDRESS_1);
   }
-  
+
+  // C191
+  @TestCase("C191")
   @Test
   public void countFunctionTest() {
     assertEquals(0L, unitDao.count());
@@ -90,6 +93,8 @@ public class UnitDaoTests {
     assertEquals(3L, unitDao.count());
   }
 
+  // C192
+  @TestCase("C192")
   @Test
   public void getByIdTest() {
     try {
@@ -106,7 +111,9 @@ public class UnitDaoTests {
     else 
       assertEquals(unit_1, result.get());
   }
-  
+
+  // C193
+  @TestCase("C193")
   @Test
   public void getAllFunctionTest() {
     assertEquals(Collections.emptyList(), unitDao.getAll());
@@ -120,7 +127,9 @@ public class UnitDaoTests {
     
     assertEquals(units, unitDao.getAll());
   }
-  
+
+  // C194
+  @TestCase("C194")
   @Test
   public void saveFunctionTest() {
     EntityTransaction transaction;
@@ -141,7 +150,9 @@ public class UnitDaoTests {
     else 
       assertEquals(unit_1, result2.get());
   }
-  
+
+  // C196
+  @TestCase("C196")
   @Test
   public void updateFunctionTest() {
     try {
@@ -160,6 +171,8 @@ public class UnitDaoTests {
     assertNotEquals(ADDRESS_1, unit_1.getAddress());
   }
 
+  // C196
+  @TestCase("C196")
   @Test
   public void deleteFunctionTest() {
     try {
@@ -175,7 +188,9 @@ public class UnitDaoTests {
     
     assertEquals(List.of(unit_1, unit_3), unitDao.getAll());
   }
-  
+
+  // C197
+  @TestCase("C197")
   @Test
   public void findFunctionTest() {
     try {
@@ -190,6 +205,8 @@ public class UnitDaoTests {
     assertEquals(List.of(unit_3), result);
   }
 
+  // C198
+  @TestCase("C198")
   @Test
   public void findFunctionWithoutKeyTest() {
     try {
@@ -203,7 +220,9 @@ public class UnitDaoTests {
     
     assertEquals(units, result);
   }
-  
+
+  // C199
+  @TestCase("C199")
   @Test
   public void findFunctionWithNullKeyTest() {
     try {
@@ -217,7 +236,9 @@ public class UnitDaoTests {
     
     assertEquals(units, result);
   }
-  
+
+  // C1910
+  @TestCase("C1910")
   @Test
   public void findByUserFunction() {
     try {
@@ -230,8 +251,10 @@ public class UnitDaoTests {
     List<Unit> result = unitDao.findByUser(user);
     
     assertEquals(List.of(unit_1, unit_2), result);
-  } 
-  
+  }
+
+  // C1911
+  @TestCase("C1911")
   @Test
   public void findByUserFunctionWithNullUserFindsNoUnits() {
     try {
@@ -245,7 +268,9 @@ public class UnitDaoTests {
     
     assertEquals(Collections.emptyList(), result);
   }
-  
+
+  // C1912
+  @TestCase("C1912")
   @Test
   public void findOwnedUnitsWithFilterTestValidInputs() {
     try {
@@ -259,7 +284,9 @@ public class UnitDaoTests {
     
     assertEquals(List.of(unit_1), result);
   }
-  
+
+  // C1913
+  @TestCase("C1913")
   @Test
   public void findOwnedUnitsWithValidBadDataReturnsNothing() {
     try {

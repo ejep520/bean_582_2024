@@ -7,6 +7,7 @@ import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService;
@@ -30,7 +31,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @Tag("fast")
 public class AdminViewTests {
-
+    // S2
     static {
         // Prevent Vaadin Development mode to launch browser window
         System.setProperty("vaadin.launch-browser", "false");
@@ -65,6 +66,7 @@ public class AdminViewTests {
       children = getChildren();
     }
 
+    @TestCase("C21")
     @Test
     public void viewPropertiesTest() {
       assertEquals("admin-view", adminView.getClassName());
@@ -85,7 +87,8 @@ public class AdminViewTests {
       assertEquals(ValueChangeMode.LAZY, toolbarChildren.filterText.getValueChangeMode());
       assertEquals("Add User", toolbarChildren.addUserButton.getText());
     }
-    
+
+    @TestCase("C22")
     @Test
     public void gridPropertiesTest() {
       Grid<User> grid = adminView.getGrid();
@@ -102,6 +105,7 @@ public class AdminViewTests {
       }
     }
 
+    @TestCase("C23")
     @Test
     public void formShownAndClosedWhenUserIsSavedTest() {
         Grid<User> userGrid = adminView.getGrid();
@@ -124,6 +128,7 @@ public class AdminViewTests {
         assertNull(adminForm.getUser());
     }
 
+    @TestCase("C24")
     @Test
     public void formShownAndClosedWhenUserIsDeletedTest() {
         Grid<User> userGrid = adminView.getGrid();
@@ -145,6 +150,7 @@ public class AdminViewTests {
         assertNull(adminForm.getUser());
     }
 
+    @TestCase("C25")
     @Test
     public void formShownAndClosedWhenUserIsCancelledTest() {
         Grid<User> userGrid = adminView.getGrid();

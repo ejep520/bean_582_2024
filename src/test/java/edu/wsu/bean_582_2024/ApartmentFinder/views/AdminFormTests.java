@@ -10,6 +10,7 @@ import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import java.util.List;
@@ -20,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AdminFormTests {
-
+    // S1
     private User adminUser;
     private User ownerUser;
     private User normalUser;
@@ -48,7 +49,8 @@ public class AdminFormTests {
         
         adminForm = new AdminForm();
     }
-    
+
+    @TestCase("C11")
     @Test
     public void formPropertiesTest() {
         assertEquals("admin-form", adminForm.getClassName());
@@ -67,7 +69,8 @@ public class AdminFormTests {
         assertEquals("tertiary", buttons.cancelButton.getThemeName());
         assertEquals("error", buttons.deleteButton.getThemeName());
     }
-    
+
+    @TestCase("C12")
     @Test
     public void whenUserIsSavedTest() {
         AtomicReference<User> savedUserRef = new AtomicReference<>(null);
@@ -84,6 +87,7 @@ public class AdminFormTests {
         assertEquals(adminUser.getPassword(), savedUser.getPassword());
     }
 
+    @TestCase("C13")
     @Test
     public void whenUserIsValidatedAndSavedTest() {
         AtomicReference<User> savedUserRef = new AtomicReference<>(null);
@@ -99,6 +103,7 @@ public class AdminFormTests {
         assertEquals(adminUser.getPassword(), savedUser.getPassword());
     }
 
+    @TestCase("C14")
     @Test
     public void whenUserIsDeletedTest() {
         AtomicReference<User> deletedUserRef = new AtomicReference<>(null);
@@ -115,6 +120,7 @@ public class AdminFormTests {
         assertEquals(ownerUser.getUsername(), deletedUser.getUsername());
     }
 
+    @TestCase("C15")
     @Test
     public void whenUserIsCancelledTest() {
         AtomicReference<User> cancelledUserRef = new AtomicReference<>(null);

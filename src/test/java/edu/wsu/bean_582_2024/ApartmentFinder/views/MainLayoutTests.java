@@ -15,6 +15,7 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.SecurityService;
 import java.util.Collections;
 import java.util.List;
@@ -28,9 +29,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @ExtendWith(MockitoExtension.class)
 public class MainLayoutTests {
+  // S22
   @Mock
   private SecurityService securityService;
 
+  @TestCase("C221")
   @DisplayName("Simulate a page view without an authorized user")
   @Test
   public void loginScreenPreviewTest() {
@@ -82,7 +85,8 @@ public class MainLayoutTests {
     assertEquals("Apartment Finder", banner.getText());
     assertEquals("text-l m-m", banner.getClassName());
   }
-  
+
+  @TestCase("C222")
   @DisplayName("Simulate an authorized user.")
   @Test
   public void authorizedUserTest() {

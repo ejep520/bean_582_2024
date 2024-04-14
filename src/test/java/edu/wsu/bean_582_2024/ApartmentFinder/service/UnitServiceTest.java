@@ -1,5 +1,6 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.service;
 
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UnitServiceTest {
-
+    // S8
     @Mock
     private UnitRepository unitRepositoryMock;
     @InjectMocks
@@ -35,6 +36,7 @@ public class UnitServiceTest {
     private static final List<Unit> UNITS = List.of(UNIT_1, UNIT_2);
 
 
+    @TestCase("C81")
     @Test
     public void testGetAllUnits() {
         when(unitRepositoryMock.getAll()).thenReturn(UNITS);
@@ -44,6 +46,7 @@ public class UnitServiceTest {
         assertEquals(2, result.size());
     }
 
+    @TestCase("C82")
     @Test
     public void testFindUnits() {
         String filter = "test filter";
@@ -55,6 +58,7 @@ public class UnitServiceTest {
     }
 
     @Test
+    @TestCase("C83")
     public void testGetUnitCount() {
         when(unitRepositoryMock.count()).thenReturn(10L);
 
@@ -63,6 +67,7 @@ public class UnitServiceTest {
         assertEquals(10L, result);
     }
 
+    @TestCase("C84")
     @Test
     public void testDeleteUnit() {
         unitService.deleteUnit(UNIT_1);
@@ -70,6 +75,7 @@ public class UnitServiceTest {
         verify(unitRepositoryMock).delete(UNIT_1);
     }
 
+    @TestCase("C85")
     @Test
     public void testSaveUnit() {
         unitService.saveUnit(UNIT_1);

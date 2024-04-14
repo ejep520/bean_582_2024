@@ -18,6 +18,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class NewUserViewTests {
+  // S23
   @Mock
   private AuthService authService;
   @InjectMocks
@@ -81,7 +83,8 @@ public class NewUserViewTests {
         .findFirst()
         .orElse(null);
   }
-  
+
+  @TestCase("C231")
   @Test
   public void formSettingsTest() {
     assertNotNull(verticalLayout);
@@ -98,7 +101,8 @@ public class NewUserViewTests {
     assertEquals("Register", banner.getText());
     
   }
-  
+
+  @TestCase("C232")
   @Test
   public void noUsernamePreventsRegistration() {
     usernameField.setValue("");
@@ -107,7 +111,8 @@ public class NewUserViewTests {
     verify(authService, times(0)).usernameTaken(anyString());
     verify(authService, times(0)).register(anyString(), anyString(), any(Role.class));
   }
-  
+
+  @TestCase("C233")
   @Test
   public void takenUsernamePreventsRegistration() {
     when(authService.usernameTaken(USERNAME)).thenReturn(true);
@@ -119,7 +124,8 @@ public class NewUserViewTests {
     verify(authService).usernameTaken(USERNAME);
     verify(authService, times(0)).register(anyString(), anyString(), any(Role.class));
   }
-  
+
+  @TestCase("C234")
   @Test
   public void firstEmptyPasswordPreventsRegistration() {
     when(authService.usernameTaken(USERNAME)).thenReturn(false);
@@ -132,6 +138,7 @@ public class NewUserViewTests {
     verify(authService, times(0)).register(anyString(), anyString(), any(Role.class));
   }
 
+  @TestCase("C235")
   @Test
   public void secondEmptyPasswordPreventsRegistration() {
     when(authService.usernameTaken(USERNAME)).thenReturn(false);
@@ -144,6 +151,7 @@ public class NewUserViewTests {
     verify(authService, times(0)).register(anyString(), anyString(), any(Role.class));
   }
 
+  @TestCase("C236")
   @Test
   public void mismatchedPasswordsPreventRegistration() {
     when(authService.usernameTaken(USERNAME)).thenReturn(false);
@@ -157,6 +165,7 @@ public class NewUserViewTests {
     verify(authService, times(0)).register(anyString(), anyString(), any(Role.class));
   }
 
+  @TestCase("C237")
   @Test
   public void successfulRegistrationTest() {
     when(authService.usernameTaken(USERNAME)).thenReturn(false);
@@ -176,5 +185,4 @@ public class NewUserViewTests {
     assertEquals(PASSWORD, passwordCaptor.getValue());
     assertEquals(Role.USER, roleCaptor.getValue());
   }
-
 }

@@ -19,6 +19,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.Location;
 import com.vaadin.flow.router.QueryParameters;
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService;
 import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService.AuthException;
 import java.util.List;
@@ -34,7 +35,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class LoginViewTests {
-
+  // S21
   static {
     System.setProperty("vaadin.launch-browser", "false");
   }
@@ -52,6 +53,7 @@ public class LoginViewTests {
     when(authService.getUserCount()).thenReturn(1L);
   }
 
+  @TestCase("C211")
   @Test
   public void propertiesOfLoginView() {
     loginView = new LoginView(authService);
@@ -71,6 +73,7 @@ public class LoginViewTests {
     verify(authService).getUserCount();
   }
 
+  @TestCase("C212")
   @Test
   public void componentEventTestLoginError() throws AuthException {
     String username = "testUser";
@@ -86,6 +89,7 @@ public class LoginViewTests {
     assertTrue(form.isError());
   }
 
+  @TestCase("C213")
   @Test
   public void componentEventTestLoginFalse() throws AuthException {
     String username = "testUser";
@@ -102,6 +106,7 @@ public class LoginViewTests {
     assertTrue(form.isError());
   }
 
+  @TestCase("C214")
   @Test
   public void onComponentEventSuccessfulLoginTest() throws AuthException{
     String username = "testUser";
@@ -118,6 +123,7 @@ public class LoginViewTests {
     assertFalse(form.isError());
   }
 
+  @TestCase("C215")
   @SuppressWarnings("unchecked")
   @ParameterizedTest
   @ValueSource(booleans = {false, true})

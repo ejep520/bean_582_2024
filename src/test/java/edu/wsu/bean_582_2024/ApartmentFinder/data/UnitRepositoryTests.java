@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.dao.UnitDao;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
@@ -26,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class UnitRepositoryTests {
+  // S16
   @Mock
   private UnitDao unitDao;
   private UnitRepository unitRepository;
@@ -70,6 +72,7 @@ public class UnitRepositoryTests {
     unitRepository = new UnitRepositoryImpl(unitDao);
   }
 
+  @TestCase("C161")
   @Test
   public void getAllFunctionTest() {
     when(unitDao.getAll()).thenReturn(units);
@@ -79,7 +82,8 @@ public class UnitRepositoryTests {
     verify(unitDao).getAll();
     assertEquals(units, result);
   }
-  
+
+  @TestCase("C162")
   @ParameterizedTest(name="Get Unit by id function test {0}/4")
   @ValueSource(longs = {1L, 2L, 3L, 4L})
   public void getByIdFunctionTest(long id) {
@@ -92,7 +96,8 @@ public class UnitRepositoryTests {
     else 
       assertEquals(id, result.getId());
   }
-  
+
+  @TestCase("C163")
   @Test
   public void saveFunctionTest() {
     ArgumentCaptor<Unit> captor = ArgumentCaptor.forClass(Unit.class);
@@ -103,6 +108,7 @@ public class UnitRepositoryTests {
     assertEquals(unit_1, captor.getValue());
   }
 
+  @TestCase("C164")
   @Test
   public void updateFunctionTest() {
     ArgumentCaptor<Unit> captor = ArgumentCaptor.forClass(Unit.class);
@@ -113,6 +119,7 @@ public class UnitRepositoryTests {
     assertEquals(unit_1, captor.getValue());
   }
 
+  @TestCase("C165")
   @Test
   public void deleteFunctionTest() {
     ArgumentCaptor<Unit> captor = ArgumentCaptor.forClass(Unit.class);
@@ -123,6 +130,7 @@ public class UnitRepositoryTests {
     assertEquals(unit_1, captor.getValue());
   }
 
+  @TestCase("C166")
   @ParameterizedTest
   @ValueSource(strings = {ADDRESS_1, ADDRESS_2, ADDRESS_3, "321 Nowhere Ave"})
   public void searchFunctionTest(String searchKey) {
@@ -139,7 +147,8 @@ public class UnitRepositoryTests {
     else
       assertEquals(searchKey, result.get(0).getAddress());
   }
-  
+
+  @TestCase("C167")
   @ParameterizedTest
   @MethodSource("userStream")
   public void findByOwnerFunctionTest(User searchKey) {
@@ -163,7 +172,8 @@ public class UnitRepositoryTests {
   private static Stream<Arguments> userStream() {
     return Stream.of(arguments(user), arguments((User) null));
   }
-  
+
+  @TestCase("C168")
   @ParameterizedTest
   @MethodSource("userAddressStream")
   public void findOwnedUnitsByFilter(User thisUser, String searchKey) {
@@ -195,7 +205,8 @@ public class UnitRepositoryTests {
         arguments(user, ADDRESS_3),
         arguments(null, ADDRESS_3));
   }
-  
+
+  @TestCase("C169")
   @Test
   public void countFunctionTest() {
     long thisCount = 4L;

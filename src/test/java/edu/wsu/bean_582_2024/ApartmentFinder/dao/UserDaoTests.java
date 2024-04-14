@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
 import jakarta.persistence.EntityManager;
@@ -24,6 +25,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @AutoConfigureTestDatabase
 @Tag("slow")
 public class UserDaoTests {
+  //S20
   private final EntityManager entityManager;
   private final static String USERNAME_1 = "testAdmin";
   private final static String USERNAME_2 = "testOwner";
@@ -58,6 +60,7 @@ public class UserDaoTests {
       user_1.setUsername(USERNAME_1);
   }
 
+  @TestCase("C201")
   @Test
   public void getUserByIdTest() {
     try {
@@ -75,6 +78,7 @@ public class UserDaoTests {
       fail("User could not be found.");
   }
 
+  @TestCase("C202")
   @Test
   public void findUserByUsernameSuccessReturnsUser() {
     EntityTransaction transaction = entityManager.getTransaction();
@@ -88,6 +92,7 @@ public class UserDaoTests {
     assertEquals(user_1, result);
   }
 
+  @TestCase("C203")
   @Test
   public void findUserByUsernameFailureReturnsNull() {
     EntityTransaction transaction = entityManager.getTransaction();
@@ -100,7 +105,8 @@ public class UserDaoTests {
     
     assertNull(result);
   }
-  
+
+  @TestCase("C204")
   @Test
   public void testGetAllFunction() {
     try {
@@ -115,6 +121,7 @@ public class UserDaoTests {
     assertEquals(userList, result);
   }
 
+  @TestCase("C205")
   @Test
   public void testSaveUserFunction() {
     userDao.save(user_1);
@@ -122,7 +129,8 @@ public class UserDaoTests {
 
     assertEquals(List.of(user_1), result);
   }
-  
+
+  @TestCase("C206")
   @Test
   public void testUpdateFunction() {
     EntityTransaction transaction = entityManager.getTransaction();
@@ -142,6 +150,7 @@ public class UserDaoTests {
     entityManager.refresh(user_1);
   }
 
+  @TestCase("C207")
   @Test
   public void deleteUserFunctionTest() {
     try {
@@ -157,7 +166,8 @@ public class UserDaoTests {
     assertThrows(EntityNotFoundException.class, () -> entityManager.refresh(user_2));
     assertEquals(List.of(user_1, user_3), result);
   }
-  
+
+  @TestCase("C208")
   @Test
   public void countFunctionTest() {
     assertEquals(0L, userDao.count());

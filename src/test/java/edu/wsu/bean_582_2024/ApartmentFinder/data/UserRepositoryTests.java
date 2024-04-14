@@ -4,6 +4,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.dao.UserDao;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
@@ -24,6 +25,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class UserRepositoryTests {
+  // S17
+
   @Mock
   private UserDao userDao;
   private UserRepository userRepository;
@@ -51,7 +54,8 @@ public class UserRepositoryTests {
   public void createRepository() {
     userRepository = new UserRepositoryImpl(userDao);
   }
-  
+
+  @TestCase("C171")
   @Test
   @DisplayName("GetAll function passes call to DAO and returns result")
   public void testGetAllFunctionPassesCall() {
@@ -60,7 +64,8 @@ public class UserRepositoryTests {
     assertEquals(userList, result);
     verify(userDao).getAll();
   }
-  
+
+  @TestCase("C172")
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
   @ParameterizedTest
   @MethodSource("idUserStream")
@@ -77,14 +82,16 @@ public class UserRepositoryTests {
     return Stream.of(Arguments.of(1L, Optional.of(user_1)),
         Arguments.of(4L, Optional.empty()));
   }
-  
-  
+
+
+  @TestCase("C173")
   @Test
   public void addFunctionTest() {
     userRepository.add(user_1);
     verify(userDao).save(user_1);
   }
 
+  @TestCase("C174")
   @Test
   public void updateFunctionTest() {
     ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
@@ -92,7 +99,8 @@ public class UserRepositoryTests {
     verify(userDao).update(captor.capture());
     assertEquals(user_1, captor.getValue());
   }
-  
+
+  @TestCase("C175")
   @Test
   public void deleteFunctionTest() {
     ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
@@ -100,7 +108,8 @@ public class UserRepositoryTests {
     verify(userDao).delete(captor.capture());
     assertEquals(user_1, captor.getValue());
   }
-  
+
+  @TestCase("C176")
   @ParameterizedTest
   @ValueSource(strings = {USERNAME_1, USERNAME_2, USERNAME_3})
   public void getUserByUsernameTest(String username) {
@@ -112,7 +121,8 @@ public class UserRepositoryTests {
     User result = userRepository.getUserByUsername(username);
     assertEquals(username, result.getUsername());
   }
-  
+
+  @TestCase("C177")
   @Test
   public void countFunctionTest() {
     when(userDao.count()).thenReturn(3L);

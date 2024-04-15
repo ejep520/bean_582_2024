@@ -7,10 +7,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.InvocationTargetException;
+
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 public class AbstractClassTests {
+  // S11
+
+  @TestCase("C111")
   @ValueSource(classes={User.class, Authority.class, Unit.class})
   @ParameterizedTest()
   public <T extends AbstractEntity> void newInstancesHaveNullId(Class<T> clazz) {
@@ -19,6 +24,7 @@ public class AbstractClassTests {
     assertNull(instance.getId());
   }
 
+  @TestCase("C112")
   @ValueSource(classes={User.class, Authority.class, Unit.class})
   @ParameterizedTest
   public <T extends AbstractEntity> void setIdsStick(Class<T> clazz) {
@@ -30,6 +36,7 @@ public class AbstractClassTests {
     assertEquals(1L, result);
   }
 
+  @TestCase("C113")
   @ValueSource(classes={User.class, Authority.class, Unit.class})
   @ParameterizedTest
   public <T extends AbstractEntity> void versionIsAnInt(Class<T> clazz) {

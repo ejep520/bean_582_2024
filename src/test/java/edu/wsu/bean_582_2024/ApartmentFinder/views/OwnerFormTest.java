@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
@@ -24,9 +25,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class OwnerFormTest {
-	private final List<Unit> units = new ArrayList<>();
-	private final Unit unit1 = new Unit();
-	private final Unit unit2 = new Unit();
+  // S4
+  private final List<Unit> units = new ArrayList<>();
+  private final Unit unit1 = new Unit();
+  private final Unit unit2 = new Unit();
   private final static String ADDRESS_1 = "1815 WSU Rd";
   private final static String ADDRESS_2 = "2024 Bean Rd"; 
   private final static double BATHROOMS_1 = 2.5d;
@@ -73,7 +75,8 @@ public class OwnerFormTest {
     
     when(userService.getAllUsers()).thenReturn(USER_LIST);
   }
-    
+
+  @TestCase("C47")
   @Test
   public void propertiesTest() {
     OwnerForm form = createFormWithUnitOne();
@@ -98,6 +101,7 @@ public class OwnerFormTest {
   }
 
 
+  @TestCase("C41")
   @Test
   @DisplayName("OwnerForm setting the Unit populates the fields")
   public void formFieldsPopulated() {
@@ -122,7 +126,8 @@ public class OwnerFormTest {
     assertEquals(KITCHEN_2, form2.kitchen.getValue());
     assertEquals(LIVING_ROOM_2, form2.livingRoom.getValue());
   }
-    
+
+  @TestCase("C42")
   @Test
   @DisplayName("OwnerForm adds a listener for and fires off save event")
   public void formFiresSaveEventTest() {
@@ -132,7 +137,8 @@ public class OwnerFormTest {
     form.save.click();
     assertTrue(saveFired.get());
   }
-  
+
+  @TestCase("C43")
   @Test
   @DisplayName("OwnerForm adds a listener for and fires off delete event")
   public void formFiresDeleteEventTest() {
@@ -142,7 +148,8 @@ public class OwnerFormTest {
     form.delete.click();
     assertTrue(deleteFired.get());
   }
-  
+
+  @TestCase("C44")
   @Test
   @DisplayName("OwnerForm adds listener to and fires off cancel/close event")
   public void formFiresCancelEventTest() {
@@ -152,7 +159,8 @@ public class OwnerFormTest {
     form.cancel.click();
     assertTrue(cancelFired.get());
   }
-  
+
+  @TestCase("C45")
   @Test
   @DisplayName("OwnerForm Save Event fired off the updated Unit")
   public void formSaveEventFiresUpdatedUnit() {
@@ -172,7 +180,8 @@ public class OwnerFormTest {
       
     assertEquals(unit2, savedUnitRef.get());
   }
-  
+
+  @TestCase("C46")
   @Test
   @DisplayName("OwnerForm will not fire if form contains invalid data")
   public void saveFormWithInvalidDataDoesntFireSave() {

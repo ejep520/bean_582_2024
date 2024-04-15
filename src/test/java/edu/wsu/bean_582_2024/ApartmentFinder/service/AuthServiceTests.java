@@ -12,6 +12,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.AuthorityRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.UserRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Authority;
@@ -41,6 +42,8 @@ import org.springframework.security.core.Authentication;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthServiceTests {
+  // S7
+
   @Mock
   private UserRepository userRepository;
   @Mock
@@ -51,6 +54,7 @@ public class AuthServiceTests {
   private AuthService authService;
   private final Random random = new Random(Calendar.getInstance().getTimeInMillis());
 
+  @TestCase("C71")
   @ParameterizedTest
   @EnumSource(Role.class)
   public void authenticateEachEnumTest(Role role) {
@@ -75,6 +79,7 @@ public class AuthServiceTests {
     }
   }
 
+  @TestCase("C72")
   @Test
   public void authenticateNullReturnsNull() {
     when(authentication.getName()).thenReturn("Foo");
@@ -87,6 +92,7 @@ public class AuthServiceTests {
     assertNull(result);
   }
 
+  @TestCase("C73")
   @ParameterizedTest
   @ValueSource(classes = {UsernamePasswordAuthenticationToken.class, RememberMeAuthenticationToken.class})
   public void supportsTests(Class<?> clazz) {
@@ -95,6 +101,7 @@ public class AuthServiceTests {
     assertEquals((clazz == UsernamePasswordAuthenticationToken.class), result);
   }
 
+  @TestCase("C74")
   @Test
   public void getUserCountTest() {
     long testValue = random.nextLong(0, Long.MAX_VALUE);
@@ -106,6 +113,7 @@ public class AuthServiceTests {
     verify(userRepository).count();
   }
 
+  @TestCase("C75")
   @Test
   public void deleteAuthorityTest() {
     Authority authority = mock(Authority.class);
@@ -115,6 +123,7 @@ public class AuthServiceTests {
     verify(authorityRepository).delete(authority);
   }
 
+  @TestCase("C76")
   @ParameterizedTest
   @EnumSource(Role.class)
   public void getAuthorizedRoutesTest(Role role) {
@@ -133,6 +142,7 @@ public class AuthServiceTests {
     }
   }
 
+  @TestCase("C77")
   @ParameterizedTest
   @MethodSource("usersAndCountsStream")
   public void registerTest(User user, long count, Role originalRole) {

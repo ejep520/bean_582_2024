@@ -9,6 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.AuthorityRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.UnitRepository;
 import edu.wsu.bean_582_2024.ApartmentFinder.data.UserRepository;
@@ -36,6 +37,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 @Tag("fast")
 public class UserServiceTests {
+  // S10
+
   @Mock
   private UserRepository userRepository;
   @Mock
@@ -96,13 +99,15 @@ public class UserServiceTests {
       user1.getUnits().add(unit);
     }
   }
-  
+
+  @TestCase("C101")
   @Test
   @DisplayName("Initialization of UserService returns not null")
   public void initializationResultsInNotNull() {
     assertNotNull(userService);
   }
-  
+
+  @TestCase("C102")
   @Test
   @DisplayName("FindAll method returns all users")
   public void findAllReturnsAll() {
@@ -110,7 +115,8 @@ public class UserServiceTests {
     List<User> result = userService.getAllUsers();
     assertEquals(allUsers, result);
   }
-  
+
+  @TestCase("C103")
   @Test
   @DisplayName("FindUsers with null returns all users")
   public void findUsersNullReturnsAllUsers() {
@@ -119,6 +125,7 @@ public class UserServiceTests {
     assertEquals(allUsers, result);
   }
 
+  @TestCase("C104")
   @Test
   @DisplayName("FindUsers with empty string returns all users")
   public void findUsersEmptyReturnsAllUsers() {
@@ -126,7 +133,8 @@ public class UserServiceTests {
     List<User> result = userService.findUsers("");
     assertEquals(allUsers, result);
   }
-  
+
+  @TestCase("C105")
   @Test
   @DisplayName("FindUsers with blank string returns all users")
   public void findUsersBlankReturnsAllUsers() {
@@ -134,7 +142,8 @@ public class UserServiceTests {
     List<User> result = userService.findUsers(" ");
     assertEquals(allUsers, result);
   }
-  
+
+  @TestCase("C106")
   @Test
   @DisplayName("FindUsers with a valid user returns one User")
   public void findUsersValidFilterReturnsOne() {
@@ -142,7 +151,8 @@ public class UserServiceTests {
     List<User> result = userService.findUsers(TestUsers.USERNAME_1);
     assertEquals(List.of(user1), result);
   }
-  
+
+  @TestCase("C107")
   @Test
   @DisplayName("FindUser with invalid key returns no users")
   public void findUserInvalidFilterReturnsNone() {
@@ -150,7 +160,8 @@ public class UserServiceTests {
     List<User> result = userService.findUsers(TestUsers.BAD_USERNAME);
     assertEquals(Collections.emptyList(), result);
   }
-  
+
+  @TestCase("C108")
   @Test
   @DisplayName("Tests that DeleteUser calls the repository's delete method")
   public void deleteUserTest() {
@@ -160,6 +171,7 @@ public class UserServiceTests {
     verify(unitRepository).delete(any(Unit.class));
   }
 
+  @TestCase("C109")
   @Test
   @DisplayName("Tests that SaveUser calls the repository's save method")
   public void saveUserTest() {
@@ -167,7 +179,8 @@ public class UserServiceTests {
     userService.saveUser(user);
     verify(userRepository).add(user);
   }
-  
+
+  @TestCase("C1010")
   @Test
   @DisplayName("Tests that SaveUser calls the repository's update method")
   public void updateUserTest() {
@@ -176,7 +189,8 @@ public class UserServiceTests {
     userService.saveUser(user);
     verify(userRepository).update(user);
   }
-  
+
+  @TestCase("C1011")
   @ParameterizedTest(name="Able to find user {0}")
   @ValueSource(longs = {1L, 2L, 3L})
   public void findingUsersReturnsUsersFaithfully(Long userId) {
@@ -186,6 +200,7 @@ public class UserServiceTests {
     assertTrue(result.isPresent());
   }
 
+  @TestCase("C1012")
   @Test
   @DisplayName("Unable to find user nonexistent user by id")
   public void unableToFindNonexistentUserById() {
@@ -195,7 +210,8 @@ public class UserServiceTests {
     Optional<User> result = userService.findUserById(userId);
     assertTrue(result.isEmpty());
   }
-  
+
+  @TestCase("C1013")
   @ParameterizedTest(name="Search for Users by username {0}")
   @ValueSource(strings = {TestUsers.USERNAME_1, TestUsers.USERNAME_2, TestUsers.USERNAME_3})
   public void SearchForUsersByUsername(String searchKey) {
@@ -206,6 +222,7 @@ public class UserServiceTests {
     assertTrue(result.isPresent());
   }
 
+  @TestCase("C1014")
   @Test
   @DisplayName("Save null User makes no repository calls")
   public void saveNullUserMakesNoRepoCalls() {

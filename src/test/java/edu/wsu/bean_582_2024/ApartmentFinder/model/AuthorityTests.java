@@ -3,6 +3,8 @@ package edu.wsu.bean_582_2024.ApartmentFinder.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.Test;
  */
 @Tag("fast")
 public final class AuthorityTests extends AuthenticationTestsTemplate {
+  // S12
   private Authority authority;
   private User user;
   private static final String GRANTED_AUTHORITY = "USER";
@@ -24,6 +27,7 @@ public final class AuthorityTests extends AuthenticationTestsTemplate {
     authority = null;
   }
 
+  @TestCase("C121")
   @Test
   @DisplayName("Default Authority initialization returns not null")
   public void defaultAuthorityInitReturnsNotNullTest() {
@@ -31,6 +35,7 @@ public final class AuthorityTests extends AuthenticationTestsTemplate {
     assertNotNull(authority);
   }
 
+  @TestCase("C122")
   @Test
   @DisplayName("Parameterized Authority initialization returns not null")
   public void parameterizedAuthorityInitializationNotNullTest() {
@@ -39,6 +44,7 @@ public final class AuthorityTests extends AuthenticationTestsTemplate {
     assertNotNull(authority);
   }
 
+  @TestCase("C123")
   @Test
   @DisplayName("Parameterized Authority initialization with default user returns not null")
   public void parameterizedAuthorityWithoutValidUserReturnsNotNull() {
@@ -47,6 +53,7 @@ public final class AuthorityTests extends AuthenticationTestsTemplate {
     assertNotNull(authority);
   }
 
+  @TestCase("C124")
   @Test
   @DisplayName("Default Authority User is null")
   public void defaultAuthorityUserIsNull() {
@@ -54,6 +61,7 @@ public final class AuthorityTests extends AuthenticationTestsTemplate {
     assertNull(authority.getUser());
   }
 
+  @TestCase("C125")
   @Test
   @DisplayName("Default Authority's Authority field is null")
   public void defaultAuthorityAuthorityIsNull() {
@@ -61,6 +69,7 @@ public final class AuthorityTests extends AuthenticationTestsTemplate {
     assertNull(authority.getAuthority());
   }
 
+  @TestCase("C126")
   @Test
   @DisplayName("Parameterized Authority keeps its User")
   public void parameterizedAuthorityKeepsItsUser() {
@@ -69,6 +78,7 @@ public final class AuthorityTests extends AuthenticationTestsTemplate {
     assertEquals(user, authority.getUser());
   }
 
+  @TestCase("C127")
   @Test
   @DisplayName("Parameterized Authority keeps its authority")
   public void parameterizedAuthorityKeepsItsAuthority() {
@@ -77,6 +87,7 @@ public final class AuthorityTests extends AuthenticationTestsTemplate {
     assertEquals(GRANTED_AUTHORITY, authority.getAuthority());
   }
 
+  @TestCase("C128")
   @Test
   @DisplayName("Default Authority keeps its set User")
   public void defaultAuthorityKeepsItsSetUser() {

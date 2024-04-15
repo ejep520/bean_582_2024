@@ -7,6 +7,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.dao.AuthorityDao;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Authority;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
@@ -23,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthorityRepositoryTests {
+  // S15
   @Mock
   private AuthorityDao authorityDao;
   private AuthorityRepository authorityRepository;
@@ -72,7 +74,8 @@ public class AuthorityRepositoryTests {
   public void resetRepository() {
     authorityRepository = new AuthorityRepositoryImpl(authorityDao);
   }
-  
+
+  @TestCase("C151")
   @ParameterizedTest
   @ValueSource(longs = {11L, 12L, 13L, 21L, 22L, 30L, 42L})
   public void getAllFunctionTest(long searchKey) {
@@ -87,7 +90,8 @@ public class AuthorityRepositoryTests {
     else
       assertEquals(searchKey, result.getId());
   }
-  
+
+  @TestCase("C152")
   @Test
   public void addFunctionTest() {
     ArgumentCaptor<Authority> captor = ArgumentCaptor.forClass(Authority.class);
@@ -96,7 +100,8 @@ public class AuthorityRepositoryTests {
     verify(authorityDao).save(captor.capture());
     assertEquals(AUTHORITY_3, captor.getValue());
   }
-  
+
+  @TestCase("C153")
   @Test
   public void updateFunctionTest() {
     ArgumentCaptor<Authority> captor = ArgumentCaptor.forClass(Authority.class);
@@ -106,7 +111,8 @@ public class AuthorityRepositoryTests {
     verify(authorityDao).update(captor.capture());
     assertEquals(AUTHORITY_3, captor.getValue());
   }
-  
+
+  @TestCase("C154")
   @Test
   public void deleteFunctionTest() {
     ArgumentCaptor<Authority> captor = ArgumentCaptor.forClass(Authority.class);

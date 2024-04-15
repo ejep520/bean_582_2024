@@ -1,5 +1,6 @@
 package edu.wsu.bean_582_2024.ApartmentFinder.service;
 
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,13 +19,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UnitServiceTests {
-
+    // S9
     @Mock
     private UnitRepository unitRepositoryMock;
 
     @InjectMocks
     private UnitService unitService;
 
+    @TestCase("C91")
     @Test
     public void testGetAllUnits() {
         Unit unit1 = new Unit("100 Pullman Rd", 2, 1.5, "Elegant Living spaces", "Modern kitchen", true, null);
@@ -37,6 +39,7 @@ public class UnitServiceTests {
         assertEquals(2, result.size());
     }
 
+    @TestCase("C92")
     @Test
     public void testFindUnits() {
         String filter = "test filter";
@@ -50,6 +53,7 @@ public class UnitServiceTests {
         assertEquals(2, result.size());
     }
 
+    @TestCase("C93")
     @Test
     public void testGetUnitCount() {
         when(unitRepositoryMock.count()).thenReturn(10L);
@@ -59,20 +63,12 @@ public class UnitServiceTests {
         assertEquals(10L, result);
     }
 
+    @TestCase("C94")
     @Test
     public void testDeleteUnit() {
         Unit unitToDelete = new Unit("100 Pullman Rd", 2, 1.5, "Elegant Living spaces", "Modern kitchen", true, null);
         unitService.deleteUnit(unitToDelete);
 
         verify(unitRepositoryMock, times(1)).delete(unitToDelete);
-    }
-
-    //@Test -- This test is broken. There is no .save()
-    public void testSaveUnit() {
-        Unit unitToSave = new Unit("100 Pullman Rd", 2, 1.5, "Elegant Living spaces", "Modern kitchen", true, null);
-        unitService.saveUnit(unitToSave);
-
-        // There is no save method
-        //verify(unitRepositoryMock, times(1)).save(unitToSave);
     }
 }

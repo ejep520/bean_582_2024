@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import edu.wsu.bean_582_2024.ApartmentFinder.TestCase;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Authority;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
 import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
@@ -25,7 +26,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @AutoConfigureTestDatabase
 @Tag("slow")
 public class AuthorityDaoTests {
-
+  // S18
   private final EntityManager entityManager;
   private final AuthorityDao authorityDao;
   private static final String USERNAME = "TestAdmin";
@@ -58,6 +59,8 @@ public class AuthorityDaoTests {
     transaction.commit();
   }
 
+  // C181
+  @TestCase("C181")
   @Test
   public void findAllAuthoritiesTest() {
     EntityTransaction transaction = entityManager.getTransaction();
@@ -75,7 +78,9 @@ public class AuthorityDaoTests {
     
     assertEquals(List.of(authority_1, authority_2, authority_3), result);
   }
-  
+
+  // C182
+  @TestCase("C182")
   @Test
   public void testGetById() {
     EntityTransaction transaction = entityManager.getTransaction();
@@ -99,7 +104,9 @@ public class AuthorityDaoTests {
       fail("Authority was not retrieved.");
     }
   }
-  
+
+  // C183
+  @TestCase("C183")
   @Test
   @DisplayName("Test save function")
   public void testSaveFunction() {
@@ -124,12 +131,16 @@ public class AuthorityDaoTests {
   /**
    * In practical terms, this should never happen, but for purposes of "painting it green"...
    */
+  // C184
+  @TestCase("C184")
   @Test
   @DisplayName("Updating authorities is NOT supported.")
   public void updateFunctionTest() {
     assertThrows(UnsupportedOperationException.class, () -> authorityDao.update(authority_1));
   }
-  
+
+  // C185
+  @TestCase("C185")
   @Test
   @DisplayName("Test Delete function")
   public void testDeleteFunction() {

@@ -67,9 +67,10 @@ public class UnitDao extends DaoHelper implements Dao<Unit>{
   
   public List<Unit> find(String searchKey) {
     if ((searchKey == null) ||  searchKey.isBlank()) return getAll();
+    String formattedString = "%" + searchKey + "%";
     return castList(Unit.class, entityManager
         .createQuery("SELECT e from Unit e where lower(e.address) LIKE :searchKey OR lower(e.livingRoom) LIKE :searchKey OR lower(e.kitchen) LIKE :searchKey")
-        .setParameter("searchKey", searchKey.toLowerCase())
+        .setParameter("searchKey", formattedString.toLowerCase())
         .getResultList());
   }
   

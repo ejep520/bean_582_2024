@@ -55,7 +55,22 @@ This is a demostration project of an apartment finder web portal.
 // TODO:
 
 * Show graphs, tables, and UML
+#LOAD TESTING
+Load Testing with k6
+k6 is an open-source load testing tool that allows you to test the performance of your web applications. Follow these steps to incorporate k6 load testing into your project:
 
+Install k6: If you haven't already installed k6, you can download it from the official website and follow the installation instructions for your operating system.
+
+Write Test Scripts: Create test scripts using JavaScript to define the load testing scenarios. These scripts will simulate user behavior and interactions with your web application. You can create multiple scripts to cover different use cases and scenarios.
+
+Run Load Tests: Run the k6 load tests from the command line using the k6 run command followed by the path to your test script. For example:
+
+k6 run path/to/test/script.js
+
+
+Analyze Results: After running the load tests, analyze the results to identify any performance bottlenecks or issues in your application. k6 provides detailed metrics and reports to help you understand the performance of your application under load.
+
+Incorporate Tests into CI/CD Pipeline: Consider integrating k6 load tests into your continuous integration and delivery pipeline to automatically run tests and monitor the performance of the application with each deployment.
 
 ### Additional links
 * [Official Gradle documentation](https://docs.gradle.org)

@@ -11,6 +11,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -20,7 +22,7 @@ import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService;
 @Route(value = "/newuser", layout = MainLayout.class)
 @PageTitle("Register User")
 @AnonymousAllowed
-public class NewUserView extends Composite<Component> {
+public class NewUserView extends Composite<Component> implements AfterNavigationObserver {
 
   private final AuthService authService;
 
@@ -57,5 +59,11 @@ public class NewUserView extends Composite<Component> {
       Notification.show("User has been registered.");
       UI.getCurrent().navigate(LoginView.class);
     }
+  }
+
+  @Override
+  public void afterNavigation(AfterNavigationEvent event) {
+    if (authService.getUserCount() == 0L)
+      Notification.show("The first user created will be an administrator.");
   }
 }

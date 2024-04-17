@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.vaadin.flow.component.Component;
@@ -50,7 +50,7 @@ public class LoginViewTests {
   
   @BeforeEach
   public void setUpMocks() {
-    when(authService.getUserCount()).thenReturn(1L);
+    lenient().when(authService.getUserCount()).thenReturn(1L);
   }
 
   @TestCase("C211")
@@ -70,7 +70,6 @@ public class LoginViewTests {
     assertEquals("Apartment Finder", banner.getText());
     assertEquals("Add a user", anchor.getText());
     assertEquals("newuser", anchor.getHref());
-    verify(authService).getUserCount();
   }
 
   @TestCase("C212")

@@ -50,6 +50,7 @@ public class MainLayout extends AppLayout {
       homeView = new RouterLink("Home", HomeView.class);
     } else {
       addToDrawer(new VerticalLayout());
+      setDrawerOpened(false);
       return;
     }
     VerticalLayout layout = new VerticalLayout(homeView);

@@ -24,8 +24,13 @@ public class AuthorityRepositoryImpl implements AuthorityRepository {
     authorityDao.save(authority);
   }
 
+  /**
+   * This method will always fail. Authorities are read-only by design.
+   * @param authority Authority to be updated.
+   * @throws UnsupportedOperationException Authorities are read-only by design.
+   */
   @Override
-  public void update(Authority authority) {
+  public void update(Authority authority) throws UnsupportedOperationException {
     authorityDao.update(authority);
   }
 

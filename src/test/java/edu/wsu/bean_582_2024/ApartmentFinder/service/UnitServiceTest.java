@@ -22,17 +22,10 @@ public class UnitServiceTest {
     private UnitRepository unitRepositoryMock;
     @InjectMocks
     private UnitService unitService;
-    private static final String ADDRESS_1 = "100 Pullman Rd";
-    private static final int BEDROOMS_1 = 2;
-    private static final int BEDROOMS_2 = 3;
-    private static final double BATHROOMS_1 = 1.5D;
-    private static final double BATHROOMS_2 = 2.0D;
-    private static final String LIVING_ROOM_1 = "Elegant Living spaces";
-    private static final String LIVING_ROOM_2 = "Cozy living room";
-    private static final String KITCHEN_1 = "Modern kitchen";
-    private static final String KITCHEN_2 = "Traditional kitchen";
-    private static final Unit UNIT_1 = new Unit(ADDRESS_1, BEDROOMS_1, BATHROOMS_1, LIVING_ROOM_1, KITCHEN_1, true, null);
-    private static final Unit UNIT_2 = new Unit(ADDRESS_1, BEDROOMS_2, BATHROOMS_2, LIVING_ROOM_2, KITCHEN_2, false, null);
+    private static final Unit UNIT_1 = new Unit(TestUnits.ADDRESS_1, TestUnits.BEDROOMS_1, 
+        TestUnits.BATHROOMS_1, TestUnits.LIVING_ROOM_1, TestUnits.KITCHEN_1, true, null);
+    private static final Unit UNIT_2 = new Unit(TestUnits.ADDRESS_1, TestUnits.BEDROOMS_2, 
+        TestUnits.BATHROOMS_2, TestUnits.LIVING_ROOM_2, TestUnits.KITCHEN_2, false, null);
     private static final List<Unit> UNITS = List.of(UNIT_1, UNIT_2);
 
 

@@ -34,9 +34,9 @@ public class HomeViewTests {
     private HomeView homeView;
     @Mock
     private UnitService unitService;
-    private final static String ONE_HUNDRED_PERCENT = "100%";
+    final static String ONE_HUNDRED_PERCENT = "100%";
 
-    private record Children(HorizontalLayout toolbar, HorizontalLayout content){ }
+    record Children(HorizontalLayout toolbar, HorizontalLayout content){ }
 
     @TestCase("C31")
     @Test

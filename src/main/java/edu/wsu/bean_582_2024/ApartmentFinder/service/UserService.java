@@ -27,7 +27,7 @@ public class UserService {
   }
   
   public List<User> findUsers(String userFilter) {
-    if (userFilter == null || userFilter.isEmpty() || userFilter.isBlank())
+    if (userFilter == null || userFilter.isBlank())
       return getAllUsers();
     User result = userRepository.getUserByUsername(userFilter);
     if (result == null) return Collections.emptyList();

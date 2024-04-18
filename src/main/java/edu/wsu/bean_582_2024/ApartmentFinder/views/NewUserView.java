@@ -34,13 +34,19 @@ public class NewUserView extends Composite<Component> implements AfterNavigation
   @Override
   protected Component initContent() {
     TextField username = new TextField("Username");
+    username.getElement().setAttribute("data-testid", "username");
     PasswordField password1 = new PasswordField("Password");
+    password1.getElement().setAttribute("data-testid", "password1");
     PasswordField password2 = new PasswordField("Confirm password");
+    password2.getElement().setAttribute("data-testid", "password2");
     Button sendButton = new Button("Send", event -> register(username.getValue(),
         password1.getValue(), password2.getValue()));
+    sendButton.getElement().setAttribute("data-testid", "send");
     sendButton.addClickShortcut(Key.ENTER);
     VerticalLayout layout = new VerticalLayout(new H2("Register"), username, password1,
         password2, sendButton);
+    var layoutElement = layout.getElement();
+    layoutElement.setAttribute("data-testid", "newUser");
     layout.setAlignItems(Alignment.CENTER);
     return layout;
   }

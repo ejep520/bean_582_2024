@@ -9,11 +9,14 @@ export const options = {
               type: 'chromium',
           },
         },
+        vus: 10,
+        iterations: 100
       },
     },
   };
 
-  //set "K6_BROWSER_HEADLESS=false" && set "K6_BROWSER_ARGS='show-property-changed-rects' " && k6 run aptFinder.smoke.js
+//set "K6_BROWSER_HEADLESS=false" && set "K6_BROWSER_ARGS='show-property-changed-rects' " && k6 run aptFinder.smoke.js
+// Create janedoe user with password set to password before running this script
 const usernames = [];
 
 export default function() {
@@ -23,29 +26,11 @@ export default function() {
     //page.setViewportSize(1920, 1080);
     page.goto(url);
     page.waitForTimeout(2500);
-    if (page.url == 'http://localhost:8080/newuser'){
-        // New user
-        // Username: <input slot="input" type="text" id="input-vaadin-text-field-17" aria-labelledby="label-vaadin-text-field-8">
-        // Password1: <input slot="input" type="password" id="input-vaadin-password-field-18" autocapitalize="off" aria-labelledby="label-vaadin-password-field-11">
-        // Password2: <input slot="input" type="password" id="input-vaadin-password-field-19" autocapitalize="off" aria-labelledby="label-vaadin-password-field-14">
-        // Submit button: <vaadin-button tabindex="0" role="button">Send</vaadin-button>
 
-        const txtUsername = page.locator('input[name="username"]');
-        const password1 = page.locator('#input-vaadin-password-field-18');
-        const password2 = page.locator('#input-vaadin-password-field-19');
-        const submit = page.locator('vaadin-button[role="button"]');
-        let username = random();
-        txtUsername.type(username);
-        usernames[usernames.length] = username;
-        console.log('Username: ' + username);
-        password1.type('password');
-        password2.type('password');
-        usernames.add(username);
-        submit.click();
-    }
     // Login
     var username = usernames.pop(); //'janedoe';
     console.log('Username: ' + username);
+
     page.locator('#vaadinLoginUsername').type(username);
     page.locator('#vaadinLoginPassword').type('password');
     page.locator('vaadin-button[slot="submit"]').click();
@@ -57,22 +42,23 @@ export default function() {
     page.goto('http://localhost:8080/home');
     page.waitForTimeout(2500);
     page.goto('http://localhost:8080/newuser');
-    newUser();
+    newUser(page);
     page.waitForTimeout(2500);
 }
 
-const newUser = () => {
-    const txtUsername = page.locator('input[name="username"]');
-    const password1 = page.locator('#input-vaadin-password-field-18');
-    const password2 = page.locator('#input-vaadin-password-field-19');
-    const submit = page.locator('vaadin-button[role="button"]');
+const newUser = (page) => {
+    const txtUsername = page.locator('vaadin-text-field[data-testid="username"]');
+    const password1 = page.locator('vaadin-password-field[data-testid="password1"]');
+    const password2 = page.locator('vaadin-password-field[data-testid="password2"]');
+    const submit = page.locator('vaadin-button[data-testid="send"]');
     let username = random();
     txtUsername.type(username);
     usernames[usernames.length] = username;
     console.log('Username: ' + username);
     password1.type('password');
     password2.type('password');
-    usernames.add(username);
+    usernames.push(username);
+    page.waitForTimeout(2500);
     submit.click();
 }
 

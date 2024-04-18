@@ -62,6 +62,13 @@ public class OwnerForm extends FormLayout {
     bathrooms.setMin(0d);
     bathrooms.setMax(10.5d);
     bathrooms.setStep(0.5d);
+    address.getElement().setAttribute("data-testid", "address");
+    kitchen.getElement().setAttribute("data-testid", "kitchen");
+    livingRoom.getElement().setAttribute("data-testid", "livingRoom");
+    bedrooms.getElement().setAttribute("data-testid", "bedrooms");
+    bedrooms.getElement().setAttribute("data-testid", "bedrooms");
+    featured.getElement().setAttribute("data-testid", "featured");
+    user.getElement().setAttribute("data-testid", "owner");
     user.setItems(userService.getAllUsers());
     user.setReadOnly(!is_admin);
   }
@@ -75,6 +82,9 @@ public class OwnerForm extends FormLayout {
     cancel.addClickListener(event -> fireEvent(new CloseEvent(this)));
     save.addClickShortcut(Key.ENTER);
     cancel.addClickShortcut(Key.ESCAPE);
+    save.getElement().setAttribute("data-testid", "save");
+    cancel.getElement().setAttribute("data-testid", "cancel");
+    delete.getElement().setAttribute("data-testid", "delete");
     return new HorizontalLayout(save, delete, cancel);
   }
 

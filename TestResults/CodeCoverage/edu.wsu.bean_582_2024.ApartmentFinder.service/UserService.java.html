@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ApartmentFinder</a> &gt; <a href="index.source.html" class="el_package">edu.wsu.bean_582_2024.ApartmentFinder.service</a> &gt; <span class="el_source">UserService.java</span></div><h1>UserService.java</h1><pre class="source lang-java linenums">package edu.wsu.bean_582_2024.ApartmentFinder.service;
+
+import edu.wsu.bean_582_2024.ApartmentFinder.data.AuthorityRepository;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.UnitRepository;
+import edu.wsu.bean_582_2024.ApartmentFinder.data.UserRepository;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Authority;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+  private final UserRepository userRepository;
+  private final AuthorityRepository authRepository;
+  private final UnitRepository unitRepository;
+<span class="fc" id="L20">  public UserService (UserRepository userRepository, @Qualifier(&quot;AuthImpl&quot;) AuthorityRepository authRepository, UnitRepository unitRepository) {</span>
+<span class="fc" id="L21">    this.userRepository = userRepository;</span>
+<span class="fc" id="L22">    this.authRepository = authRepository;</span>
+<span class="fc" id="L23">    this.unitRepository = unitRepository;</span>
+<span class="fc" id="L24">  }</span>
+  public List&lt;User&gt; getAllUsers() {
+<span class="fc" id="L26">    return userRepository.getAll();</span>
+  }
+  
+  public List&lt;User&gt; findUsers(String userFilter) {
+<span class="fc bfc" id="L30" title="All 6 branches covered.">    if (userFilter == null || userFilter.isEmpty() || userFilter.isBlank())</span>
+<span class="fc" id="L31">      return getAllUsers();</span>
+<span class="fc" id="L32">    User result = userRepository.getUserByUsername(userFilter);</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">    if (result == null) return Collections.emptyList();</span>
+<span class="fc" id="L34">    else return List.of(result);</span>
+  }
+  
+  public void deleteUser(User user) {
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">    if (user == null) return;</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">    for (Authority authority : user.getAuthorities()) {</span>
+<span class="fc" id="L40">      authRepository.delete(authority);</span>
+      
+<span class="fc" id="L42">    }</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">    for (Unit unit : user.getUnits()) {</span>
+<span class="fc" id="L44">      unitRepository.delete(unit);</span>
+<span class="fc" id="L45">    }</span>
+<span class="fc" id="L46">    userRepository.delete(user);</span>
+<span class="fc" id="L47">  }</span>
+  
+  public void saveUser(User user) {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">    if (user == null) return;</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">    if (user.getId() == null)</span>
+<span class="fc" id="L52">      userRepository.add(user);</span>
+    else 
+<span class="fc" id="L54">      userRepository.update(user);</span>
+<span class="fc" id="L55">  }</span>
+  public Optional&lt;User&gt; findUserByUsername(String username) {
+<span class="fc" id="L57">    return Optional.ofNullable(userRepository.getUserByUsername(username));</span>
+  }
+  public Optional&lt;User&gt; findUserById(Long id) {
+<span class="fc" id="L60">    return userRepository.getUserById(id);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

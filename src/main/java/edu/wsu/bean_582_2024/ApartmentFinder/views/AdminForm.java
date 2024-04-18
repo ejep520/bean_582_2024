@@ -37,6 +37,13 @@ public class AdminForm extends FormLayout {
     binder.bindInstanceFields(this);
     role.setItems(Role.values());
     enabled.setReadOnly(false);
+    username.getElement().setAttribute("data-testid", "username");
+    pass1.getElement().setAttribute("data-testid", "password1");
+    pass2.getElement().setAttribute("data-testid", "password2");
+    enabled.getElement().setAttribute("data-testid", "enabled");
+    save.getElement().setAttribute("data-testid", "save");
+    cancel.getElement().setAttribute("data-testid", "cancel");
+    delete.getElement().setAttribute("data-testid", "delete");
     add(username, pass1, pass2, role, enabled, createButtonLayout());
   }
 

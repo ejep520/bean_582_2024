@@ -116,13 +116,16 @@ public class AdminView extends VerticalLayout {
 
   private Component getToolbar() {
     filterText.setPlaceholder("Filter by username");
+    filterText.getElement().setAttribute("data-testid", "filter");
     filterText.setClearButtonVisible(true);
     filterText.setValueChangeMode(ValueChangeMode.LAZY);
     filterText.addValueChangeListener(event -> updateList());
     Button addUserButton = new Button("Add User");
+    addUserButton.getElement().setAttribute("data-testid", "add-user");
     addUserButton.addClickListener(click -> addUser());
     HorizontalLayout toolbar = new HorizontalLayout(filterText, addUserButton);
     toolbar.addClassName("toolbar");
+    toolbar.getElement().setAttribute("data-testid", "toolbar");
     return toolbar;
   }
 

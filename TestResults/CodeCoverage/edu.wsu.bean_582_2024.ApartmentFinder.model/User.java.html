@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ApartmentFinder</a> &gt; <a href="index.source.html" class="el_package">edu.wsu.bean_582_2024.ApartmentFinder.model</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package edu.wsu.bean_582_2024.ApartmentFinder.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import java.io.Serial;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.springframework.security.core.CredentialsContainer;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.DigestUtils;
+
+@Table(name = &quot;apt_users&quot;)
+@Entity
+public class User extends AbstractEntity implements UserDetails, CredentialsContainer {
+  @Serial
+  private static final long serialVersionUID = -614412803435355964L;
+  @NotNull
+  @NotEmpty
+  private String username;
+  @NotNull
+  @NotEmpty
+  private String passwordHash;
+  private String passwordSalt;
+  @NotNull
+  private Boolean enabled;
+  private Role role;
+<span class="fc" id="L37">  @OneToMany(targetEntity = Authority.class, fetch = FetchType.EAGER, mappedBy = &quot;user&quot;)</span>
+  @Cascade(CascadeType.ALL)
+  private List&lt;Authority&gt; authorities = new ArrayList&lt;&gt;();
+<span class="fc" id="L40">  @OneToMany(targetEntity=Unit.class, fetch = FetchType.EAGER, mappedBy = &quot;user&quot;)</span>
+  @Cascade(CascadeType.ALL)
+  private List&lt;Unit&gt; units = new ArrayList&lt;&gt;();
+  @Transient
+  private transient String newPassword;
+  @Transient
+  private transient boolean passwordChanged;
+  
+
+<span class="fc" id="L49">  public User() {</span>
+<span class="fc" id="L50">    generateSalt();</span>
+<span class="fc" id="L51">    username = &quot;&quot;;</span>
+<span class="fc" id="L52">    passwordHash = &quot;&quot;;</span>
+<span class="fc" id="L53">    enabled = false;</span>
+<span class="fc" id="L54">    newPassword = &quot;&quot;;</span>
+<span class="fc" id="L55">    passwordChanged = false;</span>
+<span class="fc" id="L56">  }</span>
+
+<span class="fc" id="L58">  public User(String username, String password, Role role) {</span>
+<span class="fc" id="L59">    generateSalt();</span>
+<span class="fc" id="L60">    this.username = username;</span>
+<span class="fc" id="L61">    this.role = role;</span>
+<span class="fc" id="L62">    enabled = true;</span>
+<span class="fc" id="L63">    this.passwordHash =</span>
+<span class="fc" id="L64">        DigestUtils.md5DigestAsHex((password + passwordSalt).getBytes(StandardCharsets.UTF_8));</span>
+<span class="fc" id="L65">    passwordChanged = false;</span>
+<span class="fc" id="L66">  }</span>
+
+  public String getUsername() {
+<span class="fc" id="L69">    return username;</span>
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+<span class="fc" id="L74">    return true;</span>
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+<span class="fc" id="L79">    return true;</span>
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+<span class="fc" id="L84">    return true;</span>
+  }
+
+  @Override
+  public boolean isEnabled() {
+<span class="fc" id="L89">    return enabled;</span>
+  }
+
+  public void setUsername(String username) {
+<span class="fc" id="L93">    this.username = username;</span>
+<span class="fc" id="L94">  }</span>
+
+  @Override
+  public Collection&lt;Authority&gt; getAuthorities() {
+<span class="fc" id="L98">    return authorities;</span>
+  }
+
+  public String getPassword() {
+<span class="fc" id="L102">    return passwordHash;</span>
+  }
+
+  public void setPassword(String password) {
+<span class="fc" id="L106">    setNewPassword(password);</span>
+<span class="fc" id="L107">  }</span>
+
+  public Boolean getEnabled() {
+<span class="fc" id="L110">    return enabled;</span>
+  }
+
+  public void setEnabled(Boolean enabled) {
+<span class="fc" id="L114">    this.enabled = enabled;</span>
+<span class="fc" id="L115">  }</span>
+
+  public Role getRole() {
+<span class="fc" id="L118">    return role;</span>
+  }
+
+  public void setRole(Role role) {
+<span class="fc" id="L122">    this.role = role;</span>
+<span class="fc" id="L123">  }</span>
+
+  public boolean checkPassword(String password) {
+<span class="fc" id="L126">    String attemptHash = DigestUtils</span>
+<span class="fc" id="L127">        .md5DigestAsHex((password + passwordSalt).getBytes(StandardCharsets.UTF_8)); </span>
+<span class="fc" id="L128">    return attemptHash.equals(passwordHash);</span>
+  }
+
+  public void generateSalt() {
+<span class="fc" id="L132">    passwordSalt = RandomStringUtils.random(10, true, true);</span>
+<span class="fc" id="L133">  }</span>
+
+  public List&lt;Unit&gt; getUnits() {
+<span class="fc" id="L136">    return units;</span>
+  }
+
+  @Override
+<span class="nc" id="L140">  public void eraseCredentials() {}</span>
+  
+  @Override
+  public String toString() {
+<span class="fc" id="L144">    return username;</span>
+  }
+  
+  private boolean digestNewPassword() {
+<span class="fc bfc" id="L148" title="All 2 branches covered.">    if (!checkPassword(newPassword)) {</span>
+<span class="fc" id="L149">      passwordHash = DigestUtils.md5DigestAsHex(</span>
+<span class="fc" id="L150">          (newPassword + passwordSalt).getBytes(StandardCharsets.UTF_8));</span>
+<span class="fc" id="L151">      newPassword = null;</span>
+<span class="fc" id="L152">      return true;</span>
+    }
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">    if (newPassword != null) {</span>
+<span class="fc" id="L155">      newPassword = null;</span>
+    }
+<span class="fc" id="L157">    return false;</span>
+  }
+  
+  public void setNewPassword(String newPassword) {
+<span class="pc bpc" id="L161" title="1 of 4 branches missed.">    if (newPassword != null &amp;&amp; !newPassword.isBlank())</span>
+<span class="fc" id="L162">      this.newPassword = newPassword;</span>
+<span class="fc" id="L163">    passwordChanged = digestNewPassword();</span>
+<span class="fc" id="L164">  }</span>
+  
+  public boolean getPasswordChanged() {
+<span class="fc" id="L167">    return passwordChanged;</span>
+  }
+
+  public void setPasswordSalt(String passwordSalt) {
+<span class="fc" id="L171">    this.passwordSalt = passwordSalt;</span>
+<span class="fc" id="L172">  }</span>
+
+  public void setAuthorities(List&lt;Authority&gt; authorities) {
+<span class="fc" id="L175">    this.authorities = authorities;</span>
+<span class="fc" id="L176">  }</span>
+
+  public void setUnits(List&lt;Unit&gt; units) {
+<span class="nc" id="L179">    this.units = units;</span>
+<span class="nc" id="L180">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

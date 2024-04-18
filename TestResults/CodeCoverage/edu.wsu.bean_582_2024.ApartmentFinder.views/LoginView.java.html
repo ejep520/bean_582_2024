@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ApartmentFinder</a> &gt; <a href="index.source.html" class="el_package">edu.wsu.bean_582_2024.ApartmentFinder.views</a> &gt; <span class="el_source">LoginView.java</span></div><h1>LoginView.java</h1><pre class="source lang-java linenums">package edu.wsu.bean_582_2024.ApartmentFinder.views;
+
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.login.AbstractLogin;
+import com.vaadin.flow.component.login.AbstractLogin.LoginEvent;
+import com.vaadin.flow.component.login.LoginForm;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
+import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService;
+import edu.wsu.bean_582_2024.ApartmentFinder.service.AuthService.AuthException;
+
+
+@Route(&quot;login&quot;)
+@RouteAlias(&quot;/&quot;)
+@PageTitle(&quot;Login&quot;)
+@AnonymousAllowed
+public class LoginView extends VerticalLayout
+    implements BeforeEnterObserver, ComponentEventListener&lt;AbstractLogin.LoginEvent&gt; {
+<span class="fc" id="L28">  private static final Class&lt;? extends Component&gt; LOGIN_SUCCESS_URL = HomeView.class;</span>
+<span class="fc" id="L29">  private final LoginForm login = new LoginForm();</span>
+  private final AuthService authService;
+<span class="fc" id="L31">  private final UI ui = UI.getCurrent();</span>
+
+<span class="fc" id="L33">  public LoginView(AuthService authService) {</span>
+<span class="fc" id="L34">    this.authService = authService;</span>
+<span class="fc" id="L35">    addClassName(&quot;login-view&quot;);</span>
+<span class="fc" id="L36">    setSizeFull();</span>
+<span class="fc" id="L37">    setAlignItems(Alignment.CENTER);</span>
+<span class="fc" id="L38">    setJustifyContentMode(JustifyContentMode.CENTER);</span>
+<span class="fc" id="L39">    login.addLoginListener(this);</span>
+<span class="fc" id="L40">    login.setForgotPasswordButtonVisible(false);</span>
+<span class="fc" id="L41">    add(new H1(&quot;Apartment Finder&quot;), login, new Anchor(&quot;newuser&quot;, &quot;Add a user&quot;));</span>
+<span class="fc" id="L42">  }</span>
+
+  @Override
+  public void onComponentEvent(LoginEvent loginEvent) {
+    boolean authenticated;
+    try {
+<span class="fc" id="L48">      authenticated = authService.authenticate(loginEvent.getUsername(), loginEvent.getPassword());</span>
+<span class="fc" id="L49">    } catch (AuthException e) {</span>
+<span class="fc" id="L50">      login.setError(true);</span>
+<span class="fc" id="L51">      return;</span>
+<span class="fc" id="L52">    }</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">    if (authenticated) {</span>
+<span class="nc" id="L54">      ui.navigate(LOGIN_SUCCESS_URL);</span>
+    } else
+<span class="fc" id="L56">      login.setError(true);</span>
+<span class="fc" id="L57">  }</span>
+
+  @Override
+  public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">    if (authService.getUserCount() == 0L)</span>
+<span class="nc" id="L62">      beforeEnterEvent.rerouteTo(NewUserView.class);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">    else if (beforeEnterEvent.getLocation().getQueryParameters().getParameters().containsKey(&quot;error&quot;))</span>
+<span class="fc" id="L64">      login.setError(true);</span>
+<span class="fc" id="L65">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

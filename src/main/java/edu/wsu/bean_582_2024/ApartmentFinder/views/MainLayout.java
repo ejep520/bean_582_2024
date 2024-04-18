@@ -48,20 +48,24 @@ public class MainLayout extends AppLayout {
     Optional<UserDetails> details = securityService.getAuthenticatedUser();
     if (details.isPresent()) {
       homeView = new RouterLink("Home", HomeView.class);
+      homeView.getElement().setAttribute("data-testid", "homeLink");
     } else {
       addToDrawer(new VerticalLayout());
       setDrawerOpened(false);
       return;
     }
     VerticalLayout layout = new VerticalLayout(homeView);
+    layout.getElement().setAttribute("data-testid", "drawer");
     if (details.get().getAuthorities().stream()
         .anyMatch(auth -> auth.getAuthority().equals("ROLE_OWNER"))) {
       ownerView = new RouterLink("Unit Editing", OwnerView.class);
+      ownerView.getElement().setAttribute("data-testid", "ownerLink");
       layout.add(ownerView);
     }
     if (details.get().getAuthorities().stream()
         .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
       adminView = new RouterLink("User Administration", AdminView.class);
+      adminView.getElement().setAttribute("data-testid", "adminLink");
       layout.add(adminView);
     }
     homeView.setHighlightCondition(HighlightConditions.sameLocation());

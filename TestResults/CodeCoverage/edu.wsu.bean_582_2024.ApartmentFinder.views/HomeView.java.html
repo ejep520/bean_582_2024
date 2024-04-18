@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HomeView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ApartmentFinder</a> &gt; <a href="index.source.html" class="el_package">edu.wsu.bean_582_2024.ApartmentFinder.views</a> &gt; <span class="el_source">HomeView.java</span></div><h1>HomeView.java</h1><pre class="source lang-java linenums">package edu.wsu.bean_582_2024.ApartmentFinder.views;
+
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
+import edu.wsu.bean_582_2024.ApartmentFinder.service.UnitService;
+import jakarta.annotation.security.PermitAll;
+
+@PageTitle(&quot;Apartment Finder&quot;)
+@Route(value = &quot;/home&quot;, layout = MainLayout.class)
+@PermitAll
+public class HomeView extends VerticalLayout {
+  private final UnitService unitService;
+<span class="fc" id="L20">  private final TextField filterText = new TextField(&quot;Filter&quot;);</span>
+<span class="fc" id="L21">  private final Grid&lt;Unit&gt; grid = new Grid&lt;&gt;(Unit.class, false);</span>
+
+<span class="fc" id="L23">  public HomeView(UnitService unitService) {</span>
+<span class="fc" id="L24">    this.unitService = unitService;</span>
+<span class="fc" id="L25">    addClassName(&quot;home-view&quot;);</span>
+<span class="fc" id="L26">    setSizeFull();</span>
+<span class="fc" id="L27">    configureGrid();</span>
+<span class="fc" id="L28">    add(getToolbar(), getContent());</span>
+<span class="fc" id="L29">  }</span>
+
+  private Component getContent() {
+<span class="fc" id="L32">    HorizontalLayout content = new HorizontalLayout(grid);</span>
+<span class="fc" id="L33">    content.setFlexGrow(2, grid);</span>
+<span class="fc" id="L34">    content.addClassNames(&quot;content&quot;);</span>
+<span class="fc" id="L35">    content.setSizeFull();</span>
+
+<span class="fc" id="L37">    return content;</span>
+  }
+
+  private void configureGrid() {
+<span class="fc" id="L41">    grid.setClassName(&quot;owner-grid&quot;);</span>
+<span class="fc" id="L42">    grid.setSizeFull();</span>
+<span class="fc" id="L43">    grid.setColumns(&quot;address&quot;, &quot;bedrooms&quot;, &quot;bathrooms&quot;, &quot;kitchen&quot;, &quot;livingRoom&quot;, &quot;featured&quot;);</span>
+<span class="fc" id="L44">    grid.getColumns().forEach(col -&gt; col.setAutoWidth(true));</span>
+<span class="fc" id="L45">    grid.setItems(unitService.getAllUnits(true));</span>
+<span class="fc" id="L46">  }</span>
+
+  private void updateList() {
+<span class="nc" id="L49">    grid.setItems(unitService.findUnits(filterText.getValue()));</span>
+<span class="nc" id="L50">  }</span>
+
+  private Component getToolbar() {
+<span class="fc" id="L53">    filterText.setPlaceholder(&quot;Filter by address&quot;);</span>
+<span class="fc" id="L54">    filterText.getElement().setAttribute(&quot;data-testid&quot;, &quot;filter&quot;);</span>
+<span class="fc" id="L55">    filterText.setClearButtonVisible(true);</span>
+<span class="fc" id="L56">    filterText.setValueChangeMode(ValueChangeMode.LAZY);</span>
+<span class="pc" id="L57">    filterText.addValueChangeListener(event -&gt; updateList());</span>
+<span class="fc" id="L58">    HorizontalLayout toolbar = new HorizontalLayout(filterText);</span>
+<span class="fc" id="L59">    toolbar.addClassName(&quot;toolbar&quot;);</span>
+<span class="fc" id="L60">    toolbar.getElement().setAttribute(&quot;data-testid&quot;, &quot;toolbar&quot;);</span>
+<span class="fc" id="L61">    return toolbar;</span>
+  }
+  
+  public Grid&lt;Unit&gt; getGrid() {
+<span class="fc" id="L65">	    return grid;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

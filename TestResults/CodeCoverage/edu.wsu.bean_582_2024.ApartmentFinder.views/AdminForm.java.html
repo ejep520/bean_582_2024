@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminForm.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ApartmentFinder</a> &gt; <a href="index.source.html" class="el_package">edu.wsu.bean_582_2024.ApartmentFinder.views</a> &gt; <span class="el_source">AdminForm.java</span></div><h1>AdminForm.java</h1><pre class="source lang-java linenums">package edu.wsu.bean_582_2024.ApartmentFinder.views;
+
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.listbox.ListBox;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.data.binder.Binder;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
+import jakarta.annotation.security.RolesAllowed;
+
+@RolesAllowed(&quot;ADMIN&quot;)
+public class AdminForm extends FormLayout {
+  private final Binder&lt;User&gt; binder;
+<span class="fc" id="L24">  final TextField username = new TextField(&quot;username&quot;);</span>
+<span class="fc" id="L25">  final PasswordField pass1 = new PasswordField(&quot;password&quot;);</span>
+<span class="fc" id="L26">  final PasswordField pass2 = new PasswordField(&quot;confirm password&quot;);</span>
+<span class="fc" id="L27">  final ListBox&lt;Role&gt; role = new ListBox&lt;&gt;();</span>
+<span class="fc" id="L28">  final Checkbox enabled = new Checkbox(&quot;enabled&quot;);</span>
+<span class="fc" id="L29">  Button save = new Button(&quot;save&quot;);</span>
+<span class="fc" id="L30">  Button delete = new Button(&quot;delete&quot;);</span>
+<span class="fc" id="L31">  Button cancel = new Button(&quot;cancel&quot;);</span>
+
+<span class="fc" id="L33">  public AdminForm() {</span>
+<span class="fc" id="L34">    addClassName(&quot;admin-form&quot;);</span>
+<span class="fc" id="L35">    binder = new BeanValidationBinder&lt;&gt;(User.class);</span>
+<span class="fc" id="L36">    binder.bind(enabled, User::getEnabled, User::setEnabled);</span>
+<span class="fc" id="L37">    binder.bindInstanceFields(this);</span>
+<span class="fc" id="L38">    role.setItems(Role.values());</span>
+<span class="fc" id="L39">    enabled.setReadOnly(false);</span>
+<span class="fc" id="L40">    username.getElement().setAttribute(&quot;data-testid&quot;, &quot;username&quot;);</span>
+<span class="fc" id="L41">    pass1.getElement().setAttribute(&quot;data-testid&quot;, &quot;password1&quot;);</span>
+<span class="fc" id="L42">    pass2.getElement().setAttribute(&quot;data-testid&quot;, &quot;password2&quot;);</span>
+<span class="fc" id="L43">    enabled.getElement().setAttribute(&quot;data-testid&quot;, &quot;enabled&quot;);</span>
+<span class="fc" id="L44">    save.getElement().setAttribute(&quot;data-testid&quot;, &quot;save&quot;);</span>
+<span class="fc" id="L45">    cancel.getElement().setAttribute(&quot;data-testid&quot;, &quot;cancel&quot;);</span>
+<span class="fc" id="L46">    delete.getElement().setAttribute(&quot;data-testid&quot;, &quot;delete&quot;);</span>
+<span class="fc" id="L47">    add(username, pass1, pass2, role, enabled, createButtonLayout());</span>
+<span class="fc" id="L48">  }</span>
+
+  private Component createButtonLayout() {
+<span class="fc" id="L51">    save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);</span>
+<span class="fc" id="L52">    cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);</span>
+<span class="fc" id="L53">    delete.addThemeVariants(ButtonVariant.LUMO_ERROR);</span>
+<span class="fc" id="L54">    save.addClickListener(event -&gt; validateAndSave());</span>
+<span class="fc" id="L55">    delete.addClickListener(event -&gt; fireEvent(new DeleteEvent(this, binder.getBean())));</span>
+<span class="fc" id="L56">    cancel.addClickListener(event -&gt; fireEvent(new CloseEvent(this)));</span>
+<span class="fc" id="L57">    save.addClickShortcut(Key.ENTER);</span>
+<span class="fc" id="L58">    cancel.addClickShortcut(Key.ESCAPE);</span>
+<span class="fc" id="L59">    return new HorizontalLayout(save, delete, cancel);</span>
+  }
+
+  public void setUser(User user) {
+<span class="fc" id="L63">    binder.setBean(user);</span>
+<span class="fc" id="L64">    binder.readBean(user);</span>
+<span class="fc" id="L65">  }</span>
+
+  User getUser() {
+<span class="fc" id="L68">    return binder.getBean();</span>
+  }
+
+  void validateAndSave() {
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">    if (binder.isValid())</span>
+<span class="fc" id="L73">      fireEvent(new SaveEvent(this, binder.getBean()));</span>
+<span class="fc" id="L74">  }</span>
+
+  public static abstract class AdminFormEvent extends ComponentEvent&lt;AdminForm&gt; {
+
+    private final User user;
+
+    public AdminFormEvent(AdminForm source, User user) {
+<span class="fc" id="L81">      super(source, false);</span>
+<span class="fc" id="L82">      this.user = user;</span>
+<span class="fc" id="L83">    }</span>
+
+    public User getUser() {
+<span class="fc" id="L86">      return user;</span>
+    }
+  }
+  public static class SaveEvent extends AdminFormEvent {
+    public SaveEvent(AdminForm source, User user) {
+<span class="fc" id="L91">      super(source, user);</span>
+<span class="pc bpc" id="L92" title="1 of 4 branches missed.">      if (user.getId() == null || user.getId() &lt;= 0)</span>
+<span class="fc" id="L93">        user.setPassword(source.pass1.getValue());</span>
+<span class="fc" id="L94">    }</span>
+  }
+
+  public static class DeleteEvent extends AdminFormEvent {
+    public DeleteEvent(AdminForm source, User user) {
+<span class="fc" id="L99">      super(source, user);</span>
+<span class="fc" id="L100">    }</span>
+  }
+
+  public static class CloseEvent extends AdminFormEvent {
+    public CloseEvent(AdminForm source) {
+<span class="fc" id="L105">      super(source, null);</span>
+<span class="fc" id="L106">    }</span>
+  }
+
+  public void addSaveListener(ComponentEventListener&lt;SaveEvent&gt; listener) {
+<span class="fc" id="L110">    addListener(SaveEvent.class, listener);</span>
+<span class="fc" id="L111">  }</span>
+
+  public void addDeleteListener(ComponentEventListener&lt;DeleteEvent&gt; listener) {
+<span class="fc" id="L114">    addListener(DeleteEvent.class, listener);</span>
+<span class="fc" id="L115">  }</span>
+
+  public void addCloseListener(ComponentEventListener&lt;CloseEvent&gt; listener) {
+<span class="fc" id="L118">    addListener(CloseEvent.class, listener);</span>
+<span class="fc" id="L119">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

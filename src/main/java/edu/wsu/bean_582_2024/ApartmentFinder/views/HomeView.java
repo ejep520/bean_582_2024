@@ -51,11 +51,13 @@ public class HomeView extends VerticalLayout {
 
   private Component getToolbar() {
     filterText.setPlaceholder("Filter by address");
+    filterText.getElement().setAttribute("data-testid", "filter");
     filterText.setClearButtonVisible(true);
     filterText.setValueChangeMode(ValueChangeMode.LAZY);
     filterText.addValueChangeListener(event -> updateList());
     HorizontalLayout toolbar = new HorizontalLayout(filterText);
     toolbar.addClassName("toolbar");
+    toolbar.getElement().setAttribute("data-testid", "toolbar");
     return toolbar;
   }
   

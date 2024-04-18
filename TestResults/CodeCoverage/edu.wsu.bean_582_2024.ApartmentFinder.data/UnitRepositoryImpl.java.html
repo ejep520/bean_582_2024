@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UnitRepositoryImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ApartmentFinder</a> &gt; <a href="index.source.html" class="el_package">edu.wsu.bean_582_2024.ApartmentFinder.data</a> &gt; <span class="el_source">UnitRepositoryImpl.java</span></div><h1>UnitRepositoryImpl.java</h1><pre class="source lang-java linenums">package edu.wsu.bean_582_2024.ApartmentFinder.data;
+
+import edu.wsu.bean_582_2024.ApartmentFinder.dao.UnitDao;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
+import java.util.List;
+import org.springframework.stereotype.Component;
+
+@Component
+public class UnitRepositoryImpl implements UnitRepository {
+
+  private final UnitDao unitDao;
+  
+<span class="fc" id="L14">  public UnitRepositoryImpl(UnitDao unitDao) {</span>
+<span class="fc" id="L15">    this.unitDao = unitDao;</span>
+<span class="fc" id="L16">  }</span>
+  
+  @Override
+  public List&lt;Unit&gt; getAll() {
+<span class="fc" id="L20">    return unitDao.getAll();</span>
+  }
+  
+  @Override
+  public Unit get(Long id) {
+<span class="fc" id="L25">    return unitDao.get(id).orElse(null);</span>
+  }
+
+  @Override
+  public void add(Unit unit) {
+<span class="fc" id="L30">    unitDao.save(unit);</span>
+<span class="fc" id="L31">  }</span>
+
+  @Override
+  public void update(Unit unit) {
+<span class="fc" id="L35">    unitDao.update(unit);</span>
+<span class="fc" id="L36">  }</span>
+
+  @Override
+  public void delete(Unit unit) {
+<span class="fc" id="L40">    unitDao.delete(unit);</span>
+<span class="fc" id="L41">  }</span>
+
+  @Override
+  public List&lt;Unit&gt; search(String searchKey) {
+<span class="fc" id="L45">    return unitDao.find(searchKey);</span>
+  }
+
+  @Override
+  public List&lt;Unit&gt; findByUser(User searchKey) {
+<span class="fc" id="L50">    return unitDao.findByUser(searchKey);</span>
+  }
+
+  @Override
+  public List&lt;Unit&gt; findOwnedUnitsByFilter(User user, String searchKey) {
+<span class="fc" id="L55">    return unitDao.findOwnedUnitsByFilter(user, searchKey);</span>
+  }
+  
+  @Override
+  public Long count() {
+<span class="fc" id="L60">    return unitDao.count();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DaoHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ApartmentFinder</a> &gt; <a href="index.source.html" class="el_package">edu.wsu.bean_582_2024.ApartmentFinder.dao</a> &gt; <span class="el_source">DaoHelper.java</span></div><h1>DaoHelper.java</h1><pre class="source lang-java linenums">package edu.wsu.bean_582_2024.ApartmentFinder.dao;
+
+import edu.wsu.bean_582_2024.ApartmentFinder.model.AbstractEntity;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Consumer;
+import org.hibernate.Transaction;
+import org.hibernate.engine.spi.SessionImplementor;
+import org.slf4j.Logger;
+
+public abstract class DaoHelper{
+  EntityManager entityManager;
+  EntityManagerFactory entityManagerFactory;
+  Logger logger;
+<span class="fc" id="L18">  public DaoHelper(EntityManagerFactory entityManagerFactory, Logger logger) {</span>
+<span class="fc" id="L19">    this.entityManagerFactory = entityManagerFactory;</span>
+<span class="fc" id="L20">    this.entityManager = this.entityManagerFactory.createEntityManager();</span>
+<span class="fc" id="L21">    this.logger = logger;</span>
+<span class="fc" id="L22">  }</span>
+  
+  &lt;T extends AbstractEntity&gt; List&lt;T&gt; castList(Class&lt;? extends T&gt; clazz, Collection&lt;?&gt; rawCollection) {
+<span class="fc" id="L25">    List&lt;T&gt; returnValue = new ArrayList&lt;&gt;(rawCollection.size());</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">    for (Object o : rawCollection) {</span>
+      try{
+<span class="fc" id="L28">        returnValue.add(clazz.cast(o));</span>
+<span class="nc" id="L29">      } catch (ClassCastException err) {</span>
+<span class="nc" id="L30">        logger.atWarn().log(String.format(&quot;Casting to a %s failed. %s&quot;, clazz, err));</span>
+<span class="fc" id="L31">      }</span>
+<span class="fc" id="L32">    }</span>
+<span class="fc" id="L33">    return returnValue;</span>
+  }
+
+  void executeInsideTransaction(Consumer&lt;EntityManager&gt; action) {
+<span class="fc" id="L37">    SessionImplementor sessionImplementor = (SessionImplementor) entityManager.getDelegate();</span>
+<span class="fc" id="L38">    Transaction transaction = sessionImplementor.getTransaction();</span>
+    try {
+<span class="fc" id="L40">      transaction.begin();</span>
+<span class="fc" id="L41">      action.accept(entityManager);</span>
+<span class="fc" id="L42">      transaction.commit();</span>
+<span class="nc" id="L43">    } catch (RuntimeException err) {</span>
+<span class="nc" id="L44">      transaction.rollback();</span>
+<span class="nc" id="L45">      throw err;</span>
+<span class="fc" id="L46">    }</span>
+<span class="fc" id="L47">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

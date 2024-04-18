@@ -67,6 +67,7 @@ public class OwnerView extends VerticalLayout {
 
   private void configureGrid() {
     getGrid().setClassName("owner-grid");
+    getGrid().getElement().setAttribute("data-testid", "ownerGrid");
     getGrid().setSizeFull();
     getGrid().setColumns("address", "bedrooms", "bathrooms", "kitchen", "livingRoom", "featured");
     getGrid().asSingleSelect().addValueChangeListener(event -> editUnit(event.getValue()));
@@ -125,10 +126,12 @@ public class OwnerView extends VerticalLayout {
 
   private Component getToolbar() {
     filterText.setPlaceholder("Filter");
+    filterText.getElement().setAttribute("data-testid", "filter");
     filterText.setClearButtonVisible(true);
     filterText.setValueChangeMode(ValueChangeMode.LAZY);
     filterText.addValueChangeListener(event -> updateList());
     Button addButton = new Button("Add Unit");
+    addButton.getElement().setAttribute("data-testid", "add-unit");
     addButton.addClickListener(event -> {
       Unit unit = new Unit();
       unit.setUser(owner_id);
@@ -136,6 +139,7 @@ public class OwnerView extends VerticalLayout {
     });
     HorizontalLayout toolbar = new HorizontalLayout(filterText, addButton);
     toolbar.addClassName("toolbar");
+    toolbar.getElement().setAttribute("data-testid", "toolbar");
     return toolbar;
   }
 

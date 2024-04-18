@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ApartmentFinder</a> &gt; <a href="index.source.html" class="el_package">edu.wsu.bean_582_2024.ApartmentFinder.dao</a> &gt; <span class="el_source">UserDao.java</span></div><h1>UserDao.java</h1><pre class="source lang-java linenums">package edu.wsu.bean_582_2024.ApartmentFinder.dao;
+
+import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
+import java.util.List;
+import java.util.Optional;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserDao extends DaoHelper implements Dao&lt;User&gt;{
+
+  public UserDao(EntityManagerFactory entityManagerFactory) {
+<span class="fc" id="L17">    super(entityManagerFactory, LoggerFactory.getLogger(UserDao.class));</span>
+<span class="fc" id="L18">  }</span>
+  
+  @Override
+  public Optional&lt;User&gt; get(long id) {
+<span class="fc" id="L22">    return Optional.ofNullable(entityManager.find(User.class, id));</span>
+  }
+
+  @Override
+  public List&lt;User&gt; getAll() {
+<span class="fc" id="L27">    Query query = entityManager.createQuery(&quot;SELECT e FROM User e&quot;);</span>
+<span class="fc" id="L28">    return castList(User.class, query.getResultList());</span>
+  }
+
+  @Override
+  public void save(User user) {
+<span class="fc" id="L33">    executeInsideTransaction(entityManager -&gt; entityManager.persist(user));</span>
+<span class="fc" id="L34">  }</span>
+
+  @Override
+  public void update(User user) {
+<span class="fc" id="L38">    EntityManager localManager = entityManagerFactory.createEntityManager();</span>
+<span class="fc" id="L39">    EntityTransaction transaction = localManager.getTransaction();</span>
+<span class="fc" id="L40">    transaction.begin();</span>
+<span class="fc" id="L41">    localManager.merge(user);</span>
+<span class="fc" id="L42">    transaction.commit();</span>
+<span class="fc" id="L43">  }</span>
+
+  @Override
+  public void delete(User user) {
+<span class="fc" id="L47">    executeInsideTransaction(entityManager -&gt;</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user)));</span>
+<span class="fc" id="L49">  }</span>
+  
+  public User findUser(String searchKey) {
+<span class="fc" id="L52">    List&lt;User&gt; listUser = castList(User.class,</span>
+<span class="fc" id="L53">        entityManager.createQuery(&quot;SELECT e from User e WHERE e.username LIKE :searchKey&quot;)</span>
+<span class="fc" id="L54">            .setParameter(&quot;searchKey&quot;, searchKey)</span>
+<span class="fc" id="L55">            .getResultList());</span>
+    try {
+<span class="fc" id="L57">      return listUser.get(0);</span>
+<span class="fc" id="L58">    } catch (IndexOutOfBoundsException err) {</span>
+<span class="fc" id="L59">      return null;</span>
+    }
+  }
+  
+  public Long count() {
+    Long returnValue;
+    try {
+<span class="fc" id="L66">      returnValue = (Long) entityManager</span>
+<span class="fc" id="L67">          .createQuery(&quot;select count(e.id) from User e&quot;)</span>
+<span class="fc" id="L68">          .getSingleResult();</span>
+<span class="nc" id="L69">    } catch (ClassCastException err) {</span>
+<span class="nc" id="L70">      logger.atError().log(String.format(&quot;Unable to cast to Long. %s&quot;, err));</span>
+<span class="nc" id="L71">      returnValue = 0L;</span>
+<span class="fc" id="L72">    }</span>
+<span class="fc" id="L73">    return returnValue;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

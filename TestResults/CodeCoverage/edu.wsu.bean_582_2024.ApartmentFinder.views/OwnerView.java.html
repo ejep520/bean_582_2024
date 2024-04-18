@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OwnerView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ApartmentFinder</a> &gt; <a href="index.source.html" class="el_package">edu.wsu.bean_582_2024.ApartmentFinder.views</a> &gt; <span class="el_source">OwnerView.java</span></div><h1>OwnerView.java</h1><pre class="source lang-java linenums">package edu.wsu.bean_582_2024.ApartmentFinder.views;
+
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Role;
+import edu.wsu.bean_582_2024.ApartmentFinder.model.User;
+import edu.wsu.bean_582_2024.ApartmentFinder.service.SecurityService;
+import edu.wsu.bean_582_2024.ApartmentFinder.service.UserService;
+import org.springframework.context.annotation.Scope;
+
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+
+import edu.wsu.bean_582_2024.ApartmentFinder.model.Unit;
+import edu.wsu.bean_582_2024.ApartmentFinder.service.UnitService;
+import jakarta.annotation.security.RolesAllowed;
+import org.springframework.security.core.userdetails.UserDetails;
+
+@SpringComponent
+@Scope(&quot;prototype&quot;)
+@Route(value = &quot;/owner&quot;, layout = MainLayout.class)
+@PageTitle(&quot;Unit Administration | Bean 582&quot;)
+@RolesAllowed({&quot;OWNER&quot;, &quot;ADMIN&quot;})
+public class OwnerView extends VerticalLayout {
+  private final UnitService unitService;
+  private final UserService userService;
+  private final User owner_id;
+  private final boolean is_admin;
+  private OwnerForm ownerForm;
+<span class="fc" id="L36">  private final TextField filterText = new TextField(&quot;Filter&quot;);</span>
+<span class="fc" id="L37">  private final Grid&lt;Unit&gt; grid = new Grid&lt;&gt;(Unit.class, false);</span>
+
+<span class="fc" id="L39">  public OwnerView(UnitService unitService, SecurityService securityService, UserService userService) {</span>
+<span class="fc" id="L40">    this.unitService = unitService;</span>
+<span class="fc" id="L41">    this.userService = userService;</span>
+<span class="fc" id="L42">    UserDetails userDetails = securityService.getAuthenticatedUser().orElse(null);</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">    if (userDetails == null) {</span>
+<span class="nc" id="L44">      owner_id = null;</span>
+<span class="nc" id="L45">      is_admin = false;</span>
+    } else {
+<span class="fc" id="L47">      owner_id = userService.findUserByUsername(userDetails.getUsername()).orElse(null);</span>
+<span class="pc bpc" id="L48" title="2 of 4 branches missed.">      is_admin = (owner_id != null) &amp;&amp; Role.ADMIN.equals(owner_id.getRole());</span>
+    }
+<span class="fc" id="L50">    addClassName(&quot;owner-view&quot;);</span>
+<span class="fc" id="L51">    setSizeFull();</span>
+<span class="fc" id="L52">    configureGrid();</span>
+<span class="fc" id="L53">    configureForm();</span>
+<span class="fc" id="L54">    add(getToolbar(), getContent());</span>
+<span class="fc" id="L55">    updateList();</span>
+<span class="fc" id="L56">    closeEditor();</span>
+<span class="fc" id="L57">  }</span>
+
+  private Component getContent() {
+<span class="fc" id="L60">    HorizontalLayout content = new HorizontalLayout(getGrid(), getOwnerForm());</span>
+<span class="fc" id="L61">    content.setFlexGrow(2, getGrid());</span>
+<span class="fc" id="L62">    content.setFlexGrow(1, getOwnerForm());</span>
+<span class="fc" id="L63">    content.addClassNames(&quot;content&quot;);</span>
+<span class="fc" id="L64">    content.setSizeFull();</span>
+<span class="fc" id="L65">    return content;</span>
+  }
+
+  private void configureGrid() {
+<span class="fc" id="L69">    getGrid().setClassName(&quot;owner-grid&quot;);</span>
+<span class="fc" id="L70">    getGrid().getElement().setAttribute(&quot;data-testid&quot;, &quot;ownerGrid&quot;);</span>
+<span class="fc" id="L71">    getGrid().setSizeFull();</span>
+<span class="fc" id="L72">    getGrid().setColumns(&quot;address&quot;, &quot;bedrooms&quot;, &quot;bathrooms&quot;, &quot;kitchen&quot;, &quot;livingRoom&quot;, &quot;featured&quot;);</span>
+<span class="fc" id="L73">    getGrid().asSingleSelect().addValueChangeListener(event -&gt; editUnit(event.getValue()));</span>
+<span class="pc bpc" id="L74" title="2 of 4 branches missed.">    if ((owner_id != null) &amp;&amp; !is_admin)</span>
+<span class="fc" id="L75">      getGrid().setItems(unitService.getUsersUnits(owner_id));</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">    else if ((owner_id != null))</span>
+<span class="nc" id="L77">      getGrid().setItems(unitService.getAllUnits(true));</span>
+<span class="fc" id="L78">  }</span>
+
+  private void editUnit(Unit unit) {
+<span class="fc bfc" id="L81" title="All 2 branches covered.">    if (unit == null) {</span>
+<span class="fc" id="L82">      closeEditor();</span>
+<span class="fc" id="L83">      return;</span>
+    }
+<span class="fc" id="L85">    getOwnerForm().setUnit(unit);</span>
+<span class="fc" id="L86">    getOwnerForm().setVisible(true);</span>
+<span class="fc" id="L87">    addClassName(&quot;editing&quot;);</span>
+<span class="fc" id="L88">  }</span>
+
+  private void configureForm() {
+<span class="fc" id="L91">    ownerForm = new OwnerForm(owner_id, userService);</span>
+<span class="fc" id="L92">    getOwnerForm().setWidth(&quot;25em&quot;);</span>
+<span class="fc" id="L93">    getOwnerForm().addSaveListener(this::saveUnit);</span>
+<span class="fc" id="L94">    getOwnerForm().addDeleteListener(this::deleteUnit);</span>
+<span class="fc" id="L95">    getOwnerForm().addCloseListener(e -&gt; closeEditor());</span>
+<span class="fc" id="L96">  }</span>
+
+  private void saveUnit(OwnerForm.SaveEvent event) {
+<span class="fc" id="L99">    unitService.saveUnit(event.getUnit());</span>
+<span class="fc" id="L100">    updateList();</span>
+<span class="fc" id="L101">    closeEditor();</span>
+<span class="fc" id="L102">    updateList();</span>
+<span class="fc" id="L103">    closeEditor();</span>
+<span class="fc" id="L104">  }</span>
+
+  private void deleteUnit(OwnerForm.DeleteEvent event) {
+<span class="fc" id="L107">    unitService.deleteUnit(event.getUnit());</span>
+<span class="fc" id="L108">    updateList();</span>
+<span class="fc" id="L109">    closeEditor();</span>
+<span class="fc" id="L110">    updateList();</span>
+<span class="fc" id="L111">    closeEditor();</span>
+<span class="fc" id="L112">  }</span>
+
+  private void updateList() {
+<span class="pc bpc" id="L115" title="2 of 4 branches missed.">    if ((owner_id != null) &amp;&amp; !is_admin)</span>
+<span class="fc" id="L116">      getGrid().setItems(unitService.getUserUnitsByFilter(owner_id, filterText.getValue()));</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">    else if (owner_id != null)</span>
+<span class="nc" id="L118">      getGrid().setItems(unitService.findUnits(filterText.getValue()));</span>
+<span class="fc" id="L119">  }</span>
+
+  private void closeEditor() {
+<span class="fc" id="L122">    getOwnerForm().setUnit(null);</span>
+<span class="fc" id="L123">    getOwnerForm().setVisible(false);</span>
+<span class="fc" id="L124">    removeClassName(&quot;editing&quot;);</span>
+<span class="fc" id="L125">  }</span>
+
+  private Component getToolbar() {
+<span class="fc" id="L128">    filterText.setPlaceholder(&quot;Filter&quot;);</span>
+<span class="fc" id="L129">    filterText.getElement().setAttribute(&quot;data-testid&quot;, &quot;filter&quot;);</span>
+<span class="fc" id="L130">    filterText.setClearButtonVisible(true);</span>
+<span class="fc" id="L131">    filterText.setValueChangeMode(ValueChangeMode.LAZY);</span>
+<span class="pc" id="L132">    filterText.addValueChangeListener(event -&gt; updateList());</span>
+<span class="fc" id="L133">    Button addButton = new Button(&quot;Add Unit&quot;);</span>
+<span class="fc" id="L134">    addButton.getElement().setAttribute(&quot;data-testid&quot;, &quot;add-unit&quot;);</span>
+<span class="fc" id="L135">    addButton.addClickListener(event -&gt; {</span>
+<span class="nc" id="L136">      Unit unit = new Unit();</span>
+<span class="nc" id="L137">      unit.setUser(owner_id);</span>
+<span class="nc" id="L138">      editUnit(unit);</span>
+<span class="nc" id="L139">    });</span>
+<span class="fc" id="L140">    HorizontalLayout toolbar = new HorizontalLayout(filterText, addButton);</span>
+<span class="fc" id="L141">    toolbar.addClassName(&quot;toolbar&quot;);</span>
+<span class="fc" id="L142">    toolbar.getElement().setAttribute(&quot;data-testid&quot;, &quot;toolbar&quot;);</span>
+<span class="fc" id="L143">    return toolbar;</span>
+  }
+
+  /**
+   * @return the ownerForm
+   */
+  public OwnerForm getOwnerForm() {
+<span class="fc" id="L150">    return ownerForm;</span>
+  }
+
+  /**
+   * @return the grid
+   */
+  public Grid&lt;Unit&gt; getGrid() {
+<span class="fc" id="L157">    return grid;</span>
+  }
+  boolean getIsAdmin() {
+<span class="nc" id="L160">    return is_admin;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

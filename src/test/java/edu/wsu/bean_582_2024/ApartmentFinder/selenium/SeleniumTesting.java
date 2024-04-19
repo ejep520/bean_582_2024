@@ -514,7 +514,6 @@ public class SeleniumTesting {
 			System.out.println(row.getText());
 			count++;
 		}
-		System.out.println( testCount + " " + preCount + " " + count );
 
    		assertNotEquals(count, preCount);   		
   	}
@@ -535,8 +534,10 @@ public class SeleniumTesting {
 			titleElement.click();
 			WebElement deleteButton = driver.findElement(By.xpath("//vaadin-button[contains(.,'Delete')]"));
 			deleteButton.click();			
+			driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 			WebElement deletedElement = driver.findElement(By.cssSelector("vaadin-grid-cell-content[slot='vaadin-grid-cell-content-18']"));
 			deletedElement.getText();
+			driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 			System.out.println(deletedElement.getText());
 			assertNotEquals(deletedElement.getText(), "remove");  
 	}

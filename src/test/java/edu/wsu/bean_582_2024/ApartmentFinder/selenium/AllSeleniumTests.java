@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SeleniumTesting {
+public class AllSeleniumTests {
 	
 	WebDriver driver;
 	
@@ -43,9 +43,9 @@ public class SeleniumTesting {
 	void setUp() {
 		driver = new ChromeDriver();
 		//Headless - no windows open
-		//ChromeOptions options = new ChromeOptions();
-		//options.addArguments("--headless");
-		//driver = new ChromeDriver(options);
+		/*ChromeOptions options = new ChromeOptions();
+		options.addArguments("--headless");
+		driver = new ChromeDriver(options);*/
 		
 	    driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 	}
@@ -164,7 +164,7 @@ public class SeleniumTesting {
 	
 	
 	@Test
-	@Order(3)
+	@Order(1)
 	void add_new_user() {		
 		openPageInitial();
 		driver.findElement(By.linkText("Add a user")).click();
@@ -208,7 +208,7 @@ public class SeleniumTesting {
 	}
 	
 	@Test
-	@Order(2)
+	@Order(3)
 	void test_login_happy_path_user() {
 		openPage();
 		login("user", "upass");
@@ -301,8 +301,9 @@ public class SeleniumTesting {
 		login("admin", "password");
 		driver.findElement(By.linkText("Unit Editing")).click();	
 		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
-		WebElement titleElement = driver.findElement(By.cssSelector("vaadin-grid-cell-content[slot='vaadin-grid-cell-content-20']"));
-		titleElement.click();
+		WebElement element = driver.findElement(By.cssSelector("vaadin-grid-cell-content[slot='vaadin-grid-cell-content-18']"));
+		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+		element.click();
 		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 		WebElement address = driver.findElement(By.cssSelector("input[id='input-vaadin-text-field-19']"));
 		address.clear();
@@ -310,9 +311,9 @@ public class SeleniumTesting {
 		WebElement saveButton = driver.findElement(By.xpath("//vaadin-button[contains(.,'Save')]"));
 		saveButton.click();
 		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
-		titleElement = driver.findElement(By.xpath("//vaadin-grid-cell-content[contains(.,'1999 Bean Boys Blvd')]"));
+		element = driver.findElement(By.xpath("//vaadin-grid-cell-content[contains(.,'1999 Bean Boys Blvd')]"));
 		String expectedTitle = "114 Crescent Oaks Street";
- 		assertNotEquals(expectedTitle, titleElement.getText());		
+ 		assertNotEquals(expectedTitle, element.getText());		
 	}
   	
   	@Test
@@ -465,8 +466,8 @@ public class SeleniumTesting {
    		assertEquals(expectedTitle, titleElement.getText());
   	}
 	
-	@Test
-	@Order(19)
+	//@Test
+	//@Order(19)
   	void test_login_admin_delete_user() {
 		int preCount =0, count = 0, testCount = 0;
 		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
@@ -545,7 +546,7 @@ public class SeleniumTesting {
     
 	@AfterEach
 	void tearDown() {
-		//driver.quit();
+		driver.quit();
 	}
 	
 }

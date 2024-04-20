@@ -13,6 +13,7 @@ plugins {
 	id 'com.vaadin' version '24.3.3'
 	id 'jacoco'
 	id 'info.solidsoft.pitest' version '1.15.0'
+	id "ua.eshepelyuk.ManifestClasspath" version "1.0.0"
 }
 
 group = 'edu.wsu.bean_582_2024'

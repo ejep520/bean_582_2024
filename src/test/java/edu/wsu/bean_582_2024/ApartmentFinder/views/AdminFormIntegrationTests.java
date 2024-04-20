@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -39,6 +40,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
+@Tag("fast")
 public class AdminFormIntegrationTests {
   @Mock
   private UserRepository userRepository;
@@ -74,7 +76,11 @@ public class AdminFormIntegrationTests {
     user_3 = new User(TestUsers.USERNAME_3, TestUsers.USER_PASSWORD_3, TestUsers.USER_ROLE_3);
     user_3.setId(3L);
   }
-  
+
+  /**
+   * This test verifies that on instantiation that the user repository is the only repository
+   * accessed and that its output is predictable.
+   */
   @Test
   public void viewInitializationTest() {
     createViewWithAllUsers();
@@ -83,14 +89,20 @@ public class AdminFormIntegrationTests {
     verifyNoMoreInteractions(userRepository);
     verifyNoInteractions(authorityRepository, unitRepository);
   }
-  
+
+  /**
+   * This test attempts to add a user and verifies that the calls passed thru the service to the
+   * repository are predictable and correct.
+   */
   @Test
   public void addUserTest() {
     ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
     when(userRepository.count()).thenReturn(0L);
     createViewWithNoUsers();
-    Component toolbar = adminView.getChildren().filter(e -> e.getClassName().equals("toolbar")).findFirst().orElseThrow();
-    Button addButton = (Button) toolbar.getChildren().filter(Button.class::isInstance).findFirst().orElseThrow();
+    Component toolbar = adminView.getChildren().filter(e -> e.getClassName().equals("toolbar"))
+        .findFirst().orElseThrow();
+    Button addButton = (Button) toolbar.getChildren().filter(Button.class::isInstance).findFirst()
+        .orElseThrow();
     Children children = getChildren();
     Buttons buttons = getButtons(children.buttonsLayout);
     
@@ -111,6 +123,10 @@ public class AdminFormIntegrationTests {
     verifyNoInteractions(unitRepository);
   }
 
+  /**
+   * This test is similar to the one before it, but tests the validity of the commands passed when
+   * deleting a user.
+   */
   @Test
   public void deleteUserTest() {
     createViewWithAllUsers();
@@ -133,6 +149,7 @@ public class AdminFormIntegrationTests {
     when(userRepository.getAll()).thenReturn(Collections.emptyList());
     adminView = new AdminView(userService, authService);
   }
+
   @SuppressWarnings("unchecked")
   private Children getChildren() {
     TextField username;
@@ -149,6 +166,7 @@ public class AdminFormIntegrationTests {
     buttonsLayout = getChild(HorizontalLayout.class, childrenList);
     return new Children(username, pass1, pass2, role, enabled, buttonsLayout);
   }
+
   private <T extends Component> T getChild(Class<T> clazz, List<Component> children) {
     T returnValue;
     try {

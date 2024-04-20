@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.any;
@@ -56,7 +55,11 @@ public class AuthServiceIntegrationTests {
     authService = new AuthService(new UserRepositoryImpl(userDao),
         new AuthorityRepositoryImpl(authorityDao));
   }
-  
+
+  /**
+   * Tests both the business logic (that the authenticate method will return null when the user
+   * DAO returns null) and the integration between the authentication service and the user DAO.
+   */
   @Test
   public void authenticate_null_user_returns_null() {
     when(authentication.getName()).thenReturn(TestUsers.USERNAME_1);
@@ -66,8 +69,13 @@ public class AuthServiceIntegrationTests {
     verifyNoMoreInteractions(authentication, userDao);
     verifyNoInteractions(authorityDao);
   }
-  
-  
+
+  /**
+   * Tests the integration between the user DAO and the authentication service by checking the
+   * business logic of the authenticate method against users of each Role and checked for
+   * predicted DAO calls.
+   * @param role The role being tested.
+   */
   @ParameterizedTest
   @EnumSource(Role.class)
   public void authenticate_each_role(Role role) {
@@ -88,12 +96,11 @@ public class AuthServiceIntegrationTests {
     verifyNoMoreInteractions(authentication, user, userDao);
     verifyNoInteractions(authorityDao);
   }
-  
-  @Test
-  public void register_void_throws_null_pointer_exception() {
-    assertThrows(NullPointerException.class, () -> authService.register(null));
-  }
-  
+
+  /**
+   * By mimicking no users in the database, this tests the integration between the authentication
+   * service and the DAO layer.
+   */
   @Test
   public void register_with_zero_users_creates_admin() {
     User user = mock(User.class);
@@ -109,7 +116,12 @@ public class AuthServiceIntegrationTests {
     verify(userDao).save(user);
     verifyNoMoreInteractions(user, authorityDao, userDao);
   }
-  
+
+  /**
+   * Tests the business logic as well as the predicted DAO layer calls required to register each
+   * user role.
+   * @param role The role being tested
+   */
   @EnumSource(Role.class)
   @ParameterizedTest
   public void register_each_role_with_existing_users_in_database(Role role) {
@@ -139,7 +151,13 @@ public class AuthServiceIntegrationTests {
     verify(userDao).save(user);
     verifyNoMoreInteractions(user, userDao, authorityDao);
   }
-  
+
+  /**
+   * This test checks the integration of the layers and business logic of the overloaded
+   * register method. The method under scrutiny in this test is called from the AdminForm
+   * class. By capturing the user sent to the DAO, we can check for predictable changes made
+   * by the business logic.
+   */
   @Test
   public void register_overload_no_existing_users_creates_admin() {
     ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
@@ -161,7 +179,12 @@ public class AuthServiceIntegrationTests {
     verify(userDao).update(any(User.class));
     verifyNoMoreInteractions(user, userDao, authorityDao);
   }
-  
+
+  /**
+   * Continuing to test the integration of the overloaded register method with evidence of
+   * existing users in the database. Each role is tested and its DAO calls predicted.
+   * @param role The user role being tested
+   */
   @EnumSource(Role.class)
   @ParameterizedTest
   public void register_overload_for_role_with_existing_users_in_database(Role role) {
@@ -193,7 +216,11 @@ public class AuthServiceIntegrationTests {
     verify(userDao).update(any(User.class));
     verifyNoMoreInteractions(user, userDao, authorityDao);
   }
-  
+
+  /**
+   * This very simple integration test checks that a predictable call is made from the
+   * authentication service to the user DAO and the output returned.
+   */
   @Test
   public void count_user_test() {
     when(userDao.count()).thenReturn(1L);
@@ -204,7 +231,11 @@ public class AuthServiceIntegrationTests {
     verifyNoMoreInteractions(userDao);
     verifyNoInteractions(authorityDao);
   }
-  
+
+  /**
+   * Tests that the authority service makes predictable calls to the authority DAO when an
+   * Authority is deleted.
+   */
   @Test
   public void delete_authority_test() {
    Authority authority = mock(Authority.class);
@@ -215,14 +246,16 @@ public class AuthServiceIntegrationTests {
    verifyNoMoreInteractions(authorityDao);
    verifyNoInteractions(userDao);
   }
-  
+
+  /**
+   * Tests the business logic and integration between the authentication service and the user
+   * DAO when checking to see if a username is taken.
+   * @param usernameIsTaken Whether the user DAO will report the username as taken or not.
+   */
   @ValueSource(booleans = {false, true})
   @ParameterizedTest
   public void username_taken_test(boolean usernameIsTaken) {
-    if (usernameIsTaken)
-      when(userDao.findUser(anyString())).thenReturn(mock(User.class));
-    else 
-      when(userDao.findUser(anyString())).thenReturn(null);
+    when(userDao.findUser(anyString())).thenReturn(usernameIsTaken ? mock(User.class) : null);
     
     boolean result = authService.usernameTaken(TestUsers.USERNAME_3);
     

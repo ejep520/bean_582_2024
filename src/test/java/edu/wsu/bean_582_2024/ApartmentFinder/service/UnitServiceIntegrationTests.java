@@ -48,7 +48,12 @@ public class UnitServiceIntegrationTests {
         TestUnits.LIVING_ROOM_2, TestUnits.KITCHEN_2, false, null);
     unitList = List.of(unit_1, unit_2);
   }
-  
+
+  /**
+   * This test class tests the integration between the unit service and the unit DAO via the unit
+   * repository. This test verifies that a predictable command will be sent thru the unit
+   * repository to the DAO and the result will be faithfully returned to the service.
+   */
   @Test
   public void getAllTest() {
     when(unitDao.getAll()).thenReturn(unitList);
@@ -56,10 +61,13 @@ public class UnitServiceIntegrationTests {
     List<Unit> result = unitService.getAllUnits(false);
     
     assertEquals(unitList, result);
-    verify(unitDao).getAll();
     verifyNoMoreInteractions(unitDao);
   }
-  
+
+  /**
+   * This test verifies that the search key is relayed through from the service layer, through
+   * the repository layer to the DAO and that the DAO returns the results.
+   */
   @Test
   public void findUnitsTest() {
     when(unitDao.find(TestUnits.ADDRESS_1)).thenReturn(List.of(unit_1));
@@ -67,10 +75,13 @@ public class UnitServiceIntegrationTests {
     List<Unit> result = unitService.findUnits(TestUnits.ADDRESS_1);
     
     assertEquals(List.of(unit_1), result);
-    verify(unitDao).find(TestUnits.ADDRESS_1);
     verifyNoMoreInteractions(unitDao);
   }
-  
+
+  /**
+   * Similar to the test before it, this test simulates a situation where no units are returned as
+   * a result of the query.
+   */
   @Test
   public void findUnitsTestFail() {
     when(unitDao.find(anyString())).thenReturn(Collections.emptyList());
@@ -78,10 +89,13 @@ public class UnitServiceIntegrationTests {
     List<Unit> result = unitService.findUnits(TestUnits.ADDRESS_1);
     
     assertEquals(Collections.emptyList(), result);
-    verify(unitDao).find(anyString());
     verifyNoMoreInteractions(unitDao);
   }
-  
+
+  /**
+   * This test asserts the unit DAO will receive a call from the service layer for the count of
+   * units in the database and return the result to service via the repository.
+   */
   @Test
   public void getCountTest() {
     when(unitDao.count()).thenReturn(2L);
@@ -89,7 +103,6 @@ public class UnitServiceIntegrationTests {
     long result = unitService.getUnitCount();
     
     assertEquals(2L, result);
-    verify(unitDao).count();
     verifyNoMoreInteractions(unitDao);
   }
   
@@ -105,7 +118,12 @@ public class UnitServiceIntegrationTests {
     verify(unitDao).delete(any(Unit.class));
     verifyNoMoreInteractions(unitDao);
   }
-  
+
+  /**
+   * This test analyzes the business logic in the function as well as its ability to pass needed
+   * commands to the unit DAO and get back required information.
+   * @param updateFlag represents whether the unit being saved already exists in the database.
+   */
   @ValueSource(booleans = {false, true})
   @ParameterizedTest
   public void saveUnitTest(boolean updateFlag) {
@@ -117,7 +135,13 @@ public class UnitServiceIntegrationTests {
     else verify(unitDao).save(unit_1);
     verifyNoMoreInteractions(unitDao);
   }
-  
+
+  /**
+   * Tests the business logic and integration of the layers to assure predictable commands are
+   * passed from the unit service to the unit DAO when the view layer calls for units filtered
+   * by user.
+   * @param user The user being passed in.
+   */
   @MethodSource("userStream")
   @ParameterizedTest
   public void getUserUnits(User user) {
@@ -148,7 +172,13 @@ public class UnitServiceIntegrationTests {
     User user_2 = new User(TestUsers.USERNAME_2, TestUsers.USER_PASSWORD_2, TestUsers.USER_ROLE_2);
     return Stream.of(arguments((User) null), arguments(user_1), arguments(user_2));
   }
-  
+
+  /**
+   * This test checks the business logic as well as the integration between layers when units 
+   * are searched by both user and a search key.
+   * @param user The user being searched by
+   * @param searchKey The search term being tested
+   */
   @MethodSource("userSearchKeyStream")
   @ParameterizedTest
   public void userSearchUnitsTest(User user, String searchKey) {

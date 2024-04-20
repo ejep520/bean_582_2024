@@ -81,6 +81,7 @@ public class AuthorityRepositoryIntegrationTests {
     assertEquals(0, authorities.size());
   }
   
+  
   @Test
   public void addAuthoritiesTest() {
     EntityTransaction transaction;
@@ -109,6 +110,12 @@ public class AuthorityRepositoryIntegrationTests {
     assertEquals(1, authorityList.size());
   }
 
+  /**
+   * This tests the integration between the Authority repository and the database. Specifically,
+   * by creating a user in the database with Authorities already attached, Hibernate creates the
+   * authorities in the database as a side effect. The test then reads back the authorities created
+   * by Hibernate one at a time.
+   */
   @Test
   public void readAuthoritiesTest() {
     if (!user.getAuthorities().addAll(authorities)) fail("Unable to add authorities to the user.");
@@ -127,7 +134,11 @@ public class AuthorityRepositoryIntegrationTests {
       assertEquals(authority, authorityRepository.get(authority.getId()));
     }
   }
-  
+
+  /**
+   * Updates to authorities are not permitted. Attempting to do so will cause the DAO layer to
+   * throw an exception, which this test checks for.
+   */
   @Test
   public void updateAuthorityTest() {
     EntityTransaction transaction = entityManager.getTransaction();
@@ -147,6 +158,12 @@ public class AuthorityRepositoryIntegrationTests {
     assertThrows(UnsupportedOperationException.class, () -> authorityRepository.update(authority_1));
   }
 
+  /**
+   * This tests the integration between the repository and the database by first creating
+   * authorities in a way similar to the first test in this class, then removing one of those
+   * authorities from the user, updating the user and finally, removing the authority from the
+   * database via the repository call.
+   */
   @Test
   public void deleteAuthorityTest() {
     if (!user.getAuthorities().addAll(authorities)) fail("Unable to add authorities to user.");

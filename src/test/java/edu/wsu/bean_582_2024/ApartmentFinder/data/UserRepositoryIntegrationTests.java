@@ -12,11 +12,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
+@Tag("slow")
 public class UserRepositoryIntegrationTests {
   private final UserRepository userRepository;
   private final static String USERNAME_1 = "testAdmin";
@@ -46,7 +48,11 @@ public class UserRepositoryIntegrationTests {
     user_2 = new User(USERNAME_2, PASSWORD_2, ROLE_2);
     user_3 = new User(USERNAME_3, PASSWORD_3, ROLE_3);
   }
-  
+
+  /**
+   * Tests the integration between the repository and the underlying database software via the DAO
+   * to ensure users are retrieved and added properly.
+   */
   @Test
   public void getAllUsersTest() {
     List<User> initial = userRepository.getAll();
@@ -57,19 +63,10 @@ public class UserRepositoryIntegrationTests {
     List<User> result = userRepository.getAll();
     assertEquals(userList, result);
   }
-  
-  @Test
-  public void addUserTest() {
-    List<User> initial, result;
-    initial = userRepository.getAll();
-    assertEquals(Collections.emptyList(), initial);
-    
-    userRepository.add(user_1);
-    
-    result = userRepository.getAll();
-    assertEquals(List.of(user_1), result);
-  }
-  
+
+  /**
+   * Tests the ability to update a user through the DAO by the database.
+   */
   @Test
   public void updateUserTest() {
     userRepository.add(user_1);
@@ -83,7 +80,10 @@ public class UserRepositoryIntegrationTests {
     if (result == null) fail("Could not retrieve user.");
     assertTrue(result.checkPassword("baz"));
   }
-  
+
+  /**
+   * Tests delete functionality from the database thru the user DAO.
+   */
   @Test
   public void deleteUserTest() {
     for (User user : userList) userRepository.add(user);

@@ -72,11 +72,18 @@ public class UnitRepositoryIntegrationTests {
     if (unit_3.getId() != null) unit_3.setId(null);
   }
 
+  /**
+   * Checks the resetting of the database by the BeforeEach decorated method is complete.
+   */
   @Test
   public void resetTest() {
     assertEquals(Collections.emptyList(), unitRepository.getAll());
   }
-  
+
+  /**
+   * Checks the integration of the unit repository with the database via the DAO when adding a new
+   * unit.
+   */
   @Test
   public void addUnitTest() {
     EntityTransaction transaction = entityManager.getTransaction();
@@ -89,14 +96,20 @@ public class UnitRepositoryIntegrationTests {
 
     assertEquals(List.of(unit_1), unitRepository.getAll());
   }
-  
+
+  /**
+   * Tests that units requested thru the DAO are returned by the database.
+   */
   @Test
   public void getUnitTest() {
     unitRepository.add(unit_3);
     
     assertEquals(unit_3, unitRepository.get(unit_3.getId()));
   }
-  
+
+  /**
+   * Tests that units updated by that repository are passed on to the database.
+   */
   @Test
   public void updateUnitTest() {
     unitRepository.add(unit_3);
@@ -106,7 +119,11 @@ public class UnitRepositoryIntegrationTests {
     
     assertEquals(ADDRESS_1, unitRepository.get(unit_3.getId()).getAddress());
   }
-  
+
+  /**
+   * Tests for integration between the repository layer and the database via the DAO layer when a
+   * delete call is made.
+   */
   @Test
   public void deleteUnitTest() {
     unitRepository.add(unit_3);

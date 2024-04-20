@@ -32,6 +32,10 @@ public class LoginViewIntegrationTests {
   @Mock
   private AuthorityRepository authorityRepository;
 
+  /**
+   * This test checks that in the absence of users in the repository that the app is properly
+   * redirected.
+   */
   @Test
   public void simulateWithZeroUsers() {
     when(userRepository.count()).thenReturn(0L);
@@ -44,7 +48,12 @@ public class LoginViewIntegrationTests {
     verifyNoMoreInteractions(userRepository, event);
     verifyNoInteractions(authorityRepository);
   }
-  
+
+  /**
+   * This test affirms that if no request exists when an otherwise valid login is attempted that
+   * the login is not allowed to continue. This is a security feature that assures the system is
+   * not being manipulated.
+   */
   @Test
   public void simulateAuthenticationWithoutRequest() {
     User user = mock(User.class);

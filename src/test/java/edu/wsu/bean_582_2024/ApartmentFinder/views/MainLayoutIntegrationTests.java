@@ -33,7 +33,11 @@ public class MainLayoutIntegrationTests {
   public void resetLayout() {
     layout = null;
   }
-  
+
+  /**
+   * This test simulates what would happen when the login page is displayed and tests that commands
+   * are properly forwarded to determine whether a user is logged in.
+   */
   @Test
   public void loginScreenPreviewTest() {
     when(authenticationContext.getPrincipalName()).thenReturn(Optional.empty());

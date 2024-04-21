@@ -6,9 +6,6 @@ import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
-import org.hibernate.Transaction;
-import org.hibernate.engine.spi.SessionImplementor;
 import org.slf4j.Logger;
 
 public abstract class DaoHelper{
@@ -31,18 +28,5 @@ public abstract class DaoHelper{
       }
     }
     return returnValue;
-  }
-
-  void executeInsideTransaction(Consumer<EntityManager> action) {
-    SessionImplementor sessionImplementor = (SessionImplementor) entityManager.getDelegate();
-    Transaction transaction = sessionImplementor.getTransaction();
-    try {
-      transaction.begin();
-      action.accept(entityManager);
-      transaction.commit();
-    } catch (RuntimeException err) {
-      transaction.rollback();
-      throw err;
-    }
   }
 }

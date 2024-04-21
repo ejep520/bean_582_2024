@@ -30,7 +30,11 @@ public class UserDao extends DaoHelper implements Dao<User>{
 
   @Override
   public void save(User user) {
-    executeInsideTransaction(entityManager -> entityManager.persist(user));
+    EntityManager localManager = entityManagerFactory.createEntityManager();
+    EntityTransaction transaction = localManager.getTransaction();
+    transaction.begin();
+    localManager.persist(user);
+    transaction.commit();
   }
 
   @Override
@@ -44,8 +48,11 @@ public class UserDao extends DaoHelper implements Dao<User>{
 
   @Override
   public void delete(User user) {
-    executeInsideTransaction(entityManager ->
-        entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user)));
+    EntityManager localManager = entityManagerFactory.createEntityManager();
+    EntityTransaction transaction = localManager.getTransaction();
+    transaction.begin();
+    localManager.remove(localManager.contains(user) ? user : localManager.merge(user));
+    transaction.commit();
   }
   
   public User findUser(String searchKey) {

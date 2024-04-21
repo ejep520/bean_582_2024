@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,6 +38,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
+@Tag("fast")
 public class UserServiceIntegrationTests {
   @Mock
   private UserDao userDao;
@@ -61,17 +63,24 @@ public class UserServiceIntegrationTests {
     user_3 = new User(TestUsers.USERNAME_3, TestUsers.USER_PASSWORD_3, TestUsers.USER_ROLE_3);
     userList = List.of(user_1, user_2, user_3);
   }
-  
+
+  /**
+   * This test verifies that when the command to add a user is received by the service that it
+   * passes along the proper commands thru the repository to the DAO.
+   */
   @Test
   public void addUserTest() {
     userService.saveUser(user_1);
     
     verify(userDao).save(user_1);
     verifyNoMoreInteractions(userDao);
-    verifyNoInteractions(authorityDao);
-    verifyNoInteractions(unitDao);
+    verifyNoInteractions(authorityDao, unitDao);
   }
-  
+
+  /**
+   * This test verifies that attempts to get all users from the DAO call a predictable command and
+   * that the result is faithfully returned to the caller.
+   */
   @Test
   public void getAllUsers() {
     when(userDao.getAll()).thenReturn(userList);
@@ -81,10 +90,15 @@ public class UserServiceIntegrationTests {
     assertEquals(userList, result);
     verify(userDao).getAll();
     verifyNoMoreInteractions(userDao);
-    verifyNoInteractions(unitDao);
-    verifyNoInteractions(authorityDao);
+    verifyNoInteractions(unitDao, authorityDao);
   }
-  
+
+  /**
+   * This tests the business logic within the method as well as the integration of the service and
+   * repository layers to communicate the needs of the service to the DAO layer and receive back
+   * from the service the correct information from the DAO.
+   * @param testKey Represents the test data passed in from the view layer.
+   */
   @MethodSource("userStream")
   @ParameterizedTest
   public void getUserByUsernameTest(String testKey) {
@@ -123,7 +137,11 @@ public class UserServiceIntegrationTests {
     return Stream.of(arguments((String) null), arguments(" "), arguments(TestUsers.USERNAME_1),
         arguments(TestUsers.BAD_USERNAME));
   }
-  
+
+  /**
+   * This test verifies that when a user is deleted, all necessary commands are issued to destroy
+   * the user and all units and authorities associated with that user.
+   */
   @Test
   public void deleteUserTest() {
     Authority authority = new Authority(user_1, "ADMIN_ROLE");
@@ -136,11 +154,13 @@ public class UserServiceIntegrationTests {
     verify(userDao).delete(any(User.class));
     verify(unitDao).delete(any(Unit.class));
     verify(authorityDao).delete(any(Authority.class));
-    verifyNoMoreInteractions(userDao);
-    verifyNoMoreInteractions(unitDao);
-    verifyNoMoreInteractions(authorityDao);
+    verifyNoMoreInteractions(userDao, unitDao, authorityDao);
   }
-  
+
+  /**
+   * This test verifies that a predictable command is sent from the service layer to the DAO when
+   * an existing user in the database requires updating.
+   */
   @Test
   public void saveUserTest() {
     user_1.setId(1L);
@@ -152,7 +172,12 @@ public class UserServiceIntegrationTests {
     verifyNoInteractions(authorityDao);
     verifyNoInteractions(unitDao);
   }
-  
+
+  /**
+   * This tests both the business logic of the service layer and the method's ability to pass on
+   * predictable commands to the layer below it and get back the required information.
+   * @param returnUser Determines whether the test data will "find" a user or not.
+   */
   @ValueSource(booleans = {true, false})
   @ParameterizedTest
   public void getUserByIdTest(boolean returnUser) {

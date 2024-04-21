@@ -73,7 +73,11 @@ public class OwnerFormIntegrationTests {
     
     
   }
-  
+
+  /**
+   * This test ensures that the instantiation of OwnerView results in predictable calls to the
+   * appropriate repositories.
+   */
   @Test
   public void initializationTest() {
     partialList = List.of(unit_1);

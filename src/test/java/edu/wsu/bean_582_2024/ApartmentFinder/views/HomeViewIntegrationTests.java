@@ -46,7 +46,11 @@ public class HomeViewIntegrationTests {
         false, null);
     units = List.of(unit_1, unit_2);
   }
-  
+
+  /**
+   * This test ensures the instantiation of the HomeView class behaves predictably when no units
+   * are available from the repository.
+   */
   @Test
   public void noUnitsWhenViewInitializedTest() {
     when(unitRepository.getAll()).thenReturn(Collections.emptyList());
@@ -56,7 +60,10 @@ public class HomeViewIntegrationTests {
     verifyNoMoreInteractions(unitRepository);
     verifyNoInteractions(user_1);
   }
-  
+
+  /**
+   * This test is similar to its predecessor, but assumes units are available from the repository.
+   */
   @Test
   public void unitsExistWhenViewInitialized() {
     when(unitRepository.getAll()).thenReturn(units);
@@ -67,7 +74,11 @@ public class HomeViewIntegrationTests {
     verifyNoMoreInteractions(unitRepository);
     verifyNoInteractions(user_1);
   }
-  
+
+  /**
+   * This test exercises the filtering capabilities of the view and verifies only the appropriate
+   * repository calls are made.
+   */
   @Test
   public void updatingFilterValue() {
     when(unitRepository.getAll()).thenReturn(units);

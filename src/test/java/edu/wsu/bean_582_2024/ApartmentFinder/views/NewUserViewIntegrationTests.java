@@ -41,7 +41,11 @@ public class NewUserViewIntegrationTests {
   public void resetNewUserView() {
     newUserView = new NewUserView(authService);
   }
-  
+
+  /**
+   * This test ensures that the function to check if a username is taken passes its commands to the
+   * user repository.
+   */
   @Test
   public void usernameTakenTest() {
     User user = mock(User.class);
@@ -52,7 +56,11 @@ public class NewUserViewIntegrationTests {
     verifyNoMoreInteractions(userRepository);
     verifyNoInteractions(user, authorityRepository);
   }
-  
+
+  /**
+   * This test ensures the commands required by the register(String, String) method are passed on
+   * to the repository and that no additional commands are passed along side-effectually.
+   */
   @Test
   public void registrationTest() {
     User user = mock(User.class);

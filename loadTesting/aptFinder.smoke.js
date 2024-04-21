@@ -1,4 +1,6 @@
 import { browser } from 'k6/experimental/browser';
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
+import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 
 export const options = {
     scenarios: {
@@ -10,10 +12,18 @@ export const options = {
           },
         },
         vus: 10,
-        iterations: 100
+        iterations: 40,
       },
     },
   };
+
+// https://github.com/benc-uk/k6-reporter?tab=readme-ov-file
+export function handleSummary(data) {
+    return {
+        "LoadTestSummary.html": htmlReport(data, {title: "Apartment Finder Load Test"}),
+        stdout: textSummary(data, { indent: " ", enableColors: true }),
+    };
+}
 
 //set "K6_BROWSER_HEADLESS=false" && set "K6_BROWSER_ARGS='show-property-changed-rects' " && k6 run aptFinder.smoke.js
 // Create janedoe user with password set to password before running this script
@@ -23,7 +33,6 @@ export default function() {
     usernames.push('janedoe');
     const url = 'http://localhost:8080';
     const page = browser.newPage(options);
-    //page.setViewportSize(1920, 1080);
     page.goto(url);
     page.waitForTimeout(2500);
 

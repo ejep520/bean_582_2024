@@ -45,7 +45,7 @@ public class UserDao extends DaoHelper implements Dao&lt;User&gt;{
   @Override
   public void delete(User user) {
 <span class="fc" id="L47">    executeInsideTransaction(entityManager -&gt;</span>
-<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user)));</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user)));</span>
 <span class="fc" id="L49">  }</span>
   
   public User findUser(String searchKey) {

@@ -53,7 +53,7 @@ Tags: Unit tests
 * 83 testGetUnitCount (10)
 * 84 testDeleteUnit (Verify service deletes unit on the repository)
 * 85 testSaveUnit (Verify service saves unit on the repository)
-## 9 UnitServiceTests (2)
+## 9 UnitServiceTests (Testing the UnitService)
 * 91 testGetAllUnits (2)
 * 92 testFindUnits (2)
 * 93 testGetUnitCount (10)
@@ -214,4 +214,93 @@ Tags: Unit tests
 * 235 secondEmptyPasswordPreventsRegistration (True, 0)
 * 236 mismatchedPasswordsPreventRegistration (True, 0)
 * 237 successfulRegistrationTest ("Foo", "Bar", User)
-## 30 System Tests
+## 30 AuthorityRepositoryIntegrationTests (Authority repository integration tests)
+* 301 emptyDatabaseTest (disabled)
+* 302 addAuthoritiesTest
+* 303 readAuthoritiesTest
+* 304 updateAuthorityTest
+* 305 deleteAuthorityTest
+## 31 UnitRepositoryIntegrationTests (Unit repository integration tests)
+* 311 resetTest
+* 312 addUnitTest
+* 313 getUnitTest
+* 314 updateUnitTest
+* 315 deleteUnitTest
+## 32 UserRepositoryIntegrationTests (User repository integration tests)
+* 321 getAllUsersTest
+* 322 addUserTest
+* 323 updateUserTest
+* 324 deleteUserTest
+## 33 AuthServiceIntegrationTests (Authentication service integration tests)
+* 331 authenticate_null_user_returns_null
+* 332 authenticate_each_role
+* 333 register_void_throws_null_pointer_exception
+* 334 register_with_zero_users_creates_admin
+* 335 register_each_role_with_existing_users_in_database
+* 336 register_overload_no_existing_users_creates_admin
+* 337 register_overload_for_role_with_existing_users_in_database
+* 338 count_user_test
+* 339 delete_authority_test
+* 3310 username_taken_test
+## 34 UnitServiceIntegrationTests (Unit service integration tests)
+* 341 getAllTest
+* 342 findUnitsTest
+* 343 findUnitsTestFail
+* 344 getCountTest
+* 345 deleteUnitTest
+* 346 saveUnitTest
+* 347 getUserUnits
+* 348 userSearchUnitsTest
+## 35 UserServiceIntegrationTests (User service integration tests)
+* 351 addUserTest
+* 352 getAllUsers
+* 353 getUserByUsernameTest
+* 354 deleteUserTest
+* 355 saveUserTest
+* 356 getUserByIdTest
+## 36 AdminFormIntegrationTests (Integration tests for the AdminForm class)
+* 361 viewInitializationTest
+* 362 addUserTest
+* 363 deleteUserTest
+## 37 HomeViewIntegrationTests (Integration tests for the HomeView class)
+* 371 noUnitsWhenViewInitializedTest
+* 372 unitsExistWhenViewInitialized
+* 373 updatingFilterValue
+## 38 LoginViewIntegrationTests (Integration tests for the LoginView class)
+* 381 simulateWithZeroUsers
+* 382 simulateAuthenticationWithoutRequest
+## 39 MainLayoutIntegrationTests (Integration tests for the MainLayout class)
+* 391 loginScreenPreviewTest
+* 392 loggedInScreenPreviewTest
+## 40 NewUserViewIntegrationTests (Integration tests for the NewUserView class)
+* 401 usernameTakenTest
+* 402 registrationTest
+## 41 OwnerFormIntegrationTests (Integration tests for the OwnerForm class)
+* 411 initializationTest
+## 42 Performance testing
+* 421 (aptFinder.smoke.js) Performance test exercising the application from the UI. See notes in test.
+## 43 UI Testing (Selenium test cases)
+* 431 test_page_load
+* 432 test_register
+* 433 add_new_user
+* 434 test_login_happy_path_admin
+* 435 test_incorrect_username
+* 436 add_new_user_pass_dont_match
+* 437 test_login_happy_path_user
+* 438 test_incorrect_password
+* 439 test_logOut_happy_path_admin
+* 4310 test_logOut_happy_path_user
+* 4311 test_login_admin_grid_access
+* 4312 test_login_user_grid_access
+* 4313 test_login_admin_add_unit
+* 4314 test_login_admin_edit_unit
+* 4315 test_login_admin_add_owner_users
+* 4316 test_login_happy_path_owner
+* 4317 test_logout_happy_path_owner
+* 4318 test_owner_user_grid_access
+* 4319 test_login_owner_edit_unit
+* 4320 test_login_owner_add_unit
+* 4321 test_login_owner_delete_unit
+* 4322 test_login_admin_edit_user
+* 4323 test_login_admin_delete_user
+* 4324 test_login_admin_delete_unit

@@ -46,15 +46,15 @@ public class HomeView extends VerticalLayout {
 <span class="fc" id="L46">  }</span>
 
   private void updateList() {
-<span class="nc" id="L49">    grid.setItems(unitService.findUnits(filterText.getValue()));</span>
-<span class="nc" id="L50">  }</span>
+<span class="fc" id="L49">    grid.setItems(unitService.findUnits(filterText.getValue()));</span>
+<span class="fc" id="L50">  }</span>
 
   private Component getToolbar() {
 <span class="fc" id="L53">    filterText.setPlaceholder(&quot;Filter by address&quot;);</span>
 <span class="fc" id="L54">    filterText.getElement().setAttribute(&quot;data-testid&quot;, &quot;filter&quot;);</span>
 <span class="fc" id="L55">    filterText.setClearButtonVisible(true);</span>
 <span class="fc" id="L56">    filterText.setValueChangeMode(ValueChangeMode.LAZY);</span>
-<span class="pc" id="L57">    filterText.addValueChangeListener(event -&gt; updateList());</span>
+<span class="fc" id="L57">    filterText.addValueChangeListener(event -&gt; updateList());</span>
 <span class="fc" id="L58">    HorizontalLayout toolbar = new HorizontalLayout(filterText);</span>
 <span class="fc" id="L59">    toolbar.addClassName(&quot;toolbar&quot;);</span>
 <span class="fc" id="L60">    toolbar.getElement().setAttribute(&quot;data-testid&quot;, &quot;toolbar&quot;);</span>

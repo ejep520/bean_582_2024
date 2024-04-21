@@ -27,7 +27,7 @@ public class UserService {
   }
   
   public List&lt;User&gt; findUsers(String userFilter) {
-<span class="fc bfc" id="L30" title="All 6 branches covered.">    if (userFilter == null || userFilter.isEmpty() || userFilter.isBlank())</span>
+<span class="fc bfc" id="L30" title="All 4 branches covered.">    if (userFilter == null || userFilter.isBlank())</span>
 <span class="fc" id="L31">      return getAllUsers();</span>
 <span class="fc" id="L32">    User result = userRepository.getUserByUsername(userFilter);</span>
 <span class="fc bfc" id="L33" title="All 2 branches covered.">    if (result == null) return Collections.emptyList();</span>

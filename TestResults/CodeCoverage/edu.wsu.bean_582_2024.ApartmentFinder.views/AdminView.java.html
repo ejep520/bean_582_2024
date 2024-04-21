@@ -70,7 +70,7 @@ public class AdminView extends VerticalLayout {
 <span class="fc" id="L70">      closeEditor();</span>
 <span class="fc" id="L71">      return;</span>
     }
-<span class="pc bpc" id="L73" title="2 of 4 branches missed.">    isNewUser = user.getId() == null || user.getId() &lt;= 0;</span>
+<span class="pc bpc" id="L73" title="1 of 4 branches missed.">    isNewUser = user.getId() == null || user.getId() &lt;= 0;</span>
 <span class="fc" id="L74">    adminForm.setUser(user);</span>
 <span class="fc" id="L75">    adminForm.setVisible(true);</span>
 <span class="fc" id="L76">    addClassName(&quot;editing&quot;);</span>
@@ -86,7 +86,7 @@ public class AdminView extends VerticalLayout {
 
   private void saveUser(AdminForm.SaveEvent event) {
 <span class="pc bpc" id="L88" title="1 of 2 branches missed.">    if (isNewUser != null) {</span>
-<span class="pc bpc" id="L89" title="1 of 2 branches missed.">      if (isNewUser) authService.register(event.getUser());</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">      if (isNewUser) authService.register(event.getUser());</span>
 <span class="fc" id="L90">      else userService.saveUser(event.getUser());</span>
     }
 <span class="fc" id="L92">    updateList();</span>
@@ -122,7 +122,7 @@ public class AdminView extends VerticalLayout {
 <span class="pc" id="L122">    filterText.addValueChangeListener(event -&gt; updateList());</span>
 <span class="fc" id="L123">    Button addUserButton = new Button(&quot;Add User&quot;);</span>
 <span class="fc" id="L124">    addUserButton.getElement().setAttribute(&quot;data-testid&quot;, &quot;add-user&quot;);</span>
-<span class="pc" id="L125">    addUserButton.addClickListener(click -&gt; addUser());</span>
+<span class="fc" id="L125">    addUserButton.addClickListener(click -&gt; addUser());</span>
 <span class="fc" id="L126">    HorizontalLayout toolbar = new HorizontalLayout(filterText, addUserButton);</span>
 <span class="fc" id="L127">    toolbar.addClassName(&quot;toolbar&quot;);</span>
 <span class="fc" id="L128">    toolbar.getElement().setAttribute(&quot;data-testid&quot;, &quot;toolbar&quot;);</span>
@@ -130,8 +130,8 @@ public class AdminView extends VerticalLayout {
   }
 
   private void addUser() {
-<span class="nc" id="L133">    grid.asSingleSelect().clear();</span>
-<span class="nc" id="L134">    editUser(new User());</span>
-<span class="nc" id="L135">  }</span>
+<span class="fc" id="L133">    grid.asSingleSelect().clear();</span>
+<span class="fc" id="L134">    editUser(new User());</span>
+<span class="fc" id="L135">  }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

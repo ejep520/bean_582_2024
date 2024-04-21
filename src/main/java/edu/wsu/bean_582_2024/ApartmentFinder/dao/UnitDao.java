@@ -46,7 +46,11 @@ public class UnitDao extends DaoHelper implements Dao<Unit>{
 
   @Override
   public void update(Unit unit) {
-      executeInsideTransaction(entityManager -> entityManager.merge(unit));
+    EntityManager localManager = entityManagerFactory.createEntityManager();
+    EntityTransaction transaction = localManager.getTransaction();
+    transaction.begin();
+    localManager.merge(unit);
+    transaction.commit();
   }
   
   @Override

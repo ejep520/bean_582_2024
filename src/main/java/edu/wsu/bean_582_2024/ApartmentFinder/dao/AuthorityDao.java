@@ -32,7 +32,11 @@ public class AuthorityDao extends DaoHelper implements Dao<Authority> {
 
   @Override
   public void save(Authority authority) {
-    executeInsideTransaction(entityManager -> entityManager.persist(authority));
+    EntityManager localManager = entityManagerFactory.createEntityManager();
+    EntityTransaction transaction = localManager.getTransaction();
+    transaction.begin();
+    localManager.persist(authority);
+    transaction.commit();
   }
 
   @Override

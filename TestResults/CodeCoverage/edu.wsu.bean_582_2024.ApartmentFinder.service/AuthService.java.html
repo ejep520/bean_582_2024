@@ -86,10 +86,10 @@ public class AuthService implements AuthenticationProvider {
   }
 
   public boolean authenticate(String username, String password) throws AuthException {
-<span class="nc" id="L89">    User user = UserRepository.getUserByUsername(username);</span>
-<span class="nc" id="L90">    VaadinServletRequest request = VaadinServletRequest.getCurrent();</span>
-<span class="nc bnc" id="L91" title="All 2 branches missed.">    if (request == null)</span>
-<span class="nc" id="L92">      return false;</span>
+<span class="fc" id="L89">    User user = UserRepository.getUserByUsername(username);</span>
+<span class="fc" id="L90">    VaadinServletRequest request = VaadinServletRequest.getCurrent();</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">    if (request == null)</span>
+<span class="fc" id="L92">      return false;</span>
 <span class="nc bnc" id="L93" title="All 4 branches missed.">    if (user != null &amp;&amp; user.checkPassword(password)) {</span>
 <span class="nc" id="L94">      VaadinSession.getCurrent().setAttribute(User.class, user);</span>
 <span class="nc" id="L95">      createRoutes(user.getRole());</span>
@@ -127,39 +127,39 @@ public class AuthService implements AuthenticationProvider {
   }
 
   public boolean usernameTaken(String username) {
-<span class="nc" id="L130">    User user = UserRepository.getUserByUsername(username);</span>
-<span class="nc bnc" id="L131" title="All 2 branches missed.">    return user != null;</span>
+<span class="fc" id="L130">    User user = UserRepository.getUserByUsername(username);</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">    return user != null;</span>
   }
 
   public void register(String username, String password, Role role) {
     User user;
-<span class="nc bnc" id="L136" title="All 4 branches missed.">    if (getUserCount() == 0 || role == Role.ADMIN) {</span>
-<span class="nc" id="L137">      UserRepository.add(new User(username, password, Role.ADMIN));</span>
-<span class="nc" id="L138">      user = UserRepository.getUserByUsername(username);</span>
-<span class="nc bnc" id="L139" title="All 2 branches missed.">      for (GrantedAuthority auth : ADMIN_AUTHORITY) {</span>
-<span class="nc" id="L140">        Authority authority = new Authority(user, auth.getAuthority());</span>
-<span class="nc" id="L141">        authRepository.add(authority);</span>
-<span class="nc" id="L142">        user.getAuthorities().add(authority);</span>
-<span class="nc" id="L143">      }</span>
-<span class="nc bnc" id="L144" title="All 2 branches missed.">    } else if (role == Role.OWNER) {</span>
-<span class="nc" id="L145">      UserRepository.add(new User(username, password, Role.OWNER));</span>
-<span class="nc" id="L146">      user = UserRepository.getUserByUsername(username);</span>
-<span class="nc bnc" id="L147" title="All 2 branches missed.">      for (GrantedAuthority auth : OWNER_AUTHORITY) {</span>
-<span class="nc" id="L148">        Authority authority = new Authority(user, auth.getAuthority()); </span>
-<span class="nc" id="L149">        authRepository.add(authority);</span>
-<span class="nc" id="L150">        user.getAuthorities().add(authority);</span>
-<span class="nc" id="L151">      }</span>
+<span class="fc bfc" id="L136" title="All 4 branches covered.">    if (getUserCount() == 0 || role == Role.ADMIN) {</span>
+<span class="fc" id="L137">      UserRepository.add(new User(username, password, Role.ADMIN));</span>
+<span class="fc" id="L138">      user = UserRepository.getUserByUsername(username);</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">      for (GrantedAuthority auth : ADMIN_AUTHORITY) {</span>
+<span class="fc" id="L140">        Authority authority = new Authority(user, auth.getAuthority());</span>
+<span class="fc" id="L141">        authRepository.add(authority);</span>
+<span class="fc" id="L142">        user.getAuthorities().add(authority);</span>
+<span class="fc" id="L143">      }</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">    } else if (role == Role.OWNER) {</span>
+<span class="fc" id="L145">      UserRepository.add(new User(username, password, Role.OWNER));</span>
+<span class="fc" id="L146">      user = UserRepository.getUserByUsername(username);</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">      for (GrantedAuthority auth : OWNER_AUTHORITY) {</span>
+<span class="fc" id="L148">        Authority authority = new Authority(user, auth.getAuthority()); </span>
+<span class="fc" id="L149">        authRepository.add(authority);</span>
+<span class="fc" id="L150">        user.getAuthorities().add(authority);</span>
+<span class="fc" id="L151">      }</span>
     } else {
-<span class="nc" id="L153">      UserRepository.add(new User(username, password, Role.USER));</span>
-<span class="nc" id="L154">      user = UserRepository.getUserByUsername(username);</span>
-<span class="nc bnc" id="L155" title="All 2 branches missed.">      for (GrantedAuthority auth : USER_AUTHORITY) {</span>
-<span class="nc" id="L156">        Authority authority = new Authority(user, auth.getAuthority()); </span>
-<span class="nc" id="L157">        authRepository.add(authority);</span>
-<span class="nc" id="L158">        user.getAuthorities().add(authority);</span>
-<span class="nc" id="L159">      }</span>
+<span class="fc" id="L153">      UserRepository.add(new User(username, password, Role.USER));</span>
+<span class="fc" id="L154">      user = UserRepository.getUserByUsername(username);</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">      for (GrantedAuthority auth : USER_AUTHORITY) {</span>
+<span class="fc" id="L156">        Authority authority = new Authority(user, auth.getAuthority()); </span>
+<span class="fc" id="L157">        authRepository.add(authority);</span>
+<span class="fc" id="L158">        user.getAuthorities().add(authority);</span>
+<span class="fc" id="L159">      }</span>
     }
-<span class="nc" id="L161">    UserRepository.update(user);</span>
-<span class="nc" id="L162">  }</span>
+<span class="fc" id="L161">    UserRepository.update(user);</span>
+<span class="fc" id="L162">  }</span>
   public void register(User user) {
 <span class="fc" id="L164">    user.getAuthorities().clear();</span>
 <span class="fc bfc" id="L165" title="All 2 branches covered.">    if (getUserCount() == 0) user.setRole(Role.ADMIN);</span>

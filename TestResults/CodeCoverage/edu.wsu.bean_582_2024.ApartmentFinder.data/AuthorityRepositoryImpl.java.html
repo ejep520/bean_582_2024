@@ -24,14 +24,19 @@ public class AuthorityRepositoryImpl implements AuthorityRepository {
 <span class="fc" id="L24">    authorityDao.save(authority);</span>
 <span class="fc" id="L25">  }</span>
 
+  /**
+   * This method will always fail. Authorities are read-only by design.
+   * @param authority Authority to be updated.
+   * @throws UnsupportedOperationException Authorities are read-only by design.
+   */
   @Override
-  public void update(Authority authority) {
-<span class="nc" id="L29">    authorityDao.update(authority);</span>
-<span class="nc" id="L30">  }</span>
+  public void update(Authority authority) throws UnsupportedOperationException {
+<span class="nc" id="L34">    authorityDao.update(authority);</span>
+<span class="nc" id="L35">  }</span>
 
   @Override
   public void delete(Authority authority) {
-<span class="fc" id="L34">    authorityDao.delete(authority);</span>
-<span class="fc" id="L35">  }</span>
+<span class="fc" id="L39">    authorityDao.delete(authority);</span>
+<span class="fc" id="L40">  }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

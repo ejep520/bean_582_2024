@@ -279,4 +279,28 @@ Tags: Unit tests
 * 411 initializationTest
 ## 42 Performance testing
 * 421 (aptFinder.smoke.js) Performance test exercising the application from the UI. See notes in test.
-## 43 UI Testing
+## 43 UI Testing (Selenium test cases)
+* 431 test_page_load
+* 432 test_register
+* 433 add_new_user
+* 434 test_login_happy_path_admin
+* 435 test_incorrect_username
+* 436 add_new_user_pass_dont_match
+* 437 test_login_happy_path_user
+* 438 test_incorrect_password
+* 439 test_logOut_happy_path_admin
+* 4310 test_logOut_happy_path_user
+* 4311 test_login_admin_grid_access
+* 4312 test_login_user_grid_access
+* 4313 test_login_admin_add_unit
+* 4314 test_login_admin_edit_unit
+* 4315 test_login_admin_add_owner_users
+* 4316 test_login_happy_path_owner
+* 4317 test_logout_happy_path_owner
+* 4318 test_owner_user_grid_access
+* 4319 test_login_owner_edit_unit
+* 4320 test_login_owner_add_unit
+* 4321 test_login_owner_delete_unit
+* 4322 test_login_admin_edit_user
+* 4323 test_login_admin_delete_user
+* 4324 test_login_admin_delete_unit
